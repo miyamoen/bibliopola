@@ -4,8 +4,7 @@ import Element exposing (..)
 import Html exposing (Html)
 import Lazy
 import Lazy.Tree.Zipper as Zipper
-import Style exposing (..)
-import Style.Sheet
+import Styles exposing (styleSheet)
 import Types exposing (..)
 
 
@@ -26,13 +25,3 @@ currentView { variations } =
         |> Maybe.map (Tuple.second >> Lazy.force)
         |> Maybe.withDefault (text "empty")
         |> Element.mapAll identity Child ChildVar
-
-
-styleSheet :
-    List (Style child childVar)
-    -> StyleSheet (Styles child) (Variation childVar)
-styleSheet child =
-    Style.styleSheet
-        [ style None []
-        , Style.Sheet.merge <| Style.Sheet.map Child ChildVar child
-        ]

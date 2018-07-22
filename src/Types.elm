@@ -1,5 +1,6 @@
 module Types exposing (..)
 
+import Color.Pallet exposing (Pallet)
 import Element exposing (Element)
 import Lazy exposing (Lazy)
 import Lazy.Tree.Zipper exposing (Zipper)
@@ -28,7 +29,8 @@ type alias View child childVar =
 type State
     = Close
     | Open
-    | Select
+    | Selected
+    | Focused
 
 
 type alias MyElement child childVar =
@@ -37,11 +39,14 @@ type alias MyElement child childVar =
 
 type Styles child
     = None
+    | Text
+    | Box
     | Child child
 
 
 type Variation childVar
     = NoVar
+    | PalletVar Pallet
     | ChildVar childVar
 
 
