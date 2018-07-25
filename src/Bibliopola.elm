@@ -25,6 +25,15 @@ createMainFromViewItem styles view =
         }
 
 
+createEmptyViewItem : String -> View child childVar
+createEmptyViewItem name =
+    { name = name
+    , state = Close
+    , stories = []
+    , variations = Dict.empty
+    }
+
+
 createViewItem :
     String
     -> (a -> Element child childVar msg)
@@ -87,4 +96,4 @@ update msg model =
             { model | route = Debug.log "route" route } => Cmd.none
 
         SetViews views ->
-            { model | views = views } => Cmd.none
+            { model | views = Zipper.root views } => Cmd.none

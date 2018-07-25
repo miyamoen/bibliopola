@@ -1,4 +1,11 @@
-module Model.Views exposing (attemptOpenPath, openPath, openStory, toggleTree)
+module Model.Views
+    exposing
+        ( attemptOpenPath
+        , openPath
+        , openRecursively
+        , openStory
+        , toggleTree
+        )
 
 import Dict exposing (Dict)
 import Element exposing (Element)
@@ -49,6 +56,18 @@ combine =
                     Maybe.map ((::) x) acc
     in
     List.foldr step (Just [])
+
+
+openRecursively : Zipper (View s v) -> List (Zipper (View s v))
+openRecursively zipper =
+    zipper
+        :: (if (Zipper.current zipper |> .state) == Close then
+                []
+            else
+                Zipper.openAll zipper
+                    |> List.map openRecursively
+                    |> List.concat
+           )
 
 
 

@@ -21,28 +21,28 @@ model =
 views : Zipper (View s v)
 views =
     Zipper.fromTree <|
-        Tree.tree (item "root") <|
+        Tree.tree (item Open "root") <|
             LList.fromList
-                [ Tree.singleton (item "ham")
-                , Tree.tree (item "egg") <|
+                [ Tree.singleton (item Open "ham")
+                , Tree.tree (item Close "egg") <|
                     LList.fromList
-                        [ Tree.singleton (item "boiled")
-                        , Tree.singleton (item "fried")
-                        , Tree.singleton (item "scrambled")
+                        [ Tree.singleton (item Close "boiled")
+                        , Tree.singleton (item Close "fried")
+                        , Tree.singleton (item Close "scrambled")
                         ]
-                , Tree.tree (item "spam") <|
+                , Tree.tree (item Open "spam") <|
                     LList.fromList
-                        [ Tree.tree (item "spamspam") <|
-                            LList.fromList [ Tree.singleton (item "spamspamspam") ]
+                        [ Tree.tree (item Open "spamspam") <|
+                            LList.fromList [ Tree.singleton (item Close "spamspamspam") ]
                         ]
                 ]
 
 
-item : String -> View s v
-item name =
+item : State -> String -> View s v
+item state name =
     { name = name
-    , state = Close
-    , stories = [ "arg1" => [ "default" ] ]
+    , state = state
+    , stories = []
     , variations =
         Dict.fromList
             [ "default" => lazy (\_ -> text <| name ++ " view") ]
