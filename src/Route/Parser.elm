@@ -5,11 +5,14 @@ import Parser exposing (..)
 
 route : Parser { paths : List String, queries : List ( String, String ) }
 route =
-    succeed (\paths queries -> { paths = paths, queries = queries })
-        |. hash
-        |= paths
-        |= oneOf [ queries, succeed [] ]
-        |. end
+    oneOf
+        [ succeed (\paths queries -> { paths = paths, queries = queries })
+            |. hash
+            |= paths
+            |= oneOf [ queries, succeed [] ]
+            |. end
+        , Parser.map (always { paths = [], queries = [] }) end
+        ]
 
 
 paths : Parser (List String)

@@ -24,6 +24,7 @@ testRoute =
                     { paths = [ "path1", "path2" ]
                     , queries = [ ( "hoge", "3" ), ( "huga", "9" ) ]
                     }
+        , "empty" ==> run route "" === Ok { paths = [], queries = [] }
         ]
 
 
