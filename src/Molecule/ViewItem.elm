@@ -6,6 +6,8 @@ import Dummy
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
+import Model.Views as Views exposing (..)
+import Styles exposing (styles)
 import Types exposing (..)
 
 
@@ -18,7 +20,7 @@ view zipper =
         depth =
             List.length <| Zipper.breadCrumbs zipper
     in
-    el Box [ width fill, vary (PalletVar Blue) (state == Focused) ] <|
+    el Box [ width fill ] <|
         row None
             [ spacing 5 ]
             [ icon state (Zipper.isEmpty zipper)
@@ -41,12 +43,6 @@ icon state isLeaf =
             ( Open, False ) ->
                 text "-"
 
-            ( Selected, False ) ->
-                text "-"
-
-            ( Focused, False ) ->
-                text "+"
-
             ( _, True ) ->
                 text "o"
 
@@ -54,18 +50,27 @@ icon state isLeaf =
 textPallet : State -> Pallet
 textPallet state =
     case state of
-        Focused ->
-            White
+        Open ->
+            Blue
 
-        _ ->
+        Close ->
             Black
 
 
 viewItem : View (Styles s) (Variation v)
 viewItem =
-    createViewItem "ViewItem" view [ "default" => Dummy.views ]
+    createViewItem "ViewItem"
+        view
+        ( "views"
+        , [ "root" => Dummy.views
+          , "ham" => Views.attemptOpenPath [ "ham" ] Dummy.views
+          , "egg" => Views.attemptOpenPath [ "egg" ] Dummy.views
+          , "boiled_egg" => Views.attemptOpenPath [ "egg", "boiled" ] Dummy.views
+          ]
+        )
+        |> withDefaultVariation (view Dummy.views)
 
 
 main : Program Never (Model (Styles s) (Variation v)) Msg
 main =
-    createMainfromViewItem [] viewItem
+    createMainfromViewItem styles viewItem

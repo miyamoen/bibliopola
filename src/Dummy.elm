@@ -1,10 +1,12 @@
 module Dummy exposing (..)
 
+import Dict
 import Element exposing (text)
 import Lazy exposing (lazy)
 import Lazy.LList as LList
 import Lazy.Tree as Tree
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
+import Route
 import Types exposing (..)
 
 
@@ -12,6 +14,7 @@ model : Model s v
 model =
     { styles = []
     , views = views
+    , route = Route.View [] <| Dict.fromList []
     }
 
 
@@ -39,6 +42,8 @@ item : String -> View s v
 item name =
     { name = name
     , state = Close
-    , stories = [ [ "default" ] ]
-    , variations = [ "default" => lazy (\_ -> text <| name ++ " view") ]
+    , stories = [ "arg1" => [ "default" ] ]
+    , variations =
+        Dict.fromList
+            [ "default" => lazy (\_ -> text <| name ++ " view") ]
     }

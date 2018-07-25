@@ -1,4 +1,4 @@
-module Styles exposing (..)
+module Styles exposing (styleSheet, styles)
 
 import Color.Pallet as Pallet exposing (pallets)
 import Style exposing (..)

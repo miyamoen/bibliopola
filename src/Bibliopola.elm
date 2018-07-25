@@ -1,10 +1,12 @@
 module Bibliopola exposing (..)
 
+import Dict
 import Element exposing (Element)
-import Html
 import Lazy exposing (lazy)
 import Lazy.Tree as Tree
 import Lazy.Tree.Zipper as Zipper
+import Navigation
+import Route
 import Style exposing (Style)
 import Types exposing (..)
 import View exposing (view)
@@ -16,7 +18,8 @@ createMainfromViewItem :
     -> Program Never (Model child childVar) Msg
 createMainfromViewItem styles view =
     createMain
-        { views =
+        { route = Route.View [] <| Dict.fromList []
+        , views =
             Zipper.fromTree <| Tree.singleton view
         , styles = styles
         }
@@ -25,26 +28,43 @@ createMainfromViewItem styles view =
 createViewItem :
     String
     -> (a -> Element child childVar msg)
-    -> List ( String, a )
+    -> ( String, List ( String, a ) )
     -> View child childVar
-createViewItem name view stories =
+createViewItem name view ( storyName, stories ) =
     { name = name
     , state = Close
-    , stories = List.map Tuple.first stories |> List.singleton
+    , stories = [ storyName => List.map Tuple.first stories ]
     , variations =
         List.map
             (Tuple.mapSecond
                 (\a -> lazy (\() -> view a |> Element.map (toString >> Print)))
             )
             stories
+            |> Dict.fromList
+    }
+
+
+withDefaultVariation :
+    Element child childVar msg
+    -> View child childVar
+    -> View child childVar
+withDefaultVariation view viewItem =
+    { viewItem
+        | variations =
+            viewItem.variations
+                |> Dict.insert
+                    "default"
+                    (lazy <| \_ -> Element.map (toString >> Print) view)
     }
 
 
 createMain : Model child childVar -> Program Never (Model child childVar) Msg
 createMain model =
-    Html.program
+    Navigation.program (Route.route >> SetRoute)
         { view = view
-        , init = ( model, Cmd.none )
+        , init =
+            \location ->
+                ( { model | route = Route.route location }, Cmd.none )
         , update = update
         , subscriptions = always Sub.none
         }
@@ -55,6 +75,9 @@ update msg model =
     case msg of
         NoOp ->
             model => Cmd.none
+
+        SetRoute route ->
+            { model | route = Debug.log "route" route } => Cmd.none
 
         Print print ->
             let
