@@ -5,6 +5,7 @@ import Color.Pallet exposing (Pallet(..))
 import Dummy
 import Element exposing (..)
 import Element.Attributes exposing (..)
+import Element.Events exposing (onClick)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Model.Views as Views exposing (..)
 import Styles exposing (styles)
@@ -20,15 +21,11 @@ view zipper =
         depth =
             List.length <| Zipper.breadCrumbs zipper
     in
-    el Box [ width fill ] <|
+    el Box [ width fill, onClick (SetViews <| Views.toggleTree zipper) ] <|
         row None
-            [ spacing 5 ]
+            [ spacing 5, moveRight <| toFloat depth * 30 ]
             [ icon state (Zipper.isEmpty zipper)
-            , el Text
-                [ vary (PalletVar <| textPallet state) True
-                , moveRight <| toFloat depth * 10
-                ]
-              <|
+            , el Text [ vary (PalletVar <| textPallet state) True ] <|
                 text name
             ]
 
@@ -71,6 +68,6 @@ viewItem =
         |> withDefaultVariation (view Dummy.views)
 
 
-main : Program Never (Model (Styles s) (Variation v)) Msg
+main : MyProgram (Styles s) (Variation v)
 main =
-    createMainfromViewItem styles viewItem
+    createMainFromViewItem styles viewItem

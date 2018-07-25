@@ -4,14 +4,13 @@ import Dict exposing (Dict)
 import Element exposing (..)
 import Html exposing (Html)
 import Lazy
-import Lazy.Tree.Zipper as Zipper
 import Model.Views as Views
 import Route exposing (Route(..))
 import Styles exposing (styleSheet)
 import Types exposing (..)
 
 
-view : Model child childVar -> Html Msg
+view : Model child childVar -> Html (Msg child childVar)
 view model =
     layout (styleSheet model.styles) <|
         route model

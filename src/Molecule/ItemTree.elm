@@ -18,4 +18,4 @@ viewItem =
 
 main : Program Never (Model (Styles s) (Variation v)) Msg
 main =
-    createMainfromViewItem [] viewItem
+    createMainFromViewItem [] viewItem

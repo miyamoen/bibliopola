@@ -12,11 +12,11 @@ import Types exposing (..)
 import View exposing (view)
 
 
-createMainfromViewItem :
+createMainFromViewItem :
     List (Style child childVar)
     -> View child childVar
-    -> Program Never (Model child childVar) Msg
-createMainfromViewItem styles view =
+    -> MyProgram child childVar
+createMainFromViewItem styles view =
     createMain
         { route = Route.View [] <| Dict.fromList []
         , views =
@@ -58,7 +58,7 @@ withDefaultVariation view viewItem =
     }
 
 
-createMain : Model child childVar -> Program Never (Model child childVar) Msg
+createMain : Model child childVar -> MyProgram child childVar
 createMain model =
     Navigation.program (Route.route >> SetRoute)
         { view = view
@@ -70,14 +70,11 @@ createMain model =
         }
 
 
-update : Msg -> Model child childVar -> ( Model child childVar, Cmd Msg )
+update : Msg s v -> Model s v -> ( Model s v, Cmd (Msg s v) )
 update msg model =
     case msg of
         NoOp ->
             model => Cmd.none
-
-        SetRoute route ->
-            { model | route = Debug.log "route" route } => Cmd.none
 
         Print print ->
             let
@@ -85,3 +82,9 @@ update msg model =
                     Debug.log "Msg" print
             in
             model => Cmd.none
+
+        SetRoute route ->
+            { model | route = Debug.log "route" route } => Cmd.none
+
+        SetViews views ->
+            { model | views = views } => Cmd.none

@@ -9,10 +9,11 @@ import Route exposing (Route)
 import Style exposing (Style)
 
 
-type Msg
+type Msg child childVar
     = NoOp
-    | SetRoute Route
     | Print String
+    | SetRoute Route
+    | SetViews (Zipper (View child childVar))
 
 
 type alias Model child childVar =
@@ -26,7 +27,7 @@ type alias View child childVar =
     { name : String
     , state : State
     , stories : List ( String, List String )
-    , variations : Dict String (Lazy (Element child childVar Msg))
+    , variations : Dict String (Lazy (Element child childVar (Msg child childVar)))
     }
 
 
@@ -35,8 +36,20 @@ type State
     | Open
 
 
+
+-- alias
+
+
 type alias MyElement child childVar =
-    Element (Styles child) (Variation childVar) Msg
+    Element (Styles child) (Variation childVar) (Msg child childVar)
+
+
+type alias MyProgram child childVar =
+    Program Never (Model child childVar) (Msg child childVar)
+
+
+
+-- style
 
 
 type Styles child

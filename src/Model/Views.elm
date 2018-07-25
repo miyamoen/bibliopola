@@ -1,4 +1,4 @@
-module Model.Views exposing (attemptOpenPath, openPath, openStory)
+module Model.Views exposing (attemptOpenPath, openPath, openStory, toggleTree)
 
 import Dict exposing (Dict)
 import Element exposing (Element)
@@ -21,7 +21,7 @@ openPath paths zipper =
 openStory :
     Dict String String
     -> Zipper (View s v)
-    -> Maybe (Lazy (Element s v Msg))
+    -> Maybe (Lazy (Element s v (Msg s v)))
 openStory queries zipper =
     let
         viewItem =
@@ -49,3 +49,24 @@ combine =
                     Maybe.map ((::) x) acc
     in
     List.foldr step (Just [])
+
+
+
+-- target view item
+
+
+toggleTree : Zipper (View s v) -> Zipper (View s v)
+toggleTree zipper =
+    Zipper.updateItem
+        (\item ->
+            { item
+                | state =
+                    case item.state of
+                        Open ->
+                            Close
+
+                        Close ->
+                            Open
+            }
+        )
+        zipper
