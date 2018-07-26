@@ -1,10 +1,10 @@
-module Caret exposing (..)
+module Atom.Caret exposing (Config, Direction(..), view, viewItem)
 
 import Bibliopola exposing (..)
 import Color.Pallet as Pallet exposing (Pallet(..))
 import Element exposing (..)
 import Element.Attributes exposing (..)
-import Element.Events as Events
+import Element.Util exposing (maybeOnClick)
 import Styles exposing (styles)
 import Svg exposing (..)
 import Svg.Attributes exposing (points, viewBox)
@@ -16,6 +16,11 @@ type Direction
     | Down
     | Right
     | Left
+
+
+directions : List Direction
+directions =
+    [ Up, Down, Right, Left ]
 
 
 type alias Config a msg =
@@ -34,16 +39,14 @@ view { pallet, onClick, size } direction =
             , "transform" => rotateCss direction
             , "transition-property" => "transform"
             , "transition-duration" => "0.5s"
-            , "cursor" => "pointer"
+            , "cursor"
+                => (Maybe.map (always "pointer") onClick
+                        |> Maybe.withDefault ""
+                   )
             ]
         , width <| px size
         , height <| px size
-        , case onClick of
-            Just f ->
-                Events.onClick <| f direction
-
-            Nothing ->
-                classList []
+        , maybeOnClick <| Maybe.map (\f -> f direction) onClick
         ]
     <|
         Element.html <|
@@ -97,11 +100,7 @@ viewItem =
         , List.map (\p -> toString p => config p) Pallet.pallets
         )
         ( "direction"
-        , [ "Up" => Up
-          , "Down" => Down
-          , "Right" => Right
-          , "Left" => Left
-          ]
+        , List.map (\dir -> toString dir => dir) directions
         )
         |> withDefaultVariation (view (config Black) Up)
 
