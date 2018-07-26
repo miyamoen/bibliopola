@@ -5,6 +5,7 @@ import Element exposing (Element)
 import Lazy exposing (lazy)
 import Lazy.Tree as Tree
 import Lazy.Tree.Zipper as Zipper
+import List.Extra as List
 import Navigation
 import Route
 import Style exposing (Style)
@@ -49,6 +50,31 @@ createViewItem name view ( storyName, stories ) =
                 (\a -> lazy (\() -> view a |> Element.map (toString >> Print)))
             )
             stories
+            |> Dict.fromList
+    }
+
+
+createViewItem2 :
+    String
+    -> (a -> b -> Element child childVar msg)
+    -> ( String, List ( String, a ) )
+    -> ( String, List ( String, b ) )
+    -> View child childVar
+createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
+    { name = name
+    , state = Close
+    , stories =
+        [ aStoryName => List.map Tuple.first aStories
+        , bStoryName => List.map Tuple.first bStories
+        ]
+    , variations =
+        List.lift2
+            (\( aName, a ) ( bName, b ) ->
+                String.join "/" [ aName, bName ]
+                    => lazy (\() -> view a b |> Element.map (toString >> Print))
+            )
+            aStories
+            bStories
             |> Dict.fromList
     }
 

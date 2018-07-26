@@ -21,19 +21,30 @@ view zipper =
         depth =
             List.length <| Zipper.breadCrumbs zipper
     in
-    el Box [ width fill, onClick (SetViews <| Views.toggleTree zipper) ] <|
+    el Box [ width fill ] <|
         row None
-            [ spacing 5, moveRight <| toFloat depth * 30 ]
-            [ icon state (Zipper.isEmpty zipper)
+            [ spacing 5, moveRight <| toFloat depth * 30, verticalCenter ]
+            [ icon zipper
             , el Text [ vary (PalletVar <| textPallet state) True ] <|
                 text name
             ]
 
 
-icon : State -> Bool -> MyElement s v
-icon state isLeaf =
-    el Text [ vary (PalletVar <| textPallet state) True ] <|
-        case ( state, isLeaf ) of
+icon : Zipper (View s v) -> MyElement s v
+icon zipper =
+    let
+        { state } =
+            Zipper.current zipper
+    in
+    column Text
+        [ vary (PalletVar <| textPallet state) True
+        , onClick (SetViews <| Views.toggleTree zipper)
+        , width <| px 30
+        , height <| px 30
+        , center
+        , verticalCenter
+        ]
+        [ case ( state, Zipper.isEmpty zipper ) of
             ( Close, False ) ->
                 text "+"
 
@@ -42,6 +53,7 @@ icon state isLeaf =
 
             ( _, True ) ->
                 text "o"
+        ]
 
 
 textPallet : State -> Pallet
