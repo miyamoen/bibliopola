@@ -24,7 +24,7 @@ views =
         Tree.tree (item Open "root") <|
             LList.fromList
                 [ Tree.singleton (item Open "ham")
-                , Tree.tree (item Close "egg") <|
+                , Tree.tree (emptyItem Close "egg") <|
                     LList.fromList
                         [ Tree.singleton (item Close "boiled")
                         , Tree.singleton (item Close "fried")
@@ -32,7 +32,7 @@ views =
                         ]
                 , Tree.tree (item Open "spam") <|
                     LList.fromList
-                        [ Tree.tree (item Open "spamspam") <|
+                        [ Tree.tree (emptyItem Open "spamspam") <|
                             LList.fromList [ Tree.singleton (item Close "spamspamspam") ]
                         ]
                 ]
@@ -46,4 +46,13 @@ item state name =
     , variations =
         Dict.fromList
             [ "default" => lazy (\_ -> text <| name ++ " view") ]
+    }
+
+
+emptyItem : State -> String -> View s v
+emptyItem state name =
+    { name = name
+    , state = state
+    , stories = []
+    , variations = Dict.empty
     }

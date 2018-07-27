@@ -1,7 +1,11 @@
 module Molecule.ViewItem exposing (..)
 
+import Atom.Caret as Caret
+import Atom.File as File
+import Atom.Folder as Folder
 import Bibliopola exposing (..)
 import Color.Pallet exposing (Pallet(..))
+import Dict
 import Dummy
 import Element exposing (..)
 import Element.Attributes exposing (..)
@@ -23,47 +27,46 @@ view zipper =
     in
     el Box [ width fill ] <|
         row None
-            [ spacing 5, moveRight <| toFloat depth * 30, verticalCenter ]
-            [ icon zipper
-            , el Text [ vary (PalletVar <| textPallet state) True ] <|
-                text name
+            [ spacing 10, moveRight <| toFloat depth * 20, verticalCenter ]
+            [ caret zipper
+            , row None
+                [ spacing 5, verticalCenter ]
+                [ icon zipper, el Text [] <| text name ]
             ]
+
+
+caret : Zipper (View s v) -> MyElement s v
+caret zipper =
+    let
+        size =
+            15
+    in
+    if Zipper.isEmpty zipper then
+        el None [ width <| px size, height <| px size ] empty
+    else
+        Caret.view
+            { size = size
+            , pallet = Grey
+            , onClick = Just <| \_ -> SetViews <| Views.toggleTree zipper
+            }
+        <|
+            case .state <| Zipper.current zipper of
+                Open ->
+                    Caret.Down
+
+                Close ->
+                    Caret.Right
 
 
 icon : Zipper (View s v) -> MyElement s v
 icon zipper =
-    let
-        { state } =
-            Zipper.current zipper
-    in
-    column Text
-        [ vary (PalletVar <| textPallet state) True
-        , onClick (SetViews <| Views.toggleTree zipper)
-        , width <| px 30
-        , height <| px 30
-        , center
-        , verticalCenter
-        ]
-        [ case ( state, Zipper.isEmpty zipper ) of
-            ( Close, False ) ->
-                text "+"
-
-            ( Open, False ) ->
-                text "-"
-
-            ( _, True ) ->
-                text "o"
-        ]
-
-
-textPallet : State -> Pallet
-textPallet state =
-    case state of
-        Open ->
-            Blue
-
-        Close ->
-            Black
+    (if Dict.isEmpty <| .variations <| Zipper.current zipper then
+        Folder.view
+     else
+        File.view
+    )
+    <|
+        { size = 15, pallet = Black, onClick = Nothing }
 
 
 viewItem : View (Styles s) (Variation v)

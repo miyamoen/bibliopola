@@ -7,6 +7,7 @@ type Pallet
     = Black
     | White
     | Blue
+    | Grey
 
 
 pallets : List Pallet
@@ -25,6 +26,9 @@ color pallet =
 
         Blue ->
             rgb 45 129 204
+
+        Grey ->
+            rgb 100 100 100
 
 
 css : Pallet -> String
