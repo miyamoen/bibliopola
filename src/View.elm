@@ -9,5 +9,5 @@ import Types exposing (..)
 
 view : Model child childVar -> Html (Msg child childVar)
 view model =
-    layout (styleSheet model.styles) <|
+    viewport (styleSheet model.styles) <|
         Page.Main.view model

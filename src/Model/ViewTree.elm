@@ -1,6 +1,7 @@
 module Model.ViewTree
     exposing
         ( attemptOpenPath
+        , getPath
         , isEmpty
         , openPath
         , openRecursively
@@ -97,3 +98,11 @@ isEmpty tree =
     Zipper.current tree
         |> .variations
         |> Dict.isEmpty
+
+
+getPath : ViewTree s v -> String
+getPath tree =
+    Zipper.getPath .name tree
+        |> List.tail
+        |> Maybe.map (String.join "/")
+        |> Maybe.withDefault ""

@@ -1,7 +1,7 @@
 module Organism.ViewTree exposing (..)
 
-import Element exposing (..)
 import Element.Attributes exposing (..)
+import Element.Keyed exposing (column)
 import Model.ViewTree as ViewTree
 import Molecule.ViewTreeLine as ViewItemTreeLine
 import Types exposing (..)
@@ -10,5 +10,10 @@ import Types exposing (..)
 view : Model child childVar -> MyElement child childVar
 view { views } =
     column None [ spacing 5 ] <|
-        List.map ViewItemTreeLine.view <|
+        List.map line <|
             ViewTree.openRecursively views
+
+
+line : ViewTree s v -> ( String, MyElement s v )
+line tree =
+    ViewTree.getPath tree => ViewItemTreeLine.view tree
