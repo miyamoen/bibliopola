@@ -13,22 +13,26 @@ type Msg child childVar
     = NoOp
     | Print String
     | SetRoute Route
-    | SetViews (Zipper (View child childVar))
+    | SetViews (Zipper (ViewItem child childVar))
 
 
 type alias Model child childVar =
     { route : Route
-    , views : Zipper (View child childVar)
+    , views : ViewTree child childVar
     , styles : List (Style child childVar)
     }
 
 
-type alias View child childVar =
+type alias ViewItem child childVar =
     { name : String
     , state : State
     , stories : List ( String, List String )
     , variations : Dict String (Lazy (Element child childVar (Msg child childVar)))
     }
+
+
+type alias ViewTree child childVar =
+    Zipper (ViewItem child childVar)
 
 
 type State

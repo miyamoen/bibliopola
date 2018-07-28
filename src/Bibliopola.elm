@@ -10,23 +10,47 @@ import Navigation
 import Route
 import Style exposing (Style)
 import Types exposing (..)
+import Update exposing (update)
 import View exposing (view)
+
+
+createMain : Model child childVar -> MyProgram child childVar
+createMain model =
+    Navigation.program (Route.route >> SetRoute)
+        { view = view
+        , init =
+            \location ->
+                ( { model | route = Route.route location }, Cmd.none )
+        , update = update
+        , subscriptions = always Sub.none
+        }
 
 
 createMainFromViewItem :
     List (Style child childVar)
-    -> View child childVar
+    -> ViewItem child childVar
     -> MyProgram child childVar
-createMainFromViewItem styles view =
+createMainFromViewItem styles item =
+    createMainFromViewTree styles <| createViewTreeFromItem item
+
+
+createMainFromViewTree :
+    List (Style child childVar)
+    -> ViewTree child childVar
+    -> MyProgram child childVar
+createMainFromViewTree styles tree =
     createMain
         { route = Route.View [] <| Dict.fromList []
-        , views =
-            Zipper.fromTree <| Tree.singleton view
+        , views = tree
         , styles = styles
         }
 
 
-createEmptyViewItem : String -> View child childVar
+
+-- ViewItem
+
+
+createEmptyViewItem : String -> ViewItem child childVar
 createEmptyViewItem name =
     { name = name
     , state = Close
@@ -39,7 +63,7 @@ createViewItem :
     String
     -> (a -> Element child childVar msg)
     -> ( String, List ( String, a ) )
-    -> View child childVar
+    -> ViewItem child childVar
 createViewItem name view ( storyName, stories ) =
     { name = name
     , state = Close
@@ -59,7 +83,7 @@ createViewItem2 :
     -> (a -> b -> Element child childVar msg)
     -> ( String, List ( String, a ) )
     -> ( String, List ( String, b ) )
-    -> View child childVar
+    -> ViewItem child childVar
 createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
     { name = name
     , state = Close
@@ -81,8 +105,8 @@ createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
 
 withDefaultVariation :
     Element child childVar msg
-    -> View child childVar
-    -> View child childVar
+    -> ViewItem child childVar
+    -> ViewItem child childVar
 withDefaultVariation view viewItem =
     { viewItem
         | variations =
@@ -93,33 +117,30 @@ withDefaultVariation view viewItem =
     }
 
 
-createMain : Model child childVar -> MyProgram child childVar
-createMain model =
-    Navigation.program (Route.route >> SetRoute)
-        { view = view
-        , init =
-            \location ->
-                ( { model | route = Route.route location }, Cmd.none )
-        , update = update
-        , subscriptions = always Sub.none
-        }
+
+-- ViewTree
 
 
-update : Msg s v -> Model s v -> ( Model s v, Cmd (Msg s v) )
-update msg model =
-    case msg of
-        NoOp ->
-            model => Cmd.none
+createViewTreeFromItem : ViewItem child childVar -> ViewTree child childVar
+createViewTreeFromItem item =
+    Zipper.fromTree <| Tree.singleton item
 
-        Print print ->
-            let
-                _ =
-                    Debug.log "Msg" print
-            in
-            model => Cmd.none
 
-        SetRoute route ->
-            { model | route = Debug.log "route" route } => Cmd.none
+createEmptyViewTree : String -> ViewTree child childVar
+createEmptyViewTree name =
+    { name = name
+    , state = Close
+    , stories = []
+    , variations = Dict.empty
+    }
+        |> createViewTreeFromItem
 
-        SetViews views ->
-            { model | views = Zipper.root views } => Cmd.none
+
+insertViewItem : ViewItem s v -> ViewTree s v -> ViewTree s v
+insertViewItem item tree =
+    Zipper.insert (Tree.singleton item) tree
+
+
+insertViewTree : ViewTree s v -> ViewTree s v -> ViewTree s v
+insertViewTree ( childTree, _ ) tree =
+    Zipper.insert childTree tree
