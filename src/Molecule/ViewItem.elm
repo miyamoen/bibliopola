@@ -12,6 +12,7 @@ import Element.Attributes exposing (..)
 import Element.Events exposing (onClick)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Model.Views as Views exposing (..)
+import Route
 import Styles exposing (styles)
 import Types exposing (..)
 
@@ -25,7 +26,11 @@ view zipper =
             [ spacing 10, verticalCenter ]
             [ caret zipper
             , row None
-                [ spacing 5, verticalCenter ]
+                [ spacing 5
+                , verticalCenter
+                , onClick <| SetRoute <| Route.View (Zipper.getPath .name zipper) Dict.empty
+                , inlineStyle [ "cursor" => "pointer" ]
+                ]
                 [ icon zipper, el Text [] <| text <| .name <| Zipper.current zipper ]
             ]
         ]
