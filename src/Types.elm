@@ -13,7 +13,7 @@ type Msg child childVar
     = NoOp
     | Print String
     | SetRoute Route
-    | SetViews (Zipper (ViewItem child childVar))
+    | SetViews (ViewTree child childVar)
 
 
 type alias Model child childVar =

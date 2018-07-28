@@ -18,7 +18,7 @@ model =
     }
 
 
-views : Zipper (ViewItem s v)
+views : ViewTree s v
 views =
     Zipper.fromTree <|
         Tree.tree (item Open "root") <|

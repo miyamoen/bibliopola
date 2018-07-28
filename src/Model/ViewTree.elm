@@ -1,6 +1,7 @@
-module Model.Views
+module Model.ViewTree
     exposing
         ( attemptOpenPath
+        , isEmpty
         , openPath
         , openRecursively
         , openStory
@@ -14,20 +15,20 @@ import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Types exposing (..)
 
 
-attemptOpenPath : List String -> Zipper (ViewItem s v) -> Zipper (ViewItem s v)
+attemptOpenPath : List String -> ViewTree s v -> ViewTree s v
 attemptOpenPath paths zipper =
     openPath paths zipper
         |> Result.withDefault zipper
 
 
-openPath : List String -> Zipper (ViewItem s v) -> Result String (Zipper (ViewItem s v))
+openPath : List String -> ViewTree s v -> Result String (ViewTree s v)
 openPath paths zipper =
     Zipper.openPath (\path item -> item.name == path) paths zipper
 
 
 openStory :
     Dict String String
-    -> Zipper (ViewItem s v)
+    -> ViewTree s v
     -> Result String (Lazy (Element s v (Msg s v)))
 openStory queries zipper =
     let
@@ -36,7 +37,7 @@ openStory queries zipper =
     in
     if Dict.isEmpty queries then
         Dict.get "default" viewItem.variations
-            |> Result.fromMaybe "default story is not found"
+            |> Result.fromMaybe "This ViewItem has no views."
     else
         viewItem.stories
             |> List.map
@@ -58,7 +59,7 @@ combine =
     List.foldr (Result.map2 (::)) (Ok [])
 
 
-openRecursively : Zipper (ViewItem s v) -> List (Zipper (ViewItem s v))
+openRecursively : ViewTree s v -> List (ViewTree s v)
 openRecursively zipper =
     zipper
         :: (if (Zipper.current zipper |> .state) == Close then
@@ -74,7 +75,7 @@ openRecursively zipper =
 -- target view item
 
 
-toggleTree : Zipper (ViewItem s v) -> Zipper (ViewItem s v)
+toggleTree : ViewTree s v -> ViewTree s v
 toggleTree zipper =
     Zipper.updateItem
         (\item ->
@@ -89,3 +90,10 @@ toggleTree zipper =
             }
         )
         zipper
+
+
+isEmpty : ViewTree s v -> Bool
+isEmpty tree =
+    Zipper.current tree
+        |> .variations
+        |> Dict.isEmpty

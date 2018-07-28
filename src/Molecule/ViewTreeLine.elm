@@ -9,12 +9,12 @@ import Element exposing (..)
 import Element.Attributes exposing (..)
 import Element.Events exposing (onClick)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
-import Model.Views as Views exposing (..)
+import Model.ViewTree as ViewTree exposing (..)
 import Route
 import Types exposing (..)
 
 
-view : Zipper (ViewItem s v) -> MyElement s v
+view : ViewTree s v -> MyElement s v
 view zipper =
     row None
         []
@@ -49,7 +49,7 @@ setPath path =
             SetRoute <| Route.View [] Dict.empty
 
 
-spacer : Zipper (ViewItem s v) -> Element (Styles s) vv msg
+spacer : ViewTree s v -> Element (Styles s) vv msg
 spacer zipper =
     let
         depth =
@@ -76,7 +76,7 @@ oneSpace =
     ]
 
 
-lastSpace : Zipper (ViewItem s v) -> List (Element (Styles s) vv msg)
+lastSpace : ViewTree s v -> List (Element (Styles s) vv msg)
 lastSpace zipper =
     if Zipper.isEmpty zipper then
         [ el None [ width <| px 7 ] empty
@@ -115,7 +115,7 @@ borderCss =
     "2px solid rgba(138, 142, 180, 0.22)"
 
 
-caret : Zipper (ViewItem s v) -> MyElement s v
+caret : ViewTree s v -> MyElement s v
 caret zipper =
     if Zipper.isEmpty zipper then
         empty
@@ -123,7 +123,7 @@ caret zipper =
         Caret.view
             { size = 16
             , pallet = Grey
-            , onClick = Just <| \_ -> SetViews <| Views.toggleTree zipper
+            , onClick = Just <| \_ -> SetViews <| ViewTree.toggleTree zipper
             }
         <|
             case .state <| Zipper.current zipper of
@@ -134,7 +134,7 @@ caret zipper =
                     Caret.Right
 
 
-icon : Zipper (ViewItem s v) -> MyElement s v
+icon : ViewTree s v -> MyElement s v
 icon zipper =
     (if Dict.isEmpty <| .variations <| Zipper.current zipper then
         Folder.view

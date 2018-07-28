@@ -4,7 +4,7 @@ import Bibliopola exposing (..)
 import Dict exposing (Dict)
 import Dummy
 import Organism.ViewItem as ViewItem
-import Organism.ViewTree as ViewItemTree
+import Organism.ViewTree as ViewTree
 import Styles exposing (styles)
 import Types exposing (..)
 
@@ -27,8 +27,8 @@ viewItem =
 
 viewItemTree : ViewItem (Styles s) (Variation v)
 viewItemTree =
-    createEmptyViewItem "ViewItemTree"
-        |> withDefaultVariation (ViewItemTree.view Dummy.model)
+    createEmptyViewItem "ViewTree"
+        |> withDefaultVariation (ViewTree.view Dummy.model)
 
 
 main : MyProgram (Styles s) (Variation v)

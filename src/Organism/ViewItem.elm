@@ -3,7 +3,7 @@ module Organism.ViewItem exposing (..)
 import Dict exposing (Dict)
 import Element exposing (..)
 import Lazy
-import Model.Views as Views
+import Model.ViewTree as ViewTree
 import Types exposing (..)
 
 
@@ -14,8 +14,8 @@ view :
     -> MyElement s v
 view paths queries model =
     model.views
-        |> Views.openPath paths
-        |> Result.andThen (Views.openStory queries)
+        |> ViewTree.openPath paths
+        |> Result.andThen (ViewTree.openStory queries)
         |> Result.map Lazy.force
         |> resultExtract text
         |> Element.mapAll identity Child ChildVar
