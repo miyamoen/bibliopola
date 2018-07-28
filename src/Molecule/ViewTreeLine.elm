@@ -26,7 +26,7 @@ view zipper =
                 (if Dict.isEmpty <| .variations <| Zipper.current zipper then
                     [ spacing 5, verticalCenter ]
                  else
-                    [ onClick <| setPath <| Zipper.getPath .name zipper
+                    [ onClick <| goToPath <| Zipper.getPath .name zipper
                     , inlineStyle [ "cursor" => "pointer" ]
                     , spacing 5
                     , verticalCenter
@@ -39,14 +39,14 @@ view zipper =
         ]
 
 
-setPath : List String -> Msg s v
-setPath path =
+goToPath : List String -> Msg s v
+goToPath path =
     case path of
         _ :: path ->
-            SetRoute <| Route.View path Dict.empty
+            GoToRoute <| Route.View path Dict.empty
 
         [] ->
-            SetRoute <| Route.View [] Dict.empty
+            GoToRoute <| Route.View [] Dict.empty
 
 
 spacer : ViewTree s v -> Element (Styles s) vv msg

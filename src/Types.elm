@@ -13,6 +13,7 @@ type Msg child childVar
     = NoOp
     | Print String
     | SetRoute Route
+    | GoToRoute Route
     | SetViews (ViewTree child childVar)
 
 

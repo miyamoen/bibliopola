@@ -1,6 +1,7 @@
 module Update exposing (update)
 
 import Lazy.Tree.Zipper as Zipper
+import Route
 import Types exposing (..)
 
 
@@ -22,3 +23,11 @@ update msg model =
 
         SetViews views ->
             { model | views = Zipper.root views } => Cmd.none
+
+        GoToRoute route ->
+            model
+                => (if Route.isEqualPath model.route route then
+                        Route.modifyUrl route
+                    else
+                        Route.newUrl route
+                   )
