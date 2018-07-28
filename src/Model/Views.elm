@@ -14,21 +14,21 @@ import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Types exposing (..)
 
 
-attemptOpenPath : List String -> Zipper (View s v) -> Zipper (View s v)
+attemptOpenPath : List String -> Zipper (ViewItem s v) -> Zipper (ViewItem s v)
 attemptOpenPath paths zipper =
     openPath paths zipper
         |> Result.withDefault zipper
 
 
-openPath : List String -> Zipper (View s v) -> Result String (Zipper (View s v))
+openPath : List String -> Zipper (ViewItem s v) -> Result String (Zipper (ViewItem s v))
 openPath paths zipper =
     Zipper.openPath (\path item -> item.name == path) paths zipper
 
 
 openStory :
     Dict String String
-    -> Zipper (View s v)
-    -> Maybe (Lazy (Element s v (Msg s v)))
+    -> Zipper (ViewItem s v)
+    -> Result String (Lazy (Element s v (Msg s v)))
 openStory queries zipper =
     let
         viewItem =
@@ -36,29 +36,29 @@ openStory queries zipper =
     in
     if Dict.isEmpty queries then
         Dict.get "default" viewItem.variations
+            |> Result.fromMaybe "default story is not found"
     else
         viewItem.stories
-            |> List.map (\( key, _ ) -> Dict.get key queries)
+            |> List.map
+                (\( key, _ ) ->
+                    Dict.get key queries
+                        |> Result.fromMaybe (String.concat [ "story key : ", key, " is not found" ])
+                )
             |> combine
-            |> Maybe.map (String.join "/")
-            |> Maybe.andThen (\s -> Dict.get s viewItem.variations)
+            |> Result.map (String.join "/")
+            |> Result.andThen
+                (\s ->
+                    Dict.get s viewItem.variations
+                        |> Result.fromMaybe (String.concat [ "story : ", s, " is not found" ])
+                )
 
 
-combine : List (Maybe a) -> Maybe (List a)
+combine : List (Result x a) -> Result x (List a)
 combine =
-    let
-        step e acc =
-            case e of
-                Nothing ->
-                    Nothing
-
-                Just x ->
-                    Maybe.map ((::) x) acc
-    in
-    List.foldr step (Just [])
+    List.foldr (Result.map2 (::)) (Ok [])
 
 
-openRecursively : Zipper (View s v) -> List (Zipper (View s v))
+openRecursively : Zipper (ViewItem s v) -> List (Zipper (ViewItem s v))
 openRecursively zipper =
     zipper
         :: (if (Zipper.current zipper |> .state) == Close then
@@ -74,7 +74,7 @@ openRecursively zipper =
 -- target view item
 
 
-toggleTree : Zipper (View s v) -> Zipper (View s v)
+toggleTree : Zipper (ViewItem s v) -> Zipper (ViewItem s v)
 toggleTree zipper =
     Zipper.updateItem
         (\item ->

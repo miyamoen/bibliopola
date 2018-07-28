@@ -1,11 +1,9 @@
-module Atom.Folder exposing (Config, view, viewItem)
+module Atom.Folder exposing (Config, view)
 
-import Bibliopola exposing (..)
 import Color.Pallet as Pallet exposing (Pallet(..))
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Element.Util exposing (maybeOnClick)
-import Styles exposing (styles)
 import Svg exposing (..)
 import Svg.Attributes exposing (d, viewBox)
 import Types exposing (..)
@@ -55,25 +53,3 @@ pathString =
  c2.228-2.186,5.065-3.472,8.414-3.481h70.4c3.028,0,5.923,1.147,8.142,3.218l43.062,40.381l0.016,0.025
  c10.015,9.363,23.239,14.618,37.007,14.618h245.106c3.35,0.008,6.196,1.295,8.414,3.481c2.186,2.219,3.474,5.057,3.481,8.406
  v267.859C469.756,422.395,468.468,425.233,466.282,427.452z"""
-
-
-viewItem : View (Styles s) (Variation v)
-viewItem =
-    let
-        config pallet =
-            { pallet = pallet
-            , onClick = Just "Folder clicked!"
-            , size = 256
-            }
-    in
-    createViewItem "Folder"
-        view
-        ( "pallet"
-        , List.map (\p -> toString p => config p) Pallet.pallets
-        )
-        |> withDefaultVariation (view <| config Black)
-
-
-main : MyProgram (Styles s) (Variation v)
-main =
-    createMainFromViewItem styles viewItem

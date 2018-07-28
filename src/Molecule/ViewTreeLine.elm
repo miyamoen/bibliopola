@@ -1,23 +1,20 @@
-module Molecule.ViewItem exposing (view, viewItem)
+module Molecule.ViewTreeLine exposing (view)
 
 import Atom.Caret as Caret
 import Atom.File as File
 import Atom.Folder as Folder
-import Bibliopola exposing (..)
 import Color.Pallet exposing (Pallet(..))
 import Dict
-import Dummy
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Element.Events exposing (onClick)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Model.Views as Views exposing (..)
 import Route
-import Styles exposing (styles)
 import Types exposing (..)
 
 
-view : Zipper (View s v) -> MyElement s v
+view : Zipper (ViewItem s v) -> MyElement s v
 view zipper =
     row None
         []
@@ -26,17 +23,33 @@ view zipper =
             [ spacing 10, verticalCenter ]
             [ caret zipper
             , row None
-                [ spacing 5
-                , verticalCenter
-                , onClick <| SetRoute <| Route.View (Zipper.getPath .name zipper) Dict.empty
-                , inlineStyle [ "cursor" => "pointer" ]
+                (if Dict.isEmpty <| .variations <| Zipper.current zipper then
+                    [ spacing 5, verticalCenter ]
+                 else
+                    [ onClick <| setPath <| Zipper.getPath .name zipper
+                    , inlineStyle [ "cursor" => "pointer" ]
+                    , spacing 5
+                    , verticalCenter
+                    ]
+                )
+                [ icon zipper
+                , el Text [] <| text <| .name <| Zipper.current zipper
                 ]
-                [ icon zipper, el Text [] <| text <| .name <| Zipper.current zipper ]
             ]
         ]
 
 
-spacer : Zipper (View s v) -> Element (Styles s) vv msg
+setPath : List String -> Msg s v
+setPath path =
+    case path of
+        _ :: path ->
+            SetRoute <| Route.View path Dict.empty
+
+        [] ->
+            SetRoute <| Route.View [] Dict.empty
+
+
+spacer : Zipper (ViewItem s v) -> Element (Styles s) vv msg
 spacer zipper =
     let
         depth =
@@ -63,7 +76,7 @@ oneSpace =
     ]
 
 
-lastSpace : Zipper (View s v) -> List (Element (Styles s) vv msg)
+lastSpace : Zipper (ViewItem s v) -> List (Element (Styles s) vv msg)
 lastSpace zipper =
     if Zipper.isEmpty zipper then
         [ el None [ width <| px 7 ] empty
@@ -102,7 +115,7 @@ borderCss =
     "2px solid rgba(138, 142, 180, 0.22)"
 
 
-caret : Zipper (View s v) -> MyElement s v
+caret : Zipper (ViewItem s v) -> MyElement s v
 caret zipper =
     if Zipper.isEmpty zipper then
         empty
@@ -121,7 +134,7 @@ caret zipper =
                     Caret.Right
 
 
-icon : Zipper (View s v) -> MyElement s v
+icon : Zipper (ViewItem s v) -> MyElement s v
 icon zipper =
     (if Dict.isEmpty <| .variations <| Zipper.current zipper then
         Folder.view
@@ -130,22 +143,3 @@ icon zipper =
     )
     <|
         { size = 16, pallet = Black, onClick = Nothing }
-
-
-viewItem : View (Styles s) (Variation v)
-viewItem =
-    createViewItem "ViewItem"
-        view
-        ( "views"
-        , [ "root" => Dummy.views
-          , "ham" => Views.attemptOpenPath [ "ham" ] Dummy.views
-          , "egg" => Views.attemptOpenPath [ "egg" ] Dummy.views
-          , "boiled_egg" => Views.attemptOpenPath [ "egg", "boiled" ] Dummy.views
-          ]
-        )
-        |> withDefaultVariation (view Dummy.views)
-
-
-main : MyProgram (Styles s) (Variation v)
-main =
-    createMainFromViewItem styles viewItem

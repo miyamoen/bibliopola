@@ -18,7 +18,7 @@ model =
     }
 
 
-views : Zipper (View s v)
+views : Zipper (ViewItem s v)
 views =
     Zipper.fromTree <|
         Tree.tree (item Open "root") <|
@@ -38,7 +38,7 @@ views =
                 ]
 
 
-item : State -> String -> View s v
+item : State -> String -> ViewItem s v
 item state name =
     { name = name
     , state = state
@@ -49,7 +49,7 @@ item state name =
     }
 
 
-emptyItem : State -> String -> View s v
+emptyItem : State -> String -> ViewItem s v
 emptyItem state name =
     { name = name
     , state = state
