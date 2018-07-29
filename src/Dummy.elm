@@ -4,7 +4,7 @@ import Dict
 import Element exposing (text)
 import Lazy exposing (lazy)
 import Lazy.LList as LList
-import Lazy.Tree as Tree
+import Lazy.Tree as Tree exposing (Tree(Tree))
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Route
 import Types exposing (..)
@@ -21,18 +21,18 @@ model =
 views : ViewTree s v
 views =
     Zipper.fromTree <|
-        Tree.tree (item Open "root") <|
+        Tree (item Open "root") <|
             LList.fromList
                 [ Tree.singleton (item Open "ham")
-                , Tree.tree (emptyItem Close "egg") <|
+                , Tree (emptyItem Close "egg") <|
                     LList.fromList
                         [ Tree.singleton (item Close "boiled")
                         , Tree.singleton (item Close "fried")
                         , Tree.singleton (item Close "scrambled")
                         ]
-                , Tree.tree (item Open "spam") <|
+                , Tree (item Open "spam") <|
                     LList.fromList
-                        [ Tree.tree (emptyItem Open "spamspam") <|
+                        [ Tree (emptyItem Open "spamspam") <|
                             LList.fromList [ Tree.singleton (item Close "spamspamspam") ]
                         ]
                 ]

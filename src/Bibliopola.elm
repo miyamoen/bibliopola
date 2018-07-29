@@ -4,7 +4,7 @@ import Dict
 import Element exposing (Element)
 import Lazy exposing (lazy)
 import Lazy.Tree as Tree
-import Lazy.Tree.Zipper as Zipper
+import Lazy.Tree.Zipper as Zipper exposing (Zipper(Zipper))
 import List.Extra as List
 import Navigation
 import Route
@@ -142,5 +142,5 @@ insertViewItem item tree =
 
 
 insertViewTree : ViewTree s v -> ViewTree s v -> ViewTree s v
-insertViewTree ( childTree, _ ) tree =
+insertViewTree (Zipper childTree _) tree =
     Zipper.insert childTree tree

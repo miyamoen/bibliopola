@@ -53,7 +53,7 @@ spacer : ViewTree s v -> Element (Styles s) vv msg
 spacer zipper =
     let
         depth =
-            List.length <| Zipper.breadCrumbs zipper
+            List.length <| Zipper.breadcrumbs zipper
     in
     if depth == 0 then
         empty
