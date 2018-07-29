@@ -4,6 +4,7 @@ import Atom.Caret as Caret
 import Atom.File as File
 import Atom.Folder as Folder
 import Atom.SelectBox as SelectBox
+import Atom.Toggle as Toggle
 import Bibliopola exposing (..)
 import Color.Pallet as Pallet exposing (Pallet(..))
 import Styles exposing (styles)
@@ -19,7 +20,11 @@ tree =
                 |> insertViewItem file
                 |> insertViewItem folder
             )
-        |> insertViewItem selectBox
+        |> insertViewTree
+            (createEmptyViewTree "Form"
+                |> insertViewItem selectBox
+                |> insertViewItem toggle
+            )
 
 
 caret : ViewItem (Styles s) (Variation v)
@@ -80,6 +85,14 @@ selectBox : ViewItem (Styles s) (Variation v)
 selectBox =
     createEmptyViewItem "SelectBox"
         |> withDefaultVariation (SelectBox.view_ [ "a", "b", "c", "d", "e", "f", "g" ] "e")
+
+
+toggle : ViewItem (Styles s) (Variation v)
+toggle =
+    createViewItem "Toggle"
+        (Toggle.view { name = "On", onClick = identity })
+        ( "on", [ "True" => True, "False" => False ] )
+        |> withDefaultVariation (Toggle.view { name = "On", onClick = identity } True)
 
 
 main : MyProgram (Styles s) (Variation v)

@@ -6,6 +6,7 @@ module Model.ViewTree
         , openPath
         , openRecursively
         , openStory
+        , toggleStoryMode
         , toggleTree
         )
 
@@ -91,6 +92,19 @@ toggleTree zipper =
             }
         )
         zipper
+
+
+toggleStoryMode : ViewTree s v -> ViewTree s v
+toggleStoryMode tree =
+    Zipper.updateItem
+        (\item ->
+            let
+                form =
+                    item.form
+            in
+            { item | form = { form | storyOn = not form.storyOn } }
+        )
+        tree
 
 
 isEmpty : ViewTree s v -> Bool

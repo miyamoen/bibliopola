@@ -1,7 +1,8 @@
 module Dummy exposing (..)
 
+import Bibliopola exposing (createViewItem4)
 import Dict
-import Element exposing (text)
+import Element exposing (column, text)
 import Lazy exposing (lazy)
 import Lazy.LList as LList
 import Lazy.Tree as Tree exposing (Tree(Tree))
@@ -46,6 +47,7 @@ item state name =
     , variations =
         Dict.fromList
             [ "default" => lazy (\_ -> text <| name ++ " view") ]
+    , form = { storyOn = False, stories = [] }
     }
 
 
@@ -55,4 +57,19 @@ emptyItem state name =
     , state = state
     , stories = []
     , variations = Dict.empty
+    , form = { storyOn = False, stories = [] }
     }
+
+
+storyItem : ViewItem (Styles s) v
+storyItem =
+    createViewItem4 "4Stories"
+        (\a b c d ->
+            column None
+                []
+                [ text a, text b, text c, text d ]
+        )
+        ( "aStory", [ "aStory1" => "aStory1", "aStory2" => "aStory2", "aStory3" => "aStory3", "aStory4" => "aStory4", "aStory5" => "aStory5" ] )
+        ( "bStory", [ "bStory1" => "bStory1", "bStory2" => "bStory2", "bStory3" => "bStory3", "bStory4" => "bStory4", "bStory5" => "bStory5" ] )
+        ( "cStory", [ "cStory1" => "cStory1", "cStory2" => "cStory2", "cStory3" => "cStory3", "cStory4" => "cStory4", "cStory5" => "cStory5" ] )
+        ( "dStory", [ "dStory1" => "dStory1", "dStory2" => "dStory2", "dStory3" => "dStory3", "dStory4" => "dStory4", "dStory5" => "dStory5" ] )

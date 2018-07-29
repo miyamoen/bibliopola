@@ -56,6 +56,7 @@ createEmptyViewItem name =
     , state = Close
     , stories = []
     , variations = Dict.empty
+    , form = { storyOn = False, stories = [] }
     }
 
 
@@ -65,9 +66,13 @@ createViewItem :
     -> ( String, List ( String, a ) )
     -> ViewItem child childVar
 createViewItem name view ( storyName, stories ) =
+    let
+        stories_ =
+            [ storyName => List.map Tuple.first stories ]
+    in
     { name = name
     , state = Close
-    , stories = [ storyName => List.map Tuple.first stories ]
+    , stories = stories_
     , variations =
         List.map
             (Tuple.mapSecond
@@ -75,6 +80,7 @@ createViewItem name view ( storyName, stories ) =
             )
             stories
             |> Dict.fromList
+    , form = { storyOn = False, stories = initFormStories stories_ }
     }
 
 
@@ -85,12 +91,15 @@ createViewItem2 :
     -> ( String, List ( String, b ) )
     -> ViewItem child childVar
 createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
+    let
+        stories_ =
+            [ aStoryName => List.map Tuple.first aStories
+            , bStoryName => List.map Tuple.first bStories
+            ]
+    in
     { name = name
     , state = Close
-    , stories =
-        [ aStoryName => List.map Tuple.first aStories
-        , bStoryName => List.map Tuple.first bStories
-        ]
+    , stories = stories_
     , variations =
         List.lift2
             (\( aName, a ) ( bName, b ) ->
@@ -100,6 +109,74 @@ createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
             aStories
             bStories
             |> Dict.fromList
+    , form = { storyOn = False, stories = initFormStories stories_ }
+    }
+
+
+createViewItem3 :
+    String
+    -> (a -> b -> c -> Element child childVar msg)
+    -> ( String, List ( String, a ) )
+    -> ( String, List ( String, b ) )
+    -> ( String, List ( String, c ) )
+    -> ViewItem child childVar
+createViewItem3 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) =
+    let
+        stories_ =
+            [ aStoryName => List.map Tuple.first aStories
+            , bStoryName => List.map Tuple.first bStories
+            , cStoryName => List.map Tuple.first cStories
+            ]
+    in
+    { name = name
+    , state = Close
+    , stories = stories_
+    , variations =
+        List.lift3
+            (\( aName, a ) ( bName, b ) ( cName, c ) ->
+                String.join "/" [ aName, bName, cName ]
+                    => lazy (\() -> view a b c |> Element.map (toString >> Print))
+            )
+            aStories
+            bStories
+            cStories
+            |> Dict.fromList
+    , form = { storyOn = False, stories = initFormStories stories_ }
+    }
+
+
+createViewItem4 :
+    String
+    -> (a -> b -> c -> d -> Element child childVar msg)
+    -> ( String, List ( String, a ) )
+    -> ( String, List ( String, b ) )
+    -> ( String, List ( String, c ) )
+    -> ( String, List ( String, d ) )
+    -> ViewItem child childVar
+createViewItem4 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) ( dStoryName, dStories ) =
+    let
+        stories_ =
+            [ aStoryName => List.map Tuple.first aStories
+            , bStoryName => List.map Tuple.first bStories
+            , cStoryName => List.map Tuple.first cStories
+            , dStoryName => List.map Tuple.first dStories
+            ]
+    in
+    { name = name
+    , state = Close
+    , stories = stories_
+    , variations =
+        List.lift4
+            (\( aName, a ) ( bName, b ) ( cName, c ) ( dName, d ) ->
+                String.join "/" [ aName, bName, cName, dName ]
+                    => lazy (\() -> view a b c d |> Element.map (toString >> Print))
+            )
+            aStories
+            bStories
+            cStories
+            dStories
+            |> Dict.fromList
+    , form = { storyOn = False, stories = initFormStories stories_ }
     }
 
 
@@ -117,6 +194,12 @@ withDefaultVariation view viewItem =
     }
 
 
+initFormStories : List ( String, List String ) -> List ( String, String )
+initFormStories stories =
+    stories
+        |> List.map (Tuple.mapSecond (List.head >> Maybe.withDefault ""))
+
+
 
 -- ViewTree
 
@@ -128,11 +211,7 @@ createViewTreeFromItem item =
 
 createEmptyViewTree : String -> ViewTree child childVar
 createEmptyViewTree name =
-    { name = name
-    , state = Close
-    , stories = []
-    , variations = Dict.empty
-    }
+    createEmptyViewItem name
         |> createViewTreeFromItem
 
 

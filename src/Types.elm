@@ -29,6 +29,7 @@ type alias ViewItem child childVar =
     , state : State
     , stories : List ( String, List String )
     , variations : Dict String (Lazy (Element child childVar (Msg child childVar)))
+    , form : { stories : List ( String, String ), storyOn : Bool }
     }
 
 
