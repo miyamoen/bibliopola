@@ -3,6 +3,7 @@ module Atom.Index exposing (..)
 import Atom.Caret as Caret
 import Atom.File as File
 import Atom.Folder as Folder
+import Atom.SelectBox as SelectBox
 import Bibliopola exposing (..)
 import Color.Pallet as Pallet exposing (Pallet(..))
 import Styles exposing (styles)
@@ -12,9 +13,13 @@ import Types exposing (..)
 tree : ViewTree (Styles s) (Variation v)
 tree =
     createEmptyViewTree "Atom"
-        |> insertViewItem caret
-        |> insertViewItem file
-        |> insertViewItem folder
+        |> insertViewTree
+            (createEmptyViewTree "Icon"
+                |> insertViewItem caret
+                |> insertViewItem file
+                |> insertViewItem folder
+            )
+        |> insertViewItem selectBox
 
 
 caret : ViewItem (Styles s) (Variation v)
@@ -69,6 +74,12 @@ folder =
         , List.map (\p -> toString p => config p) Pallet.pallets
         )
         |> withDefaultVariation (Folder.view <| config Black)
+
+
+selectBox : ViewItem (Styles s) (Variation v)
+selectBox =
+    createEmptyViewItem "SelectBox"
+        |> withDefaultVariation (SelectBox.view_ [ "a", "b", "c", "d", "e", "f", "g" ] "e")
 
 
 main : MyProgram (Styles s) (Variation v)
