@@ -90,9 +90,9 @@ selectBox =
 toggle : ViewItem (Styles s) (Variation v)
 toggle =
     createViewItem "Toggle"
-        (Toggle.view { name = "On", onClick = identity })
+        (Toggle.view { name = "On", onClick = "Clicked" })
         ( "on", [ "True" => True, "False" => False ] )
-        |> withDefaultVariation (Toggle.view { name = "On", onClick = identity } True)
+        |> withDefaultVariation (Toggle.view { name = "On", onClick = "Clicked" } True)
 
 
 main : MyProgram (Styles s) (Variation v)

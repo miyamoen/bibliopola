@@ -1,6 +1,6 @@
 module Dummy exposing (..)
 
-import Bibliopola exposing (createViewItem4)
+import Bibliopola exposing (createViewItem4, createViewTreeFromItem)
 import Dict
 import Element exposing (column, text)
 import Lazy exposing (lazy)
@@ -61,15 +61,12 @@ emptyItem state name =
     }
 
 
-storyItem : ViewItem (Styles s) v
-storyItem =
+storyTree : ViewTree s v
+storyTree =
     createViewItem4 "4Stories"
-        (\a b c d ->
-            column None
-                []
-                [ text a, text b, text c, text d ]
-        )
+        (\a b c d -> text <| String.join ", " [ a, b, c, d ])
         ( "aStory", [ "aStory1" => "aStory1", "aStory2" => "aStory2", "aStory3" => "aStory3", "aStory4" => "aStory4", "aStory5" => "aStory5" ] )
         ( "bStory", [ "bStory1" => "bStory1", "bStory2" => "bStory2", "bStory3" => "bStory3", "bStory4" => "bStory4", "bStory5" => "bStory5" ] )
         ( "cStory", [ "cStory1" => "cStory1", "cStory2" => "cStory2", "cStory3" => "cStory3", "cStory4" => "cStory4", "cStory5" => "cStory5" ] )
         ( "dStory", [ "dStory1" => "dStory1", "dStory2" => "dStory2", "dStory3" => "dStory3", "dStory4" => "dStory4", "dStory5" => "dStory5" ] )
+        |> createViewTreeFromItem

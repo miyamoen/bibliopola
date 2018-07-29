@@ -14,7 +14,7 @@ type Msg child childVar
     | Print String
     | SetRoute Route
     | GoToRoute Route
-    | SetViews (ViewTree child childVar)
+    | SetViewTree (ViewTree child childVar)
 
 
 type alias Model child childVar =

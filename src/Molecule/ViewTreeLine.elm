@@ -123,7 +123,7 @@ caret zipper =
         Caret.view
             { size = 16
             , pallet = Grey
-            , onClick = Just <| \_ -> SetViews <| ViewTree.toggleTree zipper
+            , onClick = Just <| \_ -> SetViewTree <| ViewTree.toggleTree zipper
             }
         <|
             case .state <| Zipper.current zipper of

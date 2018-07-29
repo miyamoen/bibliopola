@@ -7,13 +7,13 @@ import Types exposing (..)
 
 
 type alias Config a msg =
-    { a | name : String, onClick : Bool -> msg }
+    { a | name : String, onClick : msg }
 
 
 view : Config a msg -> Bool -> Element (Styles s) v msg
 view { name, onClick } on =
     row None
-        [ spacing 5, verticalCenter, Events.onClick (onClick on) ]
+        [ spacing 5, verticalCenter, Events.onClick onClick ]
         [ el Text [] <| text name
         , el None
             [ padding 2

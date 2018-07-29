@@ -1,11 +1,14 @@
 module Model.ViewTree
     exposing
         ( attemptOpenPath
+        , getFormStories
         , getPath
         , isEmpty
+        , isStoryMode
         , openPath
         , openRecursively
         , openStory
+        , setFormStory
         , toggleStoryMode
         , toggleTree
         )
@@ -14,6 +17,7 @@ import Dict exposing (Dict)
 import Element exposing (Element)
 import Lazy exposing (Lazy)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
+import List.Extra as List
 import Types exposing (..)
 
 
@@ -107,6 +111,36 @@ toggleStoryMode tree =
         tree
 
 
+setFormStory : String -> String -> ViewTree s v -> ViewTree s v
+setFormStory name story tree =
+    Zipper.updateItem
+        (\item ->
+            let
+                form =
+                    item.form
+            in
+            { item
+                | form =
+                    { form
+                        | stories =
+                            form.stories
+                                |> List.map
+                                    (\( targetName, targetStory ) ->
+                                        if targetName == name then
+                                            ( targetName, story )
+                                        else
+                                            ( targetName, targetStory )
+                                    )
+                    }
+            }
+        )
+        tree
+
+
+
+-- Query
+
+
 isEmpty : ViewTree s v -> Bool
 isEmpty tree =
     Zipper.current tree
@@ -120,3 +154,32 @@ getPath tree =
         |> List.tail
         |> Maybe.map (String.join "/")
         |> Maybe.withDefault ""
+
+
+isStoryMode : ViewTree s v -> Bool
+isStoryMode tree =
+    Zipper.current tree
+        |> .form
+        |> .storyOn
+
+
+getFormStories :
+    ViewTree s v
+    -> List { name : String, selected : String, options : List String }
+getFormStories tree =
+    let
+        item =
+            Zipper.current tree
+    in
+    item.stories
+        |> List.map
+            (\( name, stories ) ->
+                { name = name
+                , options = stories
+                , selected =
+                    item.form.stories
+                        |> List.find (Tuple.first >> (==) name)
+                        |> Maybe.map Tuple.second
+                        |> Maybe.withDefault ""
+                }
+            )

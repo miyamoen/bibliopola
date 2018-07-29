@@ -1,6 +1,19 @@
-module List.Extra exposing (lift2, lift3, lift4)
+module List.Extra exposing (find, lift2, lift3, lift4)
 
 import List exposing (..)
+
+
+find : (a -> Bool) -> List a -> Maybe a
+find predicate list =
+    case list of
+        [] ->
+            Nothing
+
+        first :: rest ->
+            if predicate first then
+                Just first
+            else
+                find predicate rest
 
 
 lift2 : (a -> b -> c) -> List a -> List b -> List c

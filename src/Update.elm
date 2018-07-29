@@ -21,7 +21,7 @@ update msg model =
         SetRoute route ->
             { model | route = Debug.log "route" route } => Cmd.none
 
-        SetViews views ->
+        SetViewTree views ->
             { model | views = Zipper.root views } => Cmd.none
 
         GoToRoute route ->
