@@ -12,17 +12,22 @@ type alias Config a msg =
         | name : String
         , onChange : String -> msg
         , options : List String
+        , disabled : Bool
     }
 
 
 view : Config a msg -> String -> Element (Styles s) v msg
-view { name, options, onChange } selected =
+view { name, options, onChange, disabled } selected =
     column None
         [ spacing 5 ]
         [ el Text
             [ inlineStyle
                 [ "text-decoration" => "underline"
                 , "font-style" => "italic"
+                , if disabled then
+                    "color" => "rgb(150, 150, 150)"
+                  else
+                    "" => ""
                 ]
             ]
           <|
@@ -38,6 +43,10 @@ view { name, options, onChange } selected =
                         , "border-radius" => "4px"
                         ]
                     , on "change" <| decoder onChange
+                    , if disabled then
+                        attribute "disabled" ""
+                      else
+                        classList []
                     ]
                 <|
                     List.map (option selected) options
@@ -64,6 +73,12 @@ decoder f =
         |> Json.Decode.map f
 
 
-view_ : List String -> String -> Element (Styles s) v String
-view_ options selected =
-    view { options = options, name = "exampleName", onChange = identity } selected
+view_ : List String -> String -> Bool -> Element (Styles s) v String
+view_ options selected disabled =
+    view
+        { options = options
+        , name = "exampleName"
+        , onChange = identity
+        , disabled = disabled
+        }
+        selected

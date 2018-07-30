@@ -15,6 +15,7 @@ type Msg child childVar
     | SetRoute Route
     | GoToRoute Route
     | SetViewTree (ViewTree child childVar)
+    | SetViewTreeWithRoute (ViewTree child childVar)
 
 
 type alias Model child childVar =
@@ -29,7 +30,7 @@ type alias ViewItem child childVar =
     , state : State
     , stories : List ( String, List String )
     , variations : Dict String (Lazy (Element child childVar (Msg child childVar)))
-    , form : { stories : List ( String, String ), storyOn : Bool }
+    , form : { stories : Dict String String, storyOn : Bool }
     }
 
 

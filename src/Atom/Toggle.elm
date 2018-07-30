@@ -29,10 +29,12 @@ view { name, onClick } on =
                 , inlineStyle
                     [ "border-radius" => "20px"
                     , "transition" => "transform .1s,background-color .1s"
-                    , if on then
-                        "background-color" => "rgb(139, 190, 236)"
-                      else
-                        "" => ""
+                    , "background-color"
+                        => (if on then
+                                "rgb(139, 190, 236)"
+                            else
+                                "rgb(255,255,255)"
+                           )
                     ]
                 ]
             <|
@@ -42,10 +44,12 @@ view { name, onClick } on =
                     , inlineStyle
                         [ "border-radius" => "8px"
                         , "background-color" => "rgb(45, 129, 204)"
-                        , if on then
-                            "transform" => "translateX(24px)"
-                          else
-                            "" => ""
+                        , "transform"
+                            => (if on then
+                                    "translateX(24px)"
+                                else
+                                    "translateX(0px)"
+                               )
                         ]
                     ]
                     empty

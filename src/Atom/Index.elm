@@ -83,8 +83,28 @@ folder =
 
 selectBox : ViewItem (Styles s) (Variation v)
 selectBox =
-    createEmptyViewItem "SelectBox"
-        |> withDefaultVariation (SelectBox.view_ [ "a", "b", "c", "d", "e", "f", "g" ] "e")
+    createViewItem3 "SelectBox"
+        SelectBox.view_
+        ( "options"
+        , [ "one" => [ "a", "b", "c", "d", "e", "f", "g" ]
+          , "long" => [ "hogehogehogehogehoge", "miyamiyamiyamiya" ]
+          ]
+        )
+        ("selected"
+            => [ "a" => "a"
+               , "c" => "c"
+               , "e" => "e"
+               , "g" => "g"
+               , "miyamiyamiyamiya" => "miyamiyamiyamiya"
+               ]
+        )
+        ( "disabled", [ "False" => False, "True" => True ] )
+        |> withDefaultVariation
+            (SelectBox.view_
+                [ "a", "b", "c", "d", "e", "f", "g" ]
+                "e"
+                False
+            )
 
 
 toggle : ViewItem (Styles s) (Variation v)

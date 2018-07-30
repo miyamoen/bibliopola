@@ -10,7 +10,6 @@ import Element.Attributes exposing (..)
 import Element.Events exposing (onClick)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Model.ViewTree as ViewTree exposing (..)
-import Route
 import Types exposing (..)
 
 
@@ -26,7 +25,7 @@ view zipper =
                 (if Dict.isEmpty <| .variations <| Zipper.current zipper then
                     [ spacing 5, verticalCenter ]
                  else
-                    [ onClick <| goToPath <| Zipper.getPath .name zipper
+                    [ onClick <| GoToRoute <| getRoute zipper
                     , inlineStyle [ "cursor" => "pointer" ]
                     , spacing 5
                     , verticalCenter
@@ -37,16 +36,6 @@ view zipper =
                 ]
             ]
         ]
-
-
-goToPath : List String -> Msg s v
-goToPath path =
-    case path of
-        _ :: path ->
-            GoToRoute <| Route.View path Dict.empty
-
-        [] ->
-            GoToRoute <| Route.View [] Dict.empty
 
 
 spacer : ViewTree s v -> Element (Styles s) vv msg

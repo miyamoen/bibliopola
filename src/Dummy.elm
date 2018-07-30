@@ -47,7 +47,7 @@ item state name =
     , variations =
         Dict.fromList
             [ "default" => lazy (\_ -> text <| name ++ " view") ]
-    , form = { storyOn = False, stories = [] }
+    , form = { storyOn = False, stories = Dict.empty }
     }
 
 
@@ -57,7 +57,7 @@ emptyItem state name =
     , state = state
     , stories = []
     , variations = Dict.empty
-    , form = { storyOn = False, stories = [] }
+    , form = { storyOn = False, stories = Dict.empty }
     }
 
 

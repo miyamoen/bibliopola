@@ -3,6 +3,9 @@ module Model.ViewTree
         ( attemptOpenPath
         , getFormStories
         , getPath
+        , getPathString
+        , getQuery
+        , getRoute
         , isEmpty
         , isStoryMode
         , openPath
@@ -17,7 +20,7 @@ import Dict exposing (Dict)
 import Element exposing (Element)
 import Lazy exposing (Lazy)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
-import List.Extra as List
+import Route exposing (Route(View))
 import Types exposing (..)
 
 
@@ -51,7 +54,7 @@ openStory queries zipper =
                     Dict.get key queries
                         |> Result.fromMaybe (String.concat [ "story key : ", key, " is not found" ])
                 )
-            |> combine
+            |> listCombine
             |> Result.map (String.join "/")
             |> Result.andThen
                 (\s ->
@@ -60,8 +63,8 @@ openStory queries zipper =
                 )
 
 
-combine : List (Result x a) -> Result x (List a)
-combine =
+listCombine : List (Result x a) -> Result x (List a)
+listCombine =
     List.foldr (Result.map2 (::)) (Ok [])
 
 
@@ -121,17 +124,7 @@ setFormStory name story tree =
             in
             { item
                 | form =
-                    { form
-                        | stories =
-                            form.stories
-                                |> List.map
-                                    (\( targetName, targetStory ) ->
-                                        if targetName == name then
-                                            ( targetName, story )
-                                        else
-                                            ( targetName, targetStory )
-                                    )
-                    }
+                    { form | stories = Dict.insert name story form.stories }
             }
         )
         tree
@@ -148,12 +141,24 @@ isEmpty tree =
         |> Dict.isEmpty
 
 
-getPath : ViewTree s v -> String
+getPath : ViewTree s v -> List String
 getPath tree =
     Zipper.getPath .name tree
         |> List.tail
-        |> Maybe.map (String.join "/")
-        |> Maybe.withDefault ""
+        |> Maybe.withDefault []
+
+
+getPathString : ViewTree s v -> String
+getPathString tree =
+    getPath tree
+        |> String.join "/"
+
+
+getQuery : ViewTree s v -> Dict String String
+getQuery tree =
+    Zipper.current tree
+        |> .form
+        |> .stories
 
 
 isStoryMode : ViewTree s v -> Bool
@@ -178,8 +183,16 @@ getFormStories tree =
                 , options = stories
                 , selected =
                     item.form.stories
-                        |> List.find (Tuple.first >> (==) name)
-                        |> Maybe.map Tuple.second
+                        |> Dict.get name
                         |> Maybe.withDefault ""
                 }
             )
+
+
+getRoute : ViewTree s v -> Route
+getRoute tree =
+    View (getPath tree) <|
+        if isStoryMode tree then
+            getQuery tree
+        else
+            Dict.empty

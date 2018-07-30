@@ -17,7 +17,7 @@ view tree =
         [ spacing 10 ]
         [ Toggle.view
             { name = "Story Mode"
-            , onClick = SetViewTree <| toggleStoryMode tree
+            , onClick = SetViewTreeWithRoute <| toggleStoryMode tree
             }
           <|
             isStoryMode tree
@@ -28,7 +28,8 @@ view tree =
                         { name = name
                         , options = options
                         , onChange =
-                            \new -> SetViewTree <| setFormStory name new tree
+                            \new -> SetViewTreeWithRoute <| setFormStory name new tree
+                        , disabled = not <| isStoryMode tree
                         }
                         selected
                 )
@@ -38,7 +39,14 @@ view tree =
 
 storySelector : ViewItem (Styles s) (Variation v)
 storySelector =
-    createEmptyViewItem "StorySelector"
+    createViewItem "StorySelector"
+        (\on ->
+            if on then
+                view <| toggleStoryMode Dummy.storyTree
+            else
+                view Dummy.storyTree
+        )
+        ( "on", [ "True" => True, "False" => False ] )
         |> withDefaultVariation (view Dummy.storyTree)
 
 

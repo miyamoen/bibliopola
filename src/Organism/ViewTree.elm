@@ -16,4 +16,4 @@ view { views } =
 
 line : ViewTree s v -> ( String, MyElement s v )
 line tree =
-    ViewTree.getPath tree => ViewItemTreeLine.view tree
+    ViewTree.getPathString tree => ViewItemTreeLine.view tree

@@ -1,6 +1,6 @@
 module Bibliopola exposing (..)
 
-import Dict
+import Dict exposing (Dict)
 import Element exposing (Element)
 import Lazy exposing (lazy)
 import Lazy.Tree as Tree
@@ -56,7 +56,7 @@ createEmptyViewItem name =
     , state = Close
     , stories = []
     , variations = Dict.empty
-    , form = { storyOn = False, stories = [] }
+    , form = { storyOn = False, stories = Dict.empty }
     }
 
 
@@ -194,10 +194,11 @@ withDefaultVariation view viewItem =
     }
 
 
-initFormStories : List ( String, List String ) -> List ( String, String )
+initFormStories : List ( String, List String ) -> Dict String String
 initFormStories stories =
     stories
         |> List.map (Tuple.mapSecond (List.head >> Maybe.withDefault ""))
+        |> Dict.fromList
 
 
 
