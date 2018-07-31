@@ -1,6 +1,9 @@
 module Model.ViewTree
     exposing
-        ( attemptOpenPath
+        ( OpenPathError(..)
+        , OpenStoryError(..)
+        , attemptOpenPath
+        , currentViewTree
         , getFormStories
         , getPath
         , getPathString
@@ -20,47 +23,65 @@ import Dict exposing (Dict)
 import Element exposing (Element)
 import Lazy exposing (Lazy)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
-import Route exposing (Route(View))
+import Route exposing (Path, Query, Route(BadUrl, View))
 import Types exposing (..)
 
 
-attemptOpenPath : List String -> ViewTree s v -> ViewTree s v
+type OpenPathError
+    = PathNotFound (List String)
+
+
+type OpenStoryError
+    = DefaultStoryNotFound
+    | StoryArityError String
+    | StoryNotFound (List String)
+
+
+attemptOpenPath : Path -> ViewTree s v -> ViewTree s v
 attemptOpenPath paths zipper =
     openPath paths zipper
         |> Result.withDefault zipper
 
 
-openPath : List String -> ViewTree s v -> Result String (ViewTree s v)
-openPath paths zipper =
-    Zipper.openPath (\path item -> item.name == path) paths zipper
+openPath : Path -> ViewTree s v -> Result OpenPathError (ViewTree s v)
+openPath path zipper =
+    Zipper.openPath (\path item -> item.name == path) path zipper
+        |> Result.mapError (\_ -> PathNotFound path)
 
 
-openStory :
-    Dict String String
-    -> ViewTree s v
-    -> Result String (Lazy (Element s v (Msg s v)))
-openStory queries zipper =
-    let
-        viewItem =
-            Zipper.current zipper
-    in
-    if Dict.isEmpty queries then
-        Dict.get "default" viewItem.variations
-            |> Result.fromMaybe "This ViewItem has no views."
+openStory : Query -> ViewTree s v -> Result OpenStoryError (Lazy (Element s v (Msg s v)))
+openStory query tree =
+    if Dict.isEmpty query then
+        openDefaultStory tree
     else
-        viewItem.stories
-            |> List.map
-                (\( key, _ ) ->
-                    Dict.get key queries
-                        |> Result.fromMaybe (String.concat [ "story key : ", key, " is not found" ])
-                )
-            |> listCombine
-            |> Result.map (String.join "/")
+        storyList tree query
             |> Result.andThen
-                (\s ->
-                    Dict.get s viewItem.variations
-                        |> Result.fromMaybe (String.concat [ "story : ", s, " is not found" ])
+                (\storyList ->
+                    Zipper.current tree
+                        |> .variations
+                        |> Dict.get (String.join "/" storyList)
+                        |> Result.fromMaybe (StoryNotFound storyList)
                 )
+
+
+storyList : ViewTree s v -> Query -> Result OpenStoryError (List String)
+storyList tree query =
+    Zipper.current tree
+        |> .stories
+        |> List.map
+            (\( key, _ ) ->
+                Dict.get key query
+                    |> Result.fromMaybe (StoryArityError key)
+            )
+        |> listCombine
+
+
+openDefaultStory : ViewTree s v -> Result OpenStoryError (Lazy (Element s v (Msg s v)))
+openDefaultStory tree =
+    Zipper.current tree
+        |> .variations
+        |> Dict.get "default"
+        |> Result.fromMaybe DefaultStoryNotFound
 
 
 listCombine : List (Result x a) -> Result x (List a)
@@ -78,6 +99,17 @@ openRecursively zipper =
                     |> List.map openRecursively
                     |> List.concat
            )
+
+
+currentViewTree : Model s v -> Maybe (ViewTree s v)
+currentViewTree { route, views } =
+    case route of
+        BadUrl _ ->
+            Nothing
+
+        View path _ ->
+            openPath path views
+                |> Result.toMaybe
 
 
 

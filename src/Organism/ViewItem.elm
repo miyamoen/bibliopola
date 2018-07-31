@@ -1,31 +1,48 @@
-module Organism.ViewItem exposing (..)
+module Organism.ViewItem exposing (view)
 
-import Dict exposing (Dict)
 import Element exposing (..)
 import Lazy
-import Model.ViewTree as ViewTree
+import Model.ViewTree as ViewTree exposing (OpenPathError(..), OpenStoryError(..))
+import Route exposing (Path, Query)
 import Types exposing (..)
 
 
-view :
-    List String
-    -> Dict String String
-    -> Model s v
-    -> MyElement s v
+view : Path -> Query -> Model s v -> MyElement s v
 view paths queries model =
-    model.views
-        |> ViewTree.openPath paths
-        |> Result.andThen (ViewTree.openStory queries)
-        |> Result.map Lazy.force
-        |> resultExtract text
-        |> Element.mapAll identity Child ChildVar
+    let
+        res =
+            model.views
+                |> ViewTree.openPath paths
+                |> Result.mapError PathError
+                |> Result.andThen
+                    (ViewTree.openStory queries >> Result.mapError QueryError)
+                |> Result.map Lazy.force
+    in
+    case res of
+        Ok element ->
+            Element.mapAll identity Child ChildVar element
+
+        Err (PathError (PathNotFound path)) ->
+            textLayout Text
+                []
+                [ text <| String.join "/" path ++ " dose not match ViewItem." ]
+
+        Err (QueryError DefaultStoryNotFound) ->
+            textLayout Text
+                []
+                [ text "default story is not set." ]
+
+        Err (QueryError (StoryArityError key)) ->
+            textLayout Text
+                []
+                [ text <| "Argument " ++ key ++ " is not found in query." ]
+
+        Err (QueryError (StoryNotFound storyList)) ->
+            textLayout Text
+                []
+                [ text <| "view " ++ String.join " " storyList ++ " is not found." ]
 
 
-resultExtract : (e -> a) -> Result e a -> a
-resultExtract f x =
-    case x of
-        Ok a ->
-            a
-
-        Err e ->
-            f e
+type OpenError
+    = PathError OpenPathError
+    | QueryError OpenStoryError
