@@ -2,12 +2,9 @@ module Organism.StorySelector exposing (..)
 
 import Atom.SelectBox as SelectBox
 import Atom.Toggle as Toggle
-import Bibliopola exposing (..)
-import Dummy
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Model.ViewTree exposing (..)
-import Styles exposing (styles)
 import Types exposing (..)
 
 
@@ -35,21 +32,3 @@ view tree =
                 )
             |> row None [ paddingLeft 10, spacing 10 ]
         ]
-
-
-storySelector : ViewItem (Styles s) (Variation v)
-storySelector =
-    createViewItem "StorySelector"
-        (\on ->
-            if on then
-                view <| toggleStoryMode Dummy.storyTree
-            else
-                view Dummy.storyTree
-        )
-        ( "on", [ "True" => True, "False" => False ] )
-        |> withDefaultVariation (view Dummy.storyTree)
-
-
-main : MyProgram (Styles s) (Variation v)
-main =
-    createMainFromViewItem styles storySelector
