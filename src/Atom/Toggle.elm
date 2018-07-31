@@ -28,7 +28,7 @@ view { name, onClick } on =
                 , height <| px 16
                 , inlineStyle
                     [ "border-radius" => "20px"
-                    , "transition" => "transform .1s,background-color .1s"
+                    , "transition" => "background-color .5s"
                     , "background-color"
                         => (if on then
                                 "rgb(139, 190, 236)"
@@ -44,6 +44,7 @@ view { name, onClick } on =
                     , inlineStyle
                         [ "border-radius" => "8px"
                         , "background-color" => "rgb(45, 129, 204)"
+                        , "transition" => "transform .2s"
                         , "transform"
                             => (if on then
                                     "translateX(24px)"
