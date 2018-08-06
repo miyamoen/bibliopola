@@ -39,3 +39,6 @@ update msg model =
                     else
                         Route.newUrl route
                    )
+
+        SetPanel panel ->
+            { model | panel = panel } => Cmd.none

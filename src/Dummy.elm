@@ -8,6 +8,7 @@ import Lazy.LList as LList
 import Lazy.Tree as Tree exposing (Tree(Tree))
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Route
+import SelectList
 import Types exposing (..)
 
 
@@ -16,6 +17,10 @@ model =
     { styles = []
     , views = views
     , route = Route.View [] <| Dict.fromList []
+    , panel =
+        SelectList.fromLists []
+            StoryPanel
+            [ StoryPanel, StoryPanel, StoryPanel, StoryPanel, StoryPanel ]
     }
 
 

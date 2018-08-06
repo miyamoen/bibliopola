@@ -6,6 +6,7 @@ import Element exposing (Element)
 import Lazy exposing (Lazy)
 import Lazy.Tree.Zipper exposing (Zipper)
 import Route exposing (Route)
+import SelectList exposing (SelectList)
 import Style exposing (Style)
 
 
@@ -16,12 +17,14 @@ type Msg child childVar
     | GoToRoute Route
     | SetViewTree (ViewTree child childVar)
     | SetViewTreeWithRoute (ViewTree child childVar)
+    | SetPanel Panel
 
 
 type alias Model child childVar =
     { route : Route
     , views : ViewTree child childVar
     , styles : List (Style child childVar)
+    , panel : Panel
     }
 
 
@@ -41,6 +44,14 @@ type alias ViewTree child childVar =
 type State
     = Close
     | Open
+
+
+type alias Panel =
+    SelectList PanelItem
+
+
+type PanelItem
+    = StoryPanel
 
 
 

@@ -8,6 +8,7 @@ import Lazy.Tree.Zipper as Zipper exposing (Zipper(Zipper))
 import List.Extra as List
 import Navigation
 import Route
+import SelectList exposing (SelectList)
 import Style exposing (Style)
 import Types exposing (..)
 import Update exposing (update)
@@ -43,6 +44,7 @@ createMainFromViewTree styles tree =
         { route = Route.View [] <| Dict.fromList []
         , views = tree
         , styles = styles
+        , panel = SelectList.singleton StoryPanel
         }
 
 
