@@ -3,7 +3,7 @@ module Page.Main exposing (..)
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Model.ViewTree as ViewTree exposing (currentViewTree)
-import Organism.StorySelector as StorySelector
+import Organism.Panel as Panel
 import Organism.ViewItem as ViewItem
 import Organism.ViewTree as ViewTree
 import Route exposing (Route(..))
@@ -17,7 +17,7 @@ view model =
         { columns = [ px 200, fill ]
         , rows =
             [ fill => [ span 1 "ViewTree", span 1 "ViewItem" ]
-            , px 200 => [ spanAll "Panel" ]
+            , px 210 => [ spanAll "Panel" ]
             ]
         , cells =
             [ named "ViewTree" <|
@@ -33,10 +33,6 @@ view model =
                             text "Start Page"
                         else
                             ViewItem.view paths queries model
-            , named "Panel"
-                (currentViewTree model
-                    |> Maybe.map StorySelector.view
-                    |> Maybe.withDefault empty
-                )
+            , named "Panel" <| Panel.view model
             ]
         }
