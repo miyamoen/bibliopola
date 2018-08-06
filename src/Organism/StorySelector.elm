@@ -1,4 +1,4 @@
-module Organism.StorySelector exposing (..)
+module Organism.StorySelector exposing (view)
 
 import Atom.SelectBox as SelectBox
 import Atom.Toggle as Toggle
@@ -10,7 +10,7 @@ import Types exposing (..)
 
 view : ViewTree s v -> MyElement s v
 view tree =
-    column None
+    row None
         [ spacing 10 ]
         [ Toggle.view
             { name = "Story Mode"

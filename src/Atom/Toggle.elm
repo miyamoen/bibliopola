@@ -13,7 +13,11 @@ type alias Config a msg =
 view : Config a msg -> Bool -> Element (Styles s) v msg
 view { name, onClick } on =
     row None
-        [ spacing 5, verticalCenter, Events.onClick onClick ]
+        [ spacing 5
+        , verticalCenter
+        , Events.onClick onClick
+        , inlineStyle [ "cursor" => "pointer" ]
+        ]
         [ el Text [] <| text name
         , el None
             [ padding 2

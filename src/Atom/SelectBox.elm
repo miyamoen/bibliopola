@@ -35,7 +35,7 @@ view { name, options, onChange, disabled } selected =
         , el None [ paddingLeft 40 ] <|
             node "select" <|
                 column None
-                    [ attribute "size" "4"
+                    [ attribute "size" "5"
                     , width fill
                     , paddingXY 5 2
                     , inlineStyle
