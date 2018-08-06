@@ -4,11 +4,10 @@ import Atom.Caret as Caret
 import Atom.File as File
 import Atom.Folder as Folder
 import Atom.SelectBox as SelectBox
-import Atom.TabLabel as TabLabel
+import Atom.Tab as Tab
 import Atom.Toggle as Toggle
 import Bibliopola exposing (..)
 import Color.Pallet as Pallet exposing (Pallet(..))
-import Reference as Ref exposing (Reference)
 import Styles exposing (styles)
 import Types exposing (..)
 
@@ -27,7 +26,7 @@ tree =
                 |> insertViewItem selectBox
                 |> insertViewItem toggle
             )
-        |> insertViewItem tabLabel
+        |> insertViewItem tab
 
 
 caret : ViewItem (Styles s) (Variation v)
@@ -118,15 +117,20 @@ toggle =
         |> withDefaultVariation (Toggle.view { name = "On", onClick = "Clicked" } True)
 
 
-tabLabel : ViewItem (Styles s) (Variation v)
-tabLabel =
-    createViewItem "TabLabel"
-        (TabLabel.view { name = "TabName", onClick = identity })
+tab : ViewItem (Styles s) (Variation v)
+tab =
+    createViewItem2 "Tab"
+        (\selected label ->
+            Tab.view { selected = selected, onClick = identity } label
+        )
         ( "selected"
-        , [ "TabName" => Ref.top "TabName", "Nothing" => Ref.top "Nothing" ]
+        , [ "True" => True, "False" => False ]
+        )
+        ( "label"
+        , [ "short" => "s", "middle" => "Middle", "long" => "Hogehogehogehoge" ]
         )
         |> withDefaultVariation
-            (TabLabel.view { name = "TabName", onClick = identity } (Ref.top "TabName"))
+            (Tab.view { selected = True, onClick = identity } "Tab Label")
 
 
 main : MyProgram (Styles s) (Variation v)
