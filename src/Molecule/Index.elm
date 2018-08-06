@@ -3,7 +3,9 @@ module Molecule.Index exposing (..)
 import Bibliopola exposing (..)
 import Dummy
 import Model.ViewTree as ViewTree
+import Molecule.Tabs as Tabs
 import Molecule.ViewTreeLine as ViewTreeLine
+import SelectList exposing (SelectList)
 import Styles exposing (styles)
 import Types exposing (..)
 
@@ -12,6 +14,21 @@ tree : ViewTree (Styles s) (Variation v)
 tree =
     createEmptyViewTree "Molecule"
         |> insertViewItem viewItemTreeLine
+        |> insertViewItem tabs
+
+
+tabs : ViewItem (Styles s) (Variation v)
+tabs =
+    let
+        view size =
+            Tabs.view <|
+                SelectList.fromLists [] StoryPanel <|
+                    List.repeat size StoryPanel
+    in
+    createViewItem "Tabs"
+        view
+        ( "size", List.range 0 10 |> List.map (\num -> toString num => num) )
+        |> withDefaultVariation (view 4)
 
 
 viewItemTreeLine : ViewItem (Styles s) (Variation v)
