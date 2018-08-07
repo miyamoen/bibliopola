@@ -32,7 +32,7 @@ view { name, options, onChange, disabled } selected =
             ]
           <|
             text name
-        , el None [ paddingLeft 40 ] <|
+        , el None [ paddingLeft 40, minWidth <| px 120 ] <|
             node "select" <|
                 column None
                     [ attribute "size" "5"

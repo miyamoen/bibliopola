@@ -24,13 +24,13 @@ view { selected, onClick } label =
         , inlineStyle
             [ "cursor" => "pointer"
             , "border-radius" => "5px 5px 0px 0px"
-            , "border-color" => "rgba(138, 142, 180, 0.22)"
+            , "border-color" => "rgb(135, 135, 150)"
             , "border-width" => "2px 2px 0px 2px"
             , "background-color"
                 => (if selected then
                         "rgb(240, 240, 240)"
                     else
-                        "rgb(138, 142, 180)"
+                        "rgb(97, 99, 116)"
                    )
             ]
         ]
