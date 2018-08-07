@@ -44,7 +44,8 @@ createMainFromViewTree styles tree =
         { route = Route.View [] <| Dict.fromList []
         , views = tree
         , styles = styles
-        , panel = SelectList.singleton StoryPanel
+        , panel = SelectList.fromLists [] StoryPanel [ MsgLoggerPanel ]
+        , logs = []
         }
 
 
@@ -78,7 +79,7 @@ createViewItem name view ( storyName, stories ) =
     , variations =
         List.map
             (Tuple.mapSecond
-                (\a -> lazy (\() -> view a |> Element.map (toString >> Print)))
+                (\a -> lazy (\() -> view a |> Element.map (toString >> LogMsg)))
             )
             stories
             |> Dict.fromList
@@ -106,7 +107,7 @@ createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
         List.lift2
             (\( aName, a ) ( bName, b ) ->
                 String.join "/" [ aName, bName ]
-                    => lazy (\() -> view a b |> Element.map (toString >> Print))
+                    => lazy (\() -> view a b |> Element.map (toString >> LogMsg))
             )
             aStories
             bStories
@@ -137,7 +138,7 @@ createViewItem3 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cS
         List.lift3
             (\( aName, a ) ( bName, b ) ( cName, c ) ->
                 String.join "/" [ aName, bName, cName ]
-                    => lazy (\() -> view a b c |> Element.map (toString >> Print))
+                    => lazy (\() -> view a b c |> Element.map (toString >> LogMsg))
             )
             aStories
             bStories
@@ -171,7 +172,7 @@ createViewItem4 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cS
         List.lift4
             (\( aName, a ) ( bName, b ) ( cName, c ) ( dName, d ) ->
                 String.join "/" [ aName, bName, cName, dName ]
-                    => lazy (\() -> view a b c d |> Element.map (toString >> Print))
+                    => lazy (\() -> view a b c d |> Element.map (toString >> LogMsg))
             )
             aStories
             bStories
@@ -192,7 +193,7 @@ withDefaultVariation view viewItem =
             viewItem.variations
                 |> Dict.insert
                     "default"
-                    (lazy <| \_ -> Element.map (toString >> Print) view)
+                    (lazy <| \_ -> Element.map (toString >> LogMsg) view)
     }
 
 

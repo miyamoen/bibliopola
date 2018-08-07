@@ -21,6 +21,11 @@ model =
         SelectList.fromLists []
             StoryPanel
             [ StoryPanel, StoryPanel, StoryPanel, StoryPanel, StoryPanel ]
+    , logs =
+        [ { id = 2, message = "dummy msg" }
+        , { id = 1, message = "dummy msg" }
+        , { id = 0, message = "dummy msg" }
+        ]
     }
 
 

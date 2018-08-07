@@ -12,12 +12,20 @@ update msg model =
         NoOp ->
             model => Cmd.none
 
-        Print print ->
+        LogMsg message ->
             let
-                _ =
-                    Debug.log "Msg" print
+                log =
+                    case model.logs of
+                        latest :: _ ->
+                            { message = message, id = latest.id + 1 }
+
+                        [] ->
+                            { message = message, id = 0 }
             in
-            model => Cmd.none
+            { model | logs = Debug.log "log" log :: model.logs } => Cmd.none
+
+        ClearLogs ->
+            { model | logs = [] } => Cmd.none
 
         SetRoute route ->
             { model | route = route } => Cmd.none

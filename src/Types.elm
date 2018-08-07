@@ -12,7 +12,8 @@ import Style exposing (Style)
 
 type Msg child childVar
     = NoOp
-    | Print String
+    | LogMsg String
+    | ClearLogs
     | SetRoute Route
     | GoToRoute Route
     | SetViewTree (ViewTree child childVar)
@@ -25,6 +26,7 @@ type alias Model child childVar =
     , views : ViewTree child childVar
     , styles : List (Style child childVar)
     , panel : Panel
+    , logs : List Log
     }
 
 
@@ -52,6 +54,11 @@ type alias Panel =
 
 type PanelItem
     = StoryPanel
+    | MsgLoggerPanel
+
+
+type alias Log =
+    { message : String, id : Int }
 
 
 
