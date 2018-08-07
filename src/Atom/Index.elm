@@ -3,6 +3,7 @@ module Atom.Index exposing (..)
 import Atom.Caret as Caret
 import Atom.File as File
 import Atom.Folder as Folder
+import Atom.LogLine as LogLine
 import Atom.SelectBox as SelectBox
 import Atom.Tab as Tab
 import Atom.Toggle as Toggle
@@ -27,6 +28,7 @@ tree =
                 |> insertViewItem toggle
             )
         |> insertViewItem tab
+        |> insertViewItem logLine
 
 
 caret : ViewItem (Styles s) (Variation v)
@@ -131,6 +133,26 @@ tab =
         )
         |> withDefaultVariation
             (Tab.view { selected = True, onClick = identity } "Tab Label")
+
+
+logLine : ViewItem (Styles s) (Variation v)
+logLine =
+    createViewItem2 "LogLine"
+        (\id message ->
+            LogLine.view { id = id, message = message }
+        )
+        ( "id"
+        , [ "1" => 1, "99" => 99, "999" => 999, "9999" => 9999 ]
+        )
+        ( "message"
+        , [ "empty" => ""
+          , "one" => "s"
+          , "middle" => "mmmmmmmmmmmmmmmmmmmmmmmm"
+          , "long" => "HogehogehogehogeHogehogehogehogeHogehogehogehogeHogeh ogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogeho geHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehoge HogehogehogehogeHogehogehogehogeHogehogehogehoge"
+          ]
+        )
+        |> withDefaultVariation
+            (LogLine.view { id = 0, message = "dummy message" })
 
 
 main : MyProgram (Styles s) (Variation v)
