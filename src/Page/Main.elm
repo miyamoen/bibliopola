@@ -33,6 +33,8 @@ view model =
                             text "Start Page"
                         else
                             ViewItem.view paths queries model
-            , named "Panel" <| Panel.view model
+            , named "Panel" <|
+                el None [ yScrollbar, clipX, height <| percent 100 ] <|
+                    Panel.view model
             ]
         }

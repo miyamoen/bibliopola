@@ -13,7 +13,7 @@ import Types exposing (..)
 view : Model s v -> MyElement s v
 view ({ panel, logs } as model) =
     column None
-        []
+        [ height fill ]
         [ Tabs.view panel
         , el None
             [ padding 10

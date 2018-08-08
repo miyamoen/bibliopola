@@ -20,7 +20,7 @@ view : Config a msg -> String -> Element (Styles s) v msg
 view { name, options, onChange, disabled } selected =
     column None
         [ spacing 5 ]
-        [ el Text
+        [ el None
             [ inlineStyle
                 [ "text-decoration" => "underline"
                 , "font-style" => "italic"

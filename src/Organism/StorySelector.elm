@@ -30,5 +30,5 @@ view tree =
                         }
                         selected
                 )
-            |> row None [ paddingLeft 10, spacing 10 ]
+            |> wrappedRow None [ paddingLeft 10, spacing 10 ]
         ]
