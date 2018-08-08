@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="UTF-8"><title>Main</title><style>html,head,body { padding:0; margin:0; }
+<html><head><meta charset="UTF-8"><title>Bibliopola with Bibliopola</title><style>html,head,body { padding:0; margin:0; }
 body { font-family: calibri, helvetica, arial, sans-serif; }</style><script type="text/javascript">
 (function() {
 'use strict';
@@ -21719,6 +21719,89 @@ var _mdgriffith$style_elements$Style_Sheet$map = F3(
 					A2(_mdgriffith$style_elements$Style_Internal_Model$mapClassAndVar, toParent, toParentVariation)),
 				styles));
 	});
+var _miyamoen$bibliopola$Color_Pallet$cssColorString = F2(
+	function (kind, values) {
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			kind,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'(',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(_elm_lang$core$String$join, ', ', values),
+					')')));
+	});
+var _miyamoen$bibliopola$Color_Pallet$colorToCssRgba = function (cl) {
+	var _p0 = _elm_lang$core$Color$toRgb(cl);
+	var red = _p0.red;
+	var green = _p0.green;
+	var blue = _p0.blue;
+	var alpha = _p0.alpha;
+	return A2(
+		_miyamoen$bibliopola$Color_Pallet$cssColorString,
+		'rgba',
+		{
+			ctor: '::',
+			_0: _elm_lang$core$Basics$toString(red),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$core$Basics$toString(green),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Basics$toString(blue),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Basics$toString(alpha),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _miyamoen$bibliopola$Color_Pallet$color = function (pallet) {
+	var _p1 = pallet;
+	switch (_p1.ctor) {
+		case 'Black':
+			return A3(_elm_lang$core$Color$rgb, 30, 30, 30);
+		case 'White':
+			return A3(_elm_lang$core$Color$rgb, 230, 230, 230);
+		case 'Blue':
+			return A3(_elm_lang$core$Color$rgb, 45, 129, 204);
+		default:
+			return A3(_elm_lang$core$Color$rgb, 100, 100, 100);
+	}
+};
+var _miyamoen$bibliopola$Color_Pallet$css = function (pallet) {
+	return _miyamoen$bibliopola$Color_Pallet$colorToCssRgba(
+		_miyamoen$bibliopola$Color_Pallet$color(pallet));
+};
+var _miyamoen$bibliopola$Color_Pallet$Grey = {ctor: 'Grey'};
+var _miyamoen$bibliopola$Color_Pallet$Blue = {ctor: 'Blue'};
+var _miyamoen$bibliopola$Color_Pallet$White = {ctor: 'White'};
+var _miyamoen$bibliopola$Color_Pallet$Black = {ctor: 'Black'};
+var _miyamoen$bibliopola$Color_Pallet$pallets = {
+	ctor: '::',
+	_0: _miyamoen$bibliopola$Color_Pallet$Black,
+	_1: {
+		ctor: '::',
+		_0: _miyamoen$bibliopola$Color_Pallet$White,
+		_1: {
+			ctor: '::',
+			_0: _miyamoen$bibliopola$Color_Pallet$Blue,
+			_1: {ctor: '[]'}
+		}
+	}
+};
+var _miyamoen$bibliopola$Element_Util$maybeOnClick = function (maybe) {
+	var _p0 = maybe;
+	if (_p0.ctor === 'Just') {
+		return _mdgriffith$style_elements$Element_Events$onClick(_p0._0);
+	} else {
+		return _mdgriffith$style_elements$Element_Attributes$classList(
+			{ctor: '[]'});
+	}
+};
 var _turboMaCk$lazy_tree_with_zipper$Lazy_LList$lazyFoldl = F2(
 	function (predicate, acc) {
 		return _elm_lang$lazy$Lazy$andThen(
@@ -22382,95 +22465,12 @@ var _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$openAll = function (_p55) 
 		_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$sliceForest(
 			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree$descendants(_p59)));
 };
-var _user$project$Color_Pallet$cssColorString = F2(
-	function (kind, values) {
-		return A2(
-			_elm_lang$core$Basics_ops['++'],
-			kind,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'(',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					A2(_elm_lang$core$String$join, ', ', values),
-					')')));
-	});
-var _user$project$Color_Pallet$colorToCssRgba = function (cl) {
-	var _p0 = _elm_lang$core$Color$toRgb(cl);
-	var red = _p0.red;
-	var green = _p0.green;
-	var blue = _p0.blue;
-	var alpha = _p0.alpha;
-	return A2(
-		_user$project$Color_Pallet$cssColorString,
-		'rgba',
-		{
-			ctor: '::',
-			_0: _elm_lang$core$Basics$toString(red),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$core$Basics$toString(green),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$core$Basics$toString(blue),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$core$Basics$toString(alpha),
-						_1: {ctor: '[]'}
-					}
-				}
-			}
-		});
-};
-var _user$project$Color_Pallet$color = function (pallet) {
-	var _p1 = pallet;
-	switch (_p1.ctor) {
-		case 'Black':
-			return A3(_elm_lang$core$Color$rgb, 30, 30, 30);
-		case 'White':
-			return A3(_elm_lang$core$Color$rgb, 230, 230, 230);
-		case 'Blue':
-			return A3(_elm_lang$core$Color$rgb, 45, 129, 204);
-		default:
-			return A3(_elm_lang$core$Color$rgb, 100, 100, 100);
-	}
-};
-var _user$project$Color_Pallet$css = function (pallet) {
-	return _user$project$Color_Pallet$colorToCssRgba(
-		_user$project$Color_Pallet$color(pallet));
-};
-var _user$project$Color_Pallet$Grey = {ctor: 'Grey'};
-var _user$project$Color_Pallet$Blue = {ctor: 'Blue'};
-var _user$project$Color_Pallet$White = {ctor: 'White'};
-var _user$project$Color_Pallet$Black = {ctor: 'Black'};
-var _user$project$Color_Pallet$pallets = {
-	ctor: '::',
-	_0: _user$project$Color_Pallet$Black,
-	_1: {
-		ctor: '::',
-		_0: _user$project$Color_Pallet$White,
-		_1: {
-			ctor: '::',
-			_0: _user$project$Color_Pallet$Blue,
-			_1: {ctor: '[]'}
-		}
-	}
-};
-var _user$project$Element_Util$maybeOnClick = function (maybe) {
-	var _p0 = maybe;
-	if (_p0.ctor === 'Just') {
-		return _mdgriffith$style_elements$Element_Events$onClick(_p0._0);
-	} else {
-		return _mdgriffith$style_elements$Element_Attributes$classList(
-			{ctor: '[]'});
-	}
-};
-var _user$project$Route_Parser$ampersand = _elm_tools$parser$Parser$symbol('&');
-var _user$project$Route_Parser$qmark = _elm_tools$parser$Parser$symbol('?');
-var _user$project$Route_Parser$equal = _elm_tools$parser$Parser$symbol('=');
-var _user$project$Route_Parser$slash = _elm_tools$parser$Parser$symbol('/');
-var _user$project$Route_Parser$hash = _elm_tools$parser$Parser$symbol('#');
-var _user$project$Route_Parser$string = _elm_tools$parser$Parser$source(
+var _miyamoen$bibliopola$Route_Parser$ampersand = _elm_tools$parser$Parser$symbol('&');
+var _miyamoen$bibliopola$Route_Parser$qmark = _elm_tools$parser$Parser$symbol('?');
+var _miyamoen$bibliopola$Route_Parser$equal = _elm_tools$parser$Parser$symbol('=');
+var _miyamoen$bibliopola$Route_Parser$slash = _elm_tools$parser$Parser$symbol('/');
+var _miyamoen$bibliopola$Route_Parser$hash = _elm_tools$parser$Parser$symbol('#');
+var _miyamoen$bibliopola$Route_Parser$string = _elm_tools$parser$Parser$source(
 	A2(
 		_elm_tools$parser$Parser$ignore,
 		_elm_tools$parser$Parser$oneOrMore,
@@ -22483,7 +22483,7 @@ var _user$project$Route_Parser$string = _elm_tools$parser$Parser$source(
 					})($char),
 				'/?=&');
 		}));
-var _user$project$Route_Parser$oneQuery = A2(
+var _miyamoen$bibliopola$Route_Parser$oneQuery = A2(
 	_elm_tools$parser$Parser_ops['|='],
 	A2(
 		_elm_tools$parser$Parser_ops['|.'],
@@ -22494,10 +22494,10 @@ var _user$project$Route_Parser$oneQuery = A2(
 					function (v0, v1) {
 						return {ctor: '_Tuple2', _0: v0, _1: v1};
 					})),
-			_user$project$Route_Parser$string),
-		_user$project$Route_Parser$equal),
-	_user$project$Route_Parser$string);
-var _user$project$Route_Parser$queries = _elm_tools$parser$Parser$oneOf(
+			_miyamoen$bibliopola$Route_Parser$string),
+		_miyamoen$bibliopola$Route_Parser$equal),
+	_miyamoen$bibliopola$Route_Parser$string);
+var _miyamoen$bibliopola$Route_Parser$queries = _elm_tools$parser$Parser$oneOf(
 	{
 		ctor: '::',
 		_0: A3(
@@ -22511,8 +22511,8 @@ var _user$project$Route_Parser$queries = _elm_tools$parser$Parser$oneOf(
 				A2(
 					_elm_tools$parser$Parser_ops['|.'],
 					_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
-					_user$project$Route_Parser$qmark),
-				_user$project$Route_Parser$oneQuery),
+					_miyamoen$bibliopola$Route_Parser$qmark),
+				_miyamoen$bibliopola$Route_Parser$oneQuery),
 			A2(
 				_elm_tools$parser$Parser$repeat,
 				_elm_tools$parser$Parser$zeroOrMore,
@@ -22521,19 +22521,19 @@ var _user$project$Route_Parser$queries = _elm_tools$parser$Parser$oneOf(
 					A2(
 						_elm_tools$parser$Parser_ops['|.'],
 						_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
-						_user$project$Route_Parser$ampersand),
-					_user$project$Route_Parser$oneQuery))),
+						_miyamoen$bibliopola$Route_Parser$ampersand),
+					_miyamoen$bibliopola$Route_Parser$oneQuery))),
 		_1: {
 			ctor: '::',
 			_0: A2(
 				_elm_tools$parser$Parser$map,
 				_elm_lang$core$Basics$always(
 					{ctor: '[]'}),
-				_user$project$Route_Parser$qmark),
+				_miyamoen$bibliopola$Route_Parser$qmark),
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Route_Parser$onePath = A3(
+var _miyamoen$bibliopola$Route_Parser$onePath = A3(
 	_elm_tools$parser$Parser$delayedCommitMap,
 	_elm_lang$core$Basics$always,
 	A2(
@@ -22541,20 +22541,20 @@ var _user$project$Route_Parser$onePath = A3(
 		A2(
 			_elm_tools$parser$Parser_ops['|.'],
 			_elm_tools$parser$Parser$succeed(_elm_lang$core$Basics$identity),
-			_user$project$Route_Parser$slash),
-		_user$project$Route_Parser$string),
+			_miyamoen$bibliopola$Route_Parser$slash),
+		_miyamoen$bibliopola$Route_Parser$string),
 	_elm_tools$parser$Parser$succeed(
 		{ctor: '_Tuple0'}));
-var _user$project$Route_Parser$paths = _elm_tools$parser$Parser$oneOf(
+var _miyamoen$bibliopola$Route_Parser$paths = _elm_tools$parser$Parser$oneOf(
 	{
 		ctor: '::',
 		_0: A2(
 			_elm_tools$parser$Parser_ops['|.'],
-			A2(_elm_tools$parser$Parser$repeat, _elm_tools$parser$Parser$oneOrMore, _user$project$Route_Parser$onePath),
+			A2(_elm_tools$parser$Parser$repeat, _elm_tools$parser$Parser$oneOrMore, _miyamoen$bibliopola$Route_Parser$onePath),
 			_elm_tools$parser$Parser$oneOf(
 				{
 					ctor: '::',
-					_0: _user$project$Route_Parser$slash,
+					_0: _miyamoen$bibliopola$Route_Parser$slash,
 					_1: {
 						ctor: '::',
 						_0: _elm_tools$parser$Parser$succeed(
@@ -22568,11 +22568,11 @@ var _user$project$Route_Parser$paths = _elm_tools$parser$Parser$oneOf(
 				_elm_tools$parser$Parser$map,
 				_elm_lang$core$Basics$always(
 					{ctor: '[]'}),
-				_user$project$Route_Parser$slash),
+				_miyamoen$bibliopola$Route_Parser$slash),
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Route_Parser$route = _elm_tools$parser$Parser$oneOf(
+var _miyamoen$bibliopola$Route_Parser$route = _elm_tools$parser$Parser$oneOf(
 	{
 		ctor: '::',
 		_0: A2(
@@ -22588,12 +22588,12 @@ var _user$project$Route_Parser$route = _elm_tools$parser$Parser$oneOf(
 								function (paths, queries) {
 									return {paths: paths, queries: queries};
 								})),
-						_user$project$Route_Parser$hash),
-					_user$project$Route_Parser$paths),
+						_miyamoen$bibliopola$Route_Parser$hash),
+					_miyamoen$bibliopola$Route_Parser$paths),
 				_elm_tools$parser$Parser$oneOf(
 					{
 						ctor: '::',
-						_0: _user$project$Route_Parser$queries,
+						_0: _miyamoen$bibliopola$Route_Parser$queries,
 						_1: {
 							ctor: '::',
 							_0: _elm_tools$parser$Parser$succeed(
@@ -22615,7 +22615,7 @@ var _user$project$Route_Parser$route = _elm_tools$parser$Parser$oneOf(
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Route$isEqualPath = F2(
+var _miyamoen$bibliopola$Route$isEqualPath = F2(
 	function (route1, route2) {
 		var _p0 = {ctor: '_Tuple2', _0: route1, _1: route2};
 		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'View')) && (_p0._1.ctor === 'View')) {
@@ -22624,7 +22624,7 @@ var _user$project$Route$isEqualPath = F2(
 			return false;
 		}
 	});
-var _user$project$Route$routeToString = function (route) {
+var _miyamoen$bibliopola$Route$routeToString = function (route) {
 	var _p1 = route;
 	if (_p1.ctor === 'View') {
 		return _elm_lang$core$String$concat(
@@ -22669,80 +22669,449 @@ var _user$project$Route$routeToString = function (route) {
 		return _p1._0;
 	}
 };
-var _user$project$Route$modifyUrl = function (_p4) {
+var _miyamoen$bibliopola$Route$modifyUrl = function (_p4) {
 	return _elm_lang$navigation$Navigation$modifyUrl(
-		_user$project$Route$routeToString(_p4));
+		_miyamoen$bibliopola$Route$routeToString(_p4));
 };
-var _user$project$Route$newUrl = function (_p5) {
+var _miyamoen$bibliopola$Route$newUrl = function (_p5) {
 	return _elm_lang$navigation$Navigation$newUrl(
-		_user$project$Route$routeToString(_p5));
+		_miyamoen$bibliopola$Route$routeToString(_p5));
 };
-var _user$project$Route$BadUrl = function (a) {
+var _miyamoen$bibliopola$Route$BadUrl = function (a) {
 	return {ctor: 'BadUrl', _0: a};
 };
-var _user$project$Route$View = F2(
+var _miyamoen$bibliopola$Route$View = F2(
 	function (a, b) {
 		return {ctor: 'View', _0: a, _1: b};
 	});
-var _user$project$Route$route = function (_p6) {
+var _miyamoen$bibliopola$Route$route = function (_p6) {
 	var _p7 = _p6;
 	var _p9 = _p7.hash;
-	var _p8 = A2(_elm_tools$parser$Parser$run, _user$project$Route_Parser$route, _p9);
+	var _p8 = A2(_elm_tools$parser$Parser$run, _miyamoen$bibliopola$Route_Parser$route, _p9);
 	if (_p8.ctor === 'Ok') {
 		return A2(
-			_user$project$Route$View,
+			_miyamoen$bibliopola$Route$View,
 			_p8._0.paths,
 			_elm_lang$core$Dict$fromList(_p8._0.queries));
 	} else {
-		return _user$project$Route$BadUrl(_p9);
+		return _miyamoen$bibliopola$Route$BadUrl(_p9);
 	}
 };
-var _user$project$Types_ops = _user$project$Types_ops || {};
-_user$project$Types_ops['=>'] = F2(
+var _miyamoen$select_list$SelectList$attempt = F2(
+	function (action, selectList) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			selectList,
+			action(selectList));
+	});
+var _miyamoen$select_list$SelectList$afterLength = function (_p0) {
+	var _p1 = _p0;
+	return _elm_lang$core$List$length(_p1._2);
+};
+var _miyamoen$select_list$SelectList$beforeLength = function (_p2) {
+	var _p3 = _p2;
+	return _elm_lang$core$List$length(_p3._0);
+};
+var _miyamoen$select_list$SelectList$length = function (_p4) {
+	var _p5 = _p4;
+	return (_elm_lang$core$List$length(_p5._0) + 1) + _elm_lang$core$List$length(_p5._2);
+};
+var _miyamoen$select_list$SelectList$index = _miyamoen$select_list$SelectList$beforeLength;
+var _miyamoen$select_list$SelectList$isLast = function (_p6) {
+	var _p7 = _p6;
+	return _elm_lang$core$List$isEmpty(_p7._2);
+};
+var _miyamoen$select_list$SelectList$isHead = function (_p8) {
+	var _p9 = _p8;
+	return _elm_lang$core$List$isEmpty(_p9._0);
+};
+var _miyamoen$select_list$SelectList$after = function (_p10) {
+	var _p11 = _p10;
+	return _p11._2;
+};
+var _miyamoen$select_list$SelectList$before = function (_p12) {
+	var _p13 = _p12;
+	return _elm_lang$core$List$reverse(_p13._0);
+};
+var _miyamoen$select_list$SelectList$selected = function (_p14) {
+	var _p15 = _p14;
+	return _p15._1;
+};
+var _miyamoen$select_list$SelectList$toList = function (_p16) {
+	var _p17 = _p16;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$List$reverse(_p17._0),
+		{ctor: '::', _0: _p17._1, _1: _p17._2});
+};
+var _miyamoen$select_list$SelectList$SelectList = F3(
+	function (a, b, c) {
+		return {ctor: 'SelectList', _0: a, _1: b, _2: c};
+	});
+var _miyamoen$select_list$SelectList$fromList = function (list) {
+	var _p18 = list;
+	if (_p18.ctor === '::') {
+		return _elm_lang$core$Maybe$Just(
+			A3(
+				_miyamoen$select_list$SelectList$SelectList,
+				{ctor: '[]'},
+				_p18._0,
+				_p18._1));
+	} else {
+		return _elm_lang$core$Maybe$Nothing;
+	}
+};
+var _miyamoen$select_list$SelectList$fromLists = F3(
+	function (before, a, after) {
+		return A3(
+			_miyamoen$select_list$SelectList$SelectList,
+			_elm_lang$core$List$reverse(before),
+			a,
+			after);
+	});
+var _miyamoen$select_list$SelectList$singleton = function (a) {
+	return A3(
+		_miyamoen$select_list$SelectList$SelectList,
+		{ctor: '[]'},
+		a,
+		{ctor: '[]'});
+};
+var _miyamoen$select_list$SelectList$append = F2(
+	function (list, _p19) {
+		var _p20 = _p19;
+		return A3(
+			_miyamoen$select_list$SelectList$SelectList,
+			_p20._0,
+			_p20._1,
+			A2(_elm_lang$core$Basics_ops['++'], _p20._2, list));
+	});
+var _miyamoen$select_list$SelectList$prepend = F2(
+	function (list, _p21) {
+		var _p22 = _p21;
+		return A3(
+			_miyamoen$select_list$SelectList$SelectList,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_p22._0,
+				_elm_lang$core$List$reverse(list)),
+			_p22._1,
+			_p22._2);
+	});
+var _miyamoen$select_list$SelectList$step = F2(
+	function (dir, _p23) {
+		var _p24 = _p23;
+		var _p30 = _p24._0;
+		var _p29 = _p24._2;
+		var _p28 = _p24._1;
+		var _p25 = dir;
+		if (_p25.ctor === 'After') {
+			var _p26 = _p29;
+			if (_p26.ctor === '::') {
+				return _elm_lang$core$Maybe$Just(
+					A3(
+						_miyamoen$select_list$SelectList$SelectList,
+						{ctor: '::', _0: _p28, _1: _p30},
+						_p26._0,
+						_p26._1));
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		} else {
+			var _p27 = _p30;
+			if (_p27.ctor === '::') {
+				return _elm_lang$core$Maybe$Just(
+					A3(
+						_miyamoen$select_list$SelectList$SelectList,
+						_p27._1,
+						_p27._0,
+						{ctor: '::', _0: _p28, _1: _p29}));
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}
+	});
+var _miyamoen$select_list$SelectList$steps = F3(
+	function (dir, n, selectList) {
+		return (_elm_lang$core$Native_Utils.cmp(n, 0) < 0) ? _elm_lang$core$Maybe$Nothing : (_elm_lang$core$Native_Utils.eq(n, 0) ? _elm_lang$core$Maybe$Just(selectList) : A2(
+			_elm_lang$core$Maybe$andThen,
+			A2(_miyamoen$select_list$SelectList$steps, dir, n - 1),
+			A2(_miyamoen$select_list$SelectList$step, dir, selectList)));
+	});
+var _miyamoen$select_list$SelectList$modify = F2(
+	function (f, _p31) {
+		var _p32 = _p31;
+		return A3(
+			_miyamoen$select_list$SelectList$SelectList,
+			_p32._0,
+			f(_p32._1),
+			_p32._2);
+	});
+var _miyamoen$select_list$SelectList$set = F2(
+	function (a, _p33) {
+		var _p34 = _p33;
+		return A3(_miyamoen$select_list$SelectList$SelectList, _p34._0, a, _p34._2);
+	});
+var _miyamoen$select_list$SelectList$delete = F2(
+	function (dir, _p35) {
+		var _p36 = _p35;
+		var _p41 = _p36._0;
+		var _p40 = _p36._2;
+		var _p37 = dir;
+		if (_p37.ctor === 'After') {
+			var _p38 = _p40;
+			if (_p38.ctor === '::') {
+				return _elm_lang$core$Maybe$Just(
+					A3(_miyamoen$select_list$SelectList$SelectList, _p41, _p38._0, _p38._1));
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		} else {
+			var _p39 = _p41;
+			if (_p39.ctor === '::') {
+				return _elm_lang$core$Maybe$Just(
+					A3(_miyamoen$select_list$SelectList$SelectList, _p39._1, _p39._0, _p40));
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}
+	});
+var _miyamoen$select_list$SelectList$insert = F3(
+	function (dir, x, _p42) {
+		var _p43 = _p42;
+		var _p47 = _p43._0;
+		var _p46 = _p43._2;
+		var _p45 = _p43._1;
+		var _p44 = dir;
+		if (_p44.ctor === 'After') {
+			return A3(
+				_miyamoen$select_list$SelectList$SelectList,
+				_p47,
+				x,
+				{ctor: '::', _0: _p45, _1: _p46});
+		} else {
+			return A3(
+				_miyamoen$select_list$SelectList$SelectList,
+				{ctor: '::', _0: _p45, _1: _p47},
+				x,
+				_p46);
+		}
+	});
+var _miyamoen$select_list$SelectList$map = F2(
+	function (f, _p48) {
+		var _p49 = _p48;
+		return A3(
+			_miyamoen$select_list$SelectList$SelectList,
+			A2(_elm_lang$core$List$map, f, _p49._0),
+			f(_p49._1),
+			A2(_elm_lang$core$List$map, f, _p49._2));
+	});
+var _miyamoen$select_list$SelectList$Before = {ctor: 'Before'};
+var _miyamoen$select_list$SelectList$moveToHead = function (_p50) {
+	var _p51 = _p50;
+	return A2(
+		_miyamoen$select_list$SelectList$attempt,
+		A2(
+			_miyamoen$select_list$SelectList$steps,
+			_miyamoen$select_list$SelectList$Before,
+			_elm_lang$core$List$length(_p51._0)),
+		_p51);
+};
+var _miyamoen$select_list$SelectList$selectBefore = function (list) {
+	return A2(
+		_elm_lang$core$List$filterMap,
+		function (n) {
+			return A3(_miyamoen$select_list$SelectList$steps, _miyamoen$select_list$SelectList$Before, n, list);
+		},
+		_elm_lang$core$List$reverse(
+			A2(
+				_elm_lang$core$List$range,
+				1,
+				_miyamoen$select_list$SelectList$beforeLength(list))));
+};
+var _miyamoen$select_list$SelectList$After = {ctor: 'After'};
+var _miyamoen$select_list$SelectList$moveToLast = function (_p52) {
+	var _p53 = _p52;
+	return A2(
+		_miyamoen$select_list$SelectList$attempt,
+		A2(
+			_miyamoen$select_list$SelectList$steps,
+			_miyamoen$select_list$SelectList$After,
+			_elm_lang$core$List$length(_p53._2)),
+		_p53);
+};
+var _miyamoen$select_list$SelectList$selectAfter = function (list) {
+	return A2(
+		_elm_lang$core$List$filterMap,
+		function (n) {
+			return A3(_miyamoen$select_list$SelectList$steps, _miyamoen$select_list$SelectList$After, n, list);
+		},
+		A2(
+			_elm_lang$core$List$range,
+			1,
+			_miyamoen$select_list$SelectList$afterLength(list)));
+};
+var _miyamoen$select_list$SelectList$selectAll = function (list) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_miyamoen$select_list$SelectList$selectBefore(list),
+		{
+			ctor: '::',
+			_0: list,
+			_1: _miyamoen$select_list$SelectList$selectAfter(list)
+		});
+};
+var _miyamoen$select_list$SelectList$AfterSelected = {ctor: 'AfterSelected'};
+var _miyamoen$select_list$SelectList$Selected = {ctor: 'Selected'};
+var _miyamoen$select_list$SelectList$BeforeSelected = {ctor: 'BeforeSelected'};
+var _miyamoen$select_list$SelectList$mapBy = F2(
+	function (f, list) {
+		var after = A2(
+			_elm_lang$core$List$map,
+			f(_miyamoen$select_list$SelectList$AfterSelected),
+			_miyamoen$select_list$SelectList$selectAfter(list));
+		var selected = A2(f, _miyamoen$select_list$SelectList$Selected, list);
+		var before = A2(
+			_elm_lang$core$List$map,
+			f(_miyamoen$select_list$SelectList$BeforeSelected),
+			_miyamoen$select_list$SelectList$selectBefore(list));
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			before,
+			{ctor: '::', _0: selected, _1: after});
+	});
+var _miyamoen$bibliopola$Types_ops = _miyamoen$bibliopola$Types_ops || {};
+_miyamoen$bibliopola$Types_ops['=>'] = F2(
 	function (v0, v1) {
 		return {ctor: '_Tuple2', _0: v0, _1: v1};
 	});
-var _user$project$Types$Model = F3(
-	function (a, b, c) {
-		return {route: a, views: b, styles: c};
+var _miyamoen$bibliopola$Types$Model = F5(
+	function (a, b, c, d, e) {
+		return {route: a, views: b, styles: c, panel: d, logs: e};
 	});
-var _user$project$Types$ViewItem = F5(
+var _miyamoen$bibliopola$Types$ViewItem = F5(
 	function (a, b, c, d, e) {
 		return {name: a, state: b, stories: c, variations: d, form: e};
 	});
-var _user$project$Types$SetViewTreeWithRoute = function (a) {
+var _miyamoen$bibliopola$Types$Log = F2(
+	function (a, b) {
+		return {message: a, id: b};
+	});
+var _miyamoen$bibliopola$Types$SetPanel = function (a) {
+	return {ctor: 'SetPanel', _0: a};
+};
+var _miyamoen$bibliopola$Types$SetViewTreeWithRoute = function (a) {
 	return {ctor: 'SetViewTreeWithRoute', _0: a};
 };
-var _user$project$Types$SetViewTree = function (a) {
+var _miyamoen$bibliopola$Types$SetViewTree = function (a) {
 	return {ctor: 'SetViewTree', _0: a};
 };
-var _user$project$Types$GoToRoute = function (a) {
+var _miyamoen$bibliopola$Types$GoToRoute = function (a) {
 	return {ctor: 'GoToRoute', _0: a};
 };
-var _user$project$Types$SetRoute = function (a) {
+var _miyamoen$bibliopola$Types$SetRoute = function (a) {
 	return {ctor: 'SetRoute', _0: a};
 };
-var _user$project$Types$Print = function (a) {
-	return {ctor: 'Print', _0: a};
+var _miyamoen$bibliopola$Types$ClearLogs = {ctor: 'ClearLogs'};
+var _miyamoen$bibliopola$Types$LogMsg = function (a) {
+	return {ctor: 'LogMsg', _0: a};
 };
-var _user$project$Types$NoOp = {ctor: 'NoOp'};
-var _user$project$Types$Open = {ctor: 'Open'};
-var _user$project$Types$Close = {ctor: 'Close'};
-var _user$project$Types$Child = function (a) {
+var _miyamoen$bibliopola$Types$NoOp = {ctor: 'NoOp'};
+var _miyamoen$bibliopola$Types$Open = {ctor: 'Open'};
+var _miyamoen$bibliopola$Types$Close = {ctor: 'Close'};
+var _miyamoen$bibliopola$Types$AuthorPanel = {ctor: 'AuthorPanel'};
+var _miyamoen$bibliopola$Types$MsgLoggerPanel = {ctor: 'MsgLoggerPanel'};
+var _miyamoen$bibliopola$Types$StoryPanel = {ctor: 'StoryPanel'};
+var _miyamoen$bibliopola$Types$Child = function (a) {
 	return {ctor: 'Child', _0: a};
 };
-var _user$project$Types$Box = {ctor: 'Box'};
-var _user$project$Types$Text = {ctor: 'Text'};
-var _user$project$Types$None = {ctor: 'None'};
-var _user$project$Types$ChildVar = function (a) {
+var _miyamoen$bibliopola$Types$Box = {ctor: 'Box'};
+var _miyamoen$bibliopola$Types$Text = {ctor: 'Text'};
+var _miyamoen$bibliopola$Types$None = {ctor: 'None'};
+var _miyamoen$bibliopola$Types$ChildVar = function (a) {
 	return {ctor: 'ChildVar', _0: a};
 };
-var _user$project$Types$PalletVar = function (a) {
+var _miyamoen$bibliopola$Types$PalletVar = function (a) {
 	return {ctor: 'PalletVar', _0: a};
 };
-var _user$project$Types$NoVar = {ctor: 'NoVar'};
-var _user$project$Atom_Caret$pointsString = '255.992,92.089 0,348.081 71.821,419.911 255.992,235.74 440.18,419.911 512,348.081';
-var _user$project$Atom_Caret$rotateCss = function (direction) {
+var _miyamoen$bibliopola$Types$NoVar = {ctor: 'NoVar'};
+var _miyamoen$bibliopola$Atom_Ban$pathString = 'M256,0C114.613,0,0,114.615,0,256s114.613,256,256,256c141.383,0,256-114.615,256-256S397.383,0,256,0z\n M99.594,144.848L367.15,412.406C335.754,434.781,297.402,448,256,448c-105.871,0-192-86.131-192-192\n C64,214.596,77.217,176.244,99.594,144.848z M412.404,367.15L144.848,99.594C176.242,77.219,214.594,64,256,64\n c105.867,0,192,86.131,192,192C448,297.404,434.781,335.756,412.404,367.15z';
+var _miyamoen$bibliopola$Atom_Ban$view = function (_p0) {
+	var _p1 = _p0;
+	var _p3 = _p1.size;
+	var _p2 = _p1.onClick;
+	return A3(
+		_mdgriffith$style_elements$Element$el,
+		_miyamoen$bibliopola$Types$None,
+		{
+			ctor: '::',
+			_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
+				{
+					ctor: '::',
+					_0: A2(
+						_miyamoen$bibliopola$Types_ops['=>'],
+						'fill',
+						_miyamoen$bibliopola$Color_Pallet$css(_p1.pallet)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_miyamoen$bibliopola$Types_ops['=>'],
+							'cursor',
+							A2(
+								_elm_lang$core$Maybe$withDefault,
+								'',
+								A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$core$Basics$always('pointer'),
+									_p2))),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$style_elements$Element_Attributes$width(
+					_mdgriffith$style_elements$Element_Attributes$px(_p3)),
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$style_elements$Element_Attributes$height(
+						_mdgriffith$style_elements$Element_Attributes$px(_p3)),
+					_1: {
+						ctor: '::',
+						_0: _miyamoen$bibliopola$Element_Util$maybeOnClick(_p2),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		},
+		_mdgriffith$style_elements$Element$html(
+			A2(
+				_elm_lang$svg$Svg$svg,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 512 512'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$g,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$path,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$d(_miyamoen$bibliopola$Atom_Ban$pathString),
+									_1: {ctor: '[]'}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				})));
+};
+var _miyamoen$bibliopola$Atom_Caret$pointsString = '255.992,92.089 0,348.081 71.821,419.911 255.992,235.74 440.18,419.911 512,348.081';
+var _miyamoen$bibliopola$Atom_Caret$rotateCss = function (direction) {
 	return _elm_lang$core$String$concat(
 		{
 			ctor: '::',
@@ -22771,39 +23140,39 @@ var _user$project$Atom_Caret$rotateCss = function (direction) {
 			}
 		});
 };
-var _user$project$Atom_Caret$view = F2(
+var _miyamoen$bibliopola$Atom_Caret$view = F2(
 	function (_p1, direction) {
 		var _p2 = _p1;
 		var _p4 = _p2.size;
 		var _p3 = _p2.onClick;
 		return A3(
 			_mdgriffith$style_elements$Element$el,
-			_user$project$Types$None,
+			_miyamoen$bibliopola$Types$None,
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 					{
 						ctor: '::',
 						_0: A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							'fill',
-							_user$project$Color_Pallet$css(_p2.pallet)),
+							_miyamoen$bibliopola$Color_Pallet$css(_p2.pallet)),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_user$project$Types_ops['=>'],
+								_miyamoen$bibliopola$Types_ops['=>'],
 								'transform',
-								_user$project$Atom_Caret$rotateCss(direction)),
+								_miyamoen$bibliopola$Atom_Caret$rotateCss(direction)),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'transition-property', 'transform'),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'transition-property', 'transform'),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$Types_ops['=>'], 'transition-duration', '0.2s'),
+									_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'transition-duration', '0.2s'),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_user$project$Types_ops['=>'],
+											_miyamoen$bibliopola$Types_ops['=>'],
 											'cursor',
 											A2(
 												_elm_lang$core$Maybe$withDefault,
@@ -22828,7 +23197,7 @@ var _user$project$Atom_Caret$view = F2(
 							_mdgriffith$style_elements$Element_Attributes$px(_p4)),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Element_Util$maybeOnClick(
+							_0: _miyamoen$bibliopola$Element_Util$maybeOnClick(
 								A2(
 									_elm_lang$core$Maybe$map,
 									function (f) {
@@ -22859,7 +23228,7 @@ var _user$project$Atom_Caret$view = F2(
 									_elm_lang$svg$Svg$polygon,
 									{
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$points(_user$project$Atom_Caret$pointsString),
+										_0: _elm_lang$svg$Svg_Attributes$points(_miyamoen$bibliopola$Atom_Caret$pointsString),
 										_1: {ctor: '[]'}
 									},
 									{ctor: '[]'}),
@@ -22868,29 +23237,29 @@ var _user$project$Atom_Caret$view = F2(
 						_1: {ctor: '[]'}
 					})));
 	});
-var _user$project$Atom_Caret$Left = {ctor: 'Left'};
-var _user$project$Atom_Caret$Right = {ctor: 'Right'};
-var _user$project$Atom_Caret$Down = {ctor: 'Down'};
-var _user$project$Atom_Caret$Up = {ctor: 'Up'};
-var _user$project$Atom_Caret$directions = {
+var _miyamoen$bibliopola$Atom_Caret$Left = {ctor: 'Left'};
+var _miyamoen$bibliopola$Atom_Caret$Right = {ctor: 'Right'};
+var _miyamoen$bibliopola$Atom_Caret$Down = {ctor: 'Down'};
+var _miyamoen$bibliopola$Atom_Caret$Up = {ctor: 'Up'};
+var _miyamoen$bibliopola$Atom_Caret$directions = {
 	ctor: '::',
-	_0: _user$project$Atom_Caret$Up,
+	_0: _miyamoen$bibliopola$Atom_Caret$Up,
 	_1: {
 		ctor: '::',
-		_0: _user$project$Atom_Caret$Down,
+		_0: _miyamoen$bibliopola$Atom_Caret$Down,
 		_1: {
 			ctor: '::',
-			_0: _user$project$Atom_Caret$Right,
+			_0: _miyamoen$bibliopola$Atom_Caret$Right,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Atom_Caret$Left,
+				_0: _miyamoen$bibliopola$Atom_Caret$Left,
 				_1: {ctor: '[]'}
 			}
 		}
 	}
 };
-var _user$project$Atom_File$pathString = 'M411.626,0H222.758c-13.559,0-26.564,5.39-36.152,14.969L68.794,132.788\n c-9.59,9.587-14.976,22.596-14.976,36.156v296.5c0,25.67,20.889,46.556,46.56,46.556h311.247c25.667,0,46.556-20.886,46.556-46.556\n V46.542C458.182,20.878,437.292,0,411.626,0z M206.252,32.349v104.652c0,11.313-4.405,15.722-15.718,15.722H85.877L206.252,32.349z\n M432.002,465.444c0,11.237-9.146,20.372-20.376,20.372H100.378c-11.237,0-20.38-9.135-20.38-20.372V175.998h124.554\n c13.77,0,24.978-11.207,24.978-24.985V26.184h182.096c11.23,0,20.376,9.127,20.376,20.358V465.444z';
-var _user$project$Atom_File$sentence = function (yString) {
+var _miyamoen$bibliopola$Atom_File$pathString = 'M411.626,0H222.758c-13.559,0-26.564,5.39-36.152,14.969L68.794,132.788\n c-9.59,9.587-14.976,22.596-14.976,36.156v296.5c0,25.67,20.889,46.556,46.56,46.556h311.247c25.667,0,46.556-20.886,46.556-46.556\n V46.542C458.182,20.878,437.292,0,411.626,0z M206.252,32.349v104.652c0,11.313-4.405,15.722-15.718,15.722H85.877L206.252,32.349z\n M432.002,465.444c0,11.237-9.146,20.372-20.376,20.372H100.378c-11.237,0-20.38-9.135-20.38-20.372V175.998h124.554\n c13.77,0,24.978-11.207,24.978-24.985V26.184h182.096c11.23,0,20.376,9.127,20.376,20.358V465.444z';
+var _miyamoen$bibliopola$Atom_File$sentence = function (yString) {
 	return A2(
 		_elm_lang$svg$Svg$rect,
 		{
@@ -22912,26 +23281,26 @@ var _user$project$Atom_File$sentence = function (yString) {
 		},
 		{ctor: '[]'});
 };
-var _user$project$Atom_File$view = function (_p0) {
+var _miyamoen$bibliopola$Atom_File$view = function (_p0) {
 	var _p1 = _p0;
 	var _p3 = _p1.size;
 	var _p2 = _p1.onClick;
 	return A3(
 		_mdgriffith$style_elements$Element$el,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{
 			ctor: '::',
 			_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 				{
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
+						_miyamoen$bibliopola$Types_ops['=>'],
 						'fill',
-						_user$project$Color_Pallet$css(_p1.pallet)),
+						_miyamoen$bibliopola$Color_Pallet$css(_p1.pallet)),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							'cursor',
 							A2(
 								_elm_lang$core$Maybe$withDefault,
@@ -22953,7 +23322,7 @@ var _user$project$Atom_File$view = function (_p0) {
 						_mdgriffith$style_elements$Element_Attributes$px(_p3)),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Element_Util$maybeOnClick(_p2),
+						_0: _miyamoen$bibliopola$Element_Util$maybeOnClick(_p2),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -22974,13 +23343,13 @@ var _user$project$Atom_File$view = function (_p0) {
 						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _user$project$Atom_File$sentence('394.181'),
+							_0: _miyamoen$bibliopola$Atom_File$sentence('394.181'),
 							_1: {
 								ctor: '::',
-								_0: _user$project$Atom_File$sentence('305.688'),
+								_0: _miyamoen$bibliopola$Atom_File$sentence('305.688'),
 								_1: {
 									ctor: '::',
-									_0: _user$project$Atom_File$sentence('217.203'),
+									_0: _miyamoen$bibliopola$Atom_File$sentence('217.203'),
 									_1: {
 										ctor: '::',
 										_0: A2(
@@ -23009,7 +23378,7 @@ var _user$project$Atom_File$view = function (_p0) {
 												_elm_lang$svg$Svg$path,
 												{
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$d(_user$project$Atom_File$pathString),
+													_0: _elm_lang$svg$Svg_Attributes$d(_miyamoen$bibliopola$Atom_File$pathString),
 													_1: {ctor: '[]'}
 												},
 												{ctor: '[]'}),
@@ -23022,27 +23391,27 @@ var _user$project$Atom_File$view = function (_p0) {
 					_1: {ctor: '[]'}
 				})));
 };
-var _user$project$Atom_Folder$pathString = 'M496.145,112.909c-9.735-9.758-23.396-15.855-38.278-15.846H212.761c-3.011,0-5.931-1.147-8.15-3.235\n l0.016,0.026l-43.07-40.39c-10.04-9.405-23.272-14.643-37.024-14.643h-70.4c-14.882-0.008-28.552,6.096-38.278,15.856\n C6.096,64.403-0.008,78.072,0,92.954v326.092c-0.008,14.882,6.096,28.551,15.855,38.277c9.726,9.759,23.396,15.863,38.278,15.856\n h403.734c14.882,0.008,28.552-6.096,38.278-15.856c9.759-9.726,15.863-23.395,15.855-38.277V151.187\n C512.008,136.305,505.904,122.636,496.145,112.909z M466.282,427.452c-2.228,2.194-5.065,3.481-8.414,3.49H54.133\n c-3.35-0.008-6.187-1.296-8.414-3.49c-2.186-2.219-3.473-5.057-3.481-8.406V92.954c0.008-3.35,1.295-6.187,3.481-8.415\n c2.228-2.186,5.065-3.472,8.414-3.481h70.4c3.028,0,5.923,1.147,8.142,3.218l43.062,40.381l0.016,0.025\n c10.015,9.363,23.239,14.618,37.007,14.618h245.106c3.35,0.008,6.196,1.295,8.414,3.481c2.186,2.219,3.474,5.057,3.481,8.406\n v267.859C469.756,422.395,468.468,425.233,466.282,427.452z';
-var _user$project$Atom_Folder$view = function (_p0) {
+var _miyamoen$bibliopola$Atom_Folder$pathString = 'M496.145,112.909c-9.735-9.758-23.396-15.855-38.278-15.846H212.761c-3.011,0-5.931-1.147-8.15-3.235\n l0.016,0.026l-43.07-40.39c-10.04-9.405-23.272-14.643-37.024-14.643h-70.4c-14.882-0.008-28.552,6.096-38.278,15.856\n C6.096,64.403-0.008,78.072,0,92.954v326.092c-0.008,14.882,6.096,28.551,15.855,38.277c9.726,9.759,23.396,15.863,38.278,15.856\n h403.734c14.882,0.008,28.552-6.096,38.278-15.856c9.759-9.726,15.863-23.395,15.855-38.277V151.187\n C512.008,136.305,505.904,122.636,496.145,112.909z M466.282,427.452c-2.228,2.194-5.065,3.481-8.414,3.49H54.133\n c-3.35-0.008-6.187-1.296-8.414-3.49c-2.186-2.219-3.473-5.057-3.481-8.406V92.954c0.008-3.35,1.295-6.187,3.481-8.415\n c2.228-2.186,5.065-3.472,8.414-3.481h70.4c3.028,0,5.923,1.147,8.142,3.218l43.062,40.381l0.016,0.025\n c10.015,9.363,23.239,14.618,37.007,14.618h245.106c3.35,0.008,6.196,1.295,8.414,3.481c2.186,2.219,3.474,5.057,3.481,8.406\n v267.859C469.756,422.395,468.468,425.233,466.282,427.452z';
+var _miyamoen$bibliopola$Atom_Folder$view = function (_p0) {
 	var _p1 = _p0;
 	var _p3 = _p1.size;
 	var _p2 = _p1.onClick;
 	return A3(
 		_mdgriffith$style_elements$Element$el,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{
 			ctor: '::',
 			_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 				{
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
+						_miyamoen$bibliopola$Types_ops['=>'],
 						'fill',
-						_user$project$Color_Pallet$css(_p1.pallet)),
+						_miyamoen$bibliopola$Color_Pallet$css(_p1.pallet)),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							'cursor',
 							A2(
 								_elm_lang$core$Maybe$withDefault,
@@ -23064,7 +23433,7 @@ var _user$project$Atom_Folder$view = function (_p0) {
 						_mdgriffith$style_elements$Element_Attributes$px(_p3)),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Element_Util$maybeOnClick(_p2),
+						_0: _miyamoen$bibliopola$Element_Util$maybeOnClick(_p2),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -23089,7 +23458,7 @@ var _user$project$Atom_Folder$view = function (_p0) {
 								_elm_lang$svg$Svg$path,
 								{
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$d(_user$project$Atom_Folder$pathString),
+									_0: _elm_lang$svg$Svg_Attributes$d(_miyamoen$bibliopola$Atom_Folder$pathString),
 									_1: {ctor: '[]'}
 								},
 								{ctor: '[]'}),
@@ -23098,17 +23467,86 @@ var _user$project$Atom_Folder$view = function (_p0) {
 					_1: {ctor: '[]'}
 				})));
 };
-var _user$project$Atom_SelectBox$decoder = function (f) {
+var _miyamoen$bibliopola$Atom_LogLine$borderCss = '2px solid rgba(138, 142, 180, 0.22)';
+var _miyamoen$bibliopola$Atom_LogLine$view = function (_p0) {
+	var _p1 = _p0;
+	return A3(
+		_mdgriffith$style_elements$Element$row,
+		_miyamoen$bibliopola$Types$None,
+		{
+			ctor: '::',
+			_0: _mdgriffith$style_elements$Element_Attributes$spacing(5),
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$style_elements$Element_Attributes$paddingBottom(5),
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
+						{
+							ctor: '::',
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-bottom', _miyamoen$bibliopola$Atom_LogLine$borderCss),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A3(
+				_mdgriffith$style_elements$Element$el,
+				_miyamoen$bibliopola$Types$None,
+				{
+					ctor: '::',
+					_0: _mdgriffith$style_elements$Element_Attributes$width(
+						_mdgriffith$style_elements$Element_Attributes$px(50)),
+					_1: {
+						ctor: '::',
+						_0: _mdgriffith$style_elements$Element_Attributes$paddingRight(5),
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
+								{
+									ctor: '::',
+									_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'text-align', 'right'),
+									_1: {
+										ctor: '::',
+										_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-right', _miyamoen$bibliopola$Atom_LogLine$borderCss),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				_mdgriffith$style_elements$Element$text(
+					_elm_lang$core$Basics$toString(_p1.id))),
+			_1: {
+				ctor: '::',
+				_0: A3(
+					_mdgriffith$style_elements$Element$paragraph,
+					_miyamoen$bibliopola$Types$None,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _mdgriffith$style_elements$Element$text(_p1.message),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _miyamoen$bibliopola$Atom_SelectBox$decoder = function (f) {
 	return A2(_elm_lang$core$Json_Decode$map, f, _mdgriffith$style_elements$Element_Events$targetValue);
 };
-var _user$project$Atom_SelectBox$option = F2(
+var _miyamoen$bibliopola$Atom_SelectBox$option = F2(
 	function (selected, option) {
 		return A2(
 			_mdgriffith$style_elements$Element$node,
 			'option',
 			A3(
 				_mdgriffith$style_elements$Element$el,
-				_user$project$Types$None,
+				_miyamoen$bibliopola$Types$None,
 				{
 					ctor: '::',
 					_0: A2(_mdgriffith$style_elements$Element_Attributes$attribute, 'value', option),
@@ -23121,13 +23559,13 @@ var _user$project$Atom_SelectBox$option = F2(
 				},
 				_mdgriffith$style_elements$Element$text(option)));
 	});
-var _user$project$Atom_SelectBox$view = F2(
+var _miyamoen$bibliopola$Atom_SelectBox$view = F2(
 	function (_p0, selected) {
 		var _p1 = _p0;
 		var _p2 = _p1.disabled;
 		return A3(
 			_mdgriffith$style_elements$Element$column,
-			_user$project$Types$None,
+			_miyamoen$bibliopola$Types$None,
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Element_Attributes$spacing(5),
@@ -23137,19 +23575,19 @@ var _user$project$Atom_SelectBox$view = F2(
 				ctor: '::',
 				_0: A3(
 					_mdgriffith$style_elements$Element$el,
-					_user$project$Types$Text,
+					_miyamoen$bibliopola$Types$None,
 					{
 						ctor: '::',
 						_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 							{
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'text-decoration', 'underline'),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'text-decoration', 'underline'),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$Types_ops['=>'], 'font-style', 'italic'),
+									_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'font-style', 'italic'),
 									_1: {
 										ctor: '::',
-										_0: _p2 ? A2(_user$project$Types_ops['=>'], 'color', 'rgb(150, 150, 150)') : A2(_user$project$Types_ops['=>'], '', ''),
+										_0: _p2 ? A2(_miyamoen$bibliopola$Types_ops['=>'], 'color', 'rgb(150, 150, 150)') : A2(_miyamoen$bibliopola$Types_ops['=>'], '', ''),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -23161,21 +23599,26 @@ var _user$project$Atom_SelectBox$view = F2(
 					ctor: '::',
 					_0: A3(
 						_mdgriffith$style_elements$Element$el,
-						_user$project$Types$None,
+						_miyamoen$bibliopola$Types$None,
 						{
 							ctor: '::',
 							_0: _mdgriffith$style_elements$Element_Attributes$paddingLeft(40),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _mdgriffith$style_elements$Element_Attributes$minWidth(
+									_mdgriffith$style_elements$Element_Attributes$px(120)),
+								_1: {ctor: '[]'}
+							}
 						},
 						A2(
 							_mdgriffith$style_elements$Element$node,
 							'select',
 							A3(
 								_mdgriffith$style_elements$Element$column,
-								_user$project$Types$None,
+								_miyamoen$bibliopola$Types$None,
 								{
 									ctor: '::',
-									_0: A2(_mdgriffith$style_elements$Element_Attributes$attribute, 'size', '4'),
+									_0: A2(_mdgriffith$style_elements$Element_Attributes$attribute, 'size', '5'),
 									_1: {
 										ctor: '::',
 										_0: _mdgriffith$style_elements$Element_Attributes$width(_mdgriffith$style_elements$Element_Attributes$fill),
@@ -23187,10 +23630,10 @@ var _user$project$Atom_SelectBox$view = F2(
 												_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 													{
 														ctor: '::',
-														_0: A2(_user$project$Types_ops['=>'], 'border', '1px solid rgba(138, 142, 180, 0.22)'),
+														_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border', '1px solid rgba(138, 142, 180, 0.22)'),
 														_1: {
 															ctor: '::',
-															_0: A2(_user$project$Types_ops['=>'], 'border-radius', '4px'),
+															_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-radius', '4px'),
 															_1: {ctor: '[]'}
 														}
 													}),
@@ -23199,7 +23642,7 @@ var _user$project$Atom_SelectBox$view = F2(
 													_0: A2(
 														_mdgriffith$style_elements$Element_Events$on,
 														'change',
-														_user$project$Atom_SelectBox$decoder(_p1.onChange)),
+														_miyamoen$bibliopola$Atom_SelectBox$decoder(_p1.onChange)),
 													_1: {
 														ctor: '::',
 														_0: _p2 ? A2(_mdgriffith$style_elements$Element_Attributes$attribute, 'disabled', '') : _mdgriffith$style_elements$Element_Attributes$classList(
@@ -23213,25 +23656,89 @@ var _user$project$Atom_SelectBox$view = F2(
 								},
 								A2(
 									_elm_lang$core$List$map,
-									_user$project$Atom_SelectBox$option(selected),
+									_miyamoen$bibliopola$Atom_SelectBox$option(selected),
 									_p1.options)))),
 					_1: {ctor: '[]'}
 				}
 			});
 	});
-var _user$project$Atom_SelectBox$view_ = F3(
+var _miyamoen$bibliopola$Atom_SelectBox$view_ = F3(
 	function (options, selected, disabled) {
 		return A2(
-			_user$project$Atom_SelectBox$view,
+			_miyamoen$bibliopola$Atom_SelectBox$view,
 			{options: options, name: 'exampleName', onChange: _elm_lang$core$Basics$identity, disabled: disabled},
 			selected);
 	});
-var _user$project$Atom_Toggle$view = F2(
+var _miyamoen$bibliopola$Atom_Tab$view = F2(
+	function (_p0, label) {
+		var _p1 = _p0;
+		var _p2 = _p1.selected;
+		return A3(
+			_mdgriffith$style_elements$Element$column,
+			_miyamoen$bibliopola$Types$Text,
+			{
+				ctor: '::',
+				_0: A2(_mdgriffith$style_elements$Element_Attributes$paddingXY, 8, 5),
+				_1: {
+					ctor: '::',
+					_0: _mdgriffith$style_elements$Element_Attributes$width(
+						_mdgriffith$style_elements$Element_Attributes$fillPortion(1)),
+					_1: {
+						ctor: '::',
+						_0: _mdgriffith$style_elements$Element_Attributes$center,
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$style_elements$Element_Attributes$scrollbars,
+							_1: {
+								ctor: '::',
+								_0: _p2 ? _mdgriffith$style_elements$Element_Attributes$classList(
+									{ctor: '[]'}) : _mdgriffith$style_elements$Element_Events$onClick(_p1.onClick),
+								_1: {
+									ctor: '::',
+									_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
+										{
+											ctor: '::',
+											_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cursor', 'pointer'),
+											_1: {
+												ctor: '::',
+												_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-radius', '5px 5px 0px 0px'),
+												_1: {
+													ctor: '::',
+													_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-color', 'rgb(135, 135, 150)'),
+													_1: {
+														ctor: '::',
+														_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-width', '2px 2px 0px 2px'),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_miyamoen$bibliopola$Types_ops['=>'],
+																'background-color',
+																_p2 ? 'rgb(240, 240, 240)' : 'rgb(97, 99, 116)'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _mdgriffith$style_elements$Element$text(label),
+				_1: {ctor: '[]'}
+			});
+	});
+var _miyamoen$bibliopola$Atom_Toggle$view = F2(
 	function (_p0, on) {
 		var _p1 = _p0;
 		return A3(
 			_mdgriffith$style_elements$Element$row,
-			_user$project$Types$None,
+			_miyamoen$bibliopola$Types$None,
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Element_Attributes$spacing(5),
@@ -23241,7 +23748,16 @@ var _user$project$Atom_Toggle$view = F2(
 					_1: {
 						ctor: '::',
 						_0: _mdgriffith$style_elements$Element_Events$onClick(_p1.onClick),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
+								{
+									ctor: '::',
+									_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cursor', 'pointer'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			},
@@ -23249,14 +23765,14 @@ var _user$project$Atom_Toggle$view = F2(
 				ctor: '::',
 				_0: A3(
 					_mdgriffith$style_elements$Element$el,
-					_user$project$Types$Text,
+					_miyamoen$bibliopola$Types$Text,
 					{ctor: '[]'},
 					_mdgriffith$style_elements$Element$text(_p1.name)),
 				_1: {
 					ctor: '::',
 					_0: A3(
 						_mdgriffith$style_elements$Element$el,
-						_user$project$Types$None,
+						_miyamoen$bibliopola$Types$None,
 						{
 							ctor: '::',
 							_0: _mdgriffith$style_elements$Element_Attributes$padding(2),
@@ -23265,10 +23781,10 @@ var _user$project$Atom_Toggle$view = F2(
 								_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 									{
 										ctor: '::',
-										_0: A2(_user$project$Types_ops['=>'], 'border', '2px solid rgba(138, 142, 180, 0.22)'),
+										_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border', '2px solid rgba(138, 142, 180, 0.22)'),
 										_1: {
 											ctor: '::',
-											_0: A2(_user$project$Types_ops['=>'], 'border-radius', '20px'),
+											_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-radius', '20px'),
 											_1: {ctor: '[]'}
 										}
 									}),
@@ -23277,7 +23793,7 @@ var _user$project$Atom_Toggle$view = F2(
 						},
 						A3(
 							_mdgriffith$style_elements$Element$el,
-							_user$project$Types$None,
+							_miyamoen$bibliopola$Types$None,
 							{
 								ctor: '::',
 								_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23291,14 +23807,14 @@ var _user$project$Atom_Toggle$view = F2(
 										_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 											{
 												ctor: '::',
-												_0: A2(_user$project$Types_ops['=>'], 'border-radius', '20px'),
+												_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-radius', '20px'),
 												_1: {
 													ctor: '::',
-													_0: A2(_user$project$Types_ops['=>'], 'transition', 'background-color .5s'),
+													_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'transition', 'background-color .5s'),
 													_1: {
 														ctor: '::',
 														_0: A2(
-															_user$project$Types_ops['=>'],
+															_miyamoen$bibliopola$Types_ops['=>'],
 															'background-color',
 															on ? 'rgb(139, 190, 236)' : 'rgb(255,255,255)'),
 														_1: {ctor: '[]'}
@@ -23311,7 +23827,7 @@ var _user$project$Atom_Toggle$view = F2(
 							},
 							A3(
 								_mdgriffith$style_elements$Element$el,
-								_user$project$Types$None,
+								_miyamoen$bibliopola$Types$None,
 								{
 									ctor: '::',
 									_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23325,17 +23841,17 @@ var _user$project$Atom_Toggle$view = F2(
 											_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 												{
 													ctor: '::',
-													_0: A2(_user$project$Types_ops['=>'], 'border-radius', '8px'),
+													_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-radius', '8px'),
 													_1: {
 														ctor: '::',
-														_0: A2(_user$project$Types_ops['=>'], 'background-color', 'rgb(45, 129, 204)'),
+														_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'background-color', 'rgb(45, 129, 204)'),
 														_1: {
 															ctor: '::',
-															_0: A2(_user$project$Types_ops['=>'], 'transition', 'transform .2s'),
+															_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'transition', 'transform .2s'),
 															_1: {
 																ctor: '::',
 																_0: A2(
-																	_user$project$Types_ops['=>'],
+																	_miyamoen$bibliopola$Types_ops['=>'],
 																	'transform',
 																	on ? 'translateX(24px)' : 'translateX(0px)'),
 																_1: {ctor: '[]'}
@@ -23352,7 +23868,7 @@ var _user$project$Atom_Toggle$view = F2(
 				}
 			});
 	});
-var _user$project$List_Extra$lift4 = F5(
+var _miyamoen$bibliopola$List_Extra$lift4 = F5(
 	function (f, la, lb, lc, ld) {
 		return A2(
 			_elm_lang$core$List$concatMap,
@@ -23376,7 +23892,7 @@ var _user$project$List_Extra$lift4 = F5(
 			},
 			la);
 	});
-var _user$project$List_Extra$lift3 = F4(
+var _miyamoen$bibliopola$List_Extra$lift3 = F4(
 	function (f, la, lb, lc) {
 		return A2(
 			_elm_lang$core$List$concatMap,
@@ -23395,7 +23911,7 @@ var _user$project$List_Extra$lift3 = F4(
 			},
 			la);
 	});
-var _user$project$List_Extra$lift2 = F3(
+var _miyamoen$bibliopola$List_Extra$lift2 = F3(
 	function (f, la, lb) {
 		return A2(
 			_elm_lang$core$List$concatMap,
@@ -23409,7 +23925,7 @@ var _user$project$List_Extra$lift2 = F3(
 			},
 			la);
 	});
-var _user$project$List_Extra$find = F2(
+var _miyamoen$bibliopola$List_Extra$find = F2(
 	function (predicate, list) {
 		find:
 		while (true) {
@@ -23430,7 +23946,7 @@ var _user$project$List_Extra$find = F2(
 			}
 		}
 	});
-var _user$project$Model_ViewTree$getFormStories = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$getFormStories = function (tree) {
 	var item = _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(tree);
 	return A2(
 		_elm_lang$core$List$map,
@@ -23448,7 +23964,7 @@ var _user$project$Model_ViewTree$getFormStories = function (tree) {
 		},
 		item.stories);
 };
-var _user$project$Model_ViewTree$isStoryMode = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$isStoryMode = function (tree) {
 	return function (_) {
 		return _.storyOn;
 	}(
@@ -23457,7 +23973,7 @@ var _user$project$Model_ViewTree$isStoryMode = function (tree) {
 		}(
 			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(tree)));
 };
-var _user$project$Model_ViewTree$getQuery = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$getQuery = function (tree) {
 	return function (_) {
 		return _.stories;
 	}(
@@ -23466,7 +23982,7 @@ var _user$project$Model_ViewTree$getQuery = function (tree) {
 		}(
 			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(tree)));
 };
-var _user$project$Model_ViewTree$getPath = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$getPath = function (tree) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
 		{ctor: '[]'},
@@ -23478,26 +23994,26 @@ var _user$project$Model_ViewTree$getPath = function (tree) {
 				},
 				tree)));
 };
-var _user$project$Model_ViewTree$getPathString = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$getPathString = function (tree) {
 	return A2(
 		_elm_lang$core$String$join,
 		'/',
-		_user$project$Model_ViewTree$getPath(tree));
+		_miyamoen$bibliopola$Model_ViewTree$getPath(tree));
 };
-var _user$project$Model_ViewTree$getRoute = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$getRoute = function (tree) {
 	return A2(
-		_user$project$Route$View,
-		_user$project$Model_ViewTree$getPath(tree),
-		_user$project$Model_ViewTree$isStoryMode(tree) ? _user$project$Model_ViewTree$getQuery(tree) : _elm_lang$core$Dict$empty);
+		_miyamoen$bibliopola$Route$View,
+		_miyamoen$bibliopola$Model_ViewTree$getPath(tree),
+		_miyamoen$bibliopola$Model_ViewTree$isStoryMode(tree) ? _miyamoen$bibliopola$Model_ViewTree$getQuery(tree) : _elm_lang$core$Dict$empty);
 };
-var _user$project$Model_ViewTree$isEmpty = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$isEmpty = function (tree) {
 	return _elm_lang$core$Dict$isEmpty(
 		function (_) {
 			return _.variations;
 		}(
 			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(tree)));
 };
-var _user$project$Model_ViewTree$setFormStory = F3(
+var _miyamoen$bibliopola$Model_ViewTree$setFormStory = F3(
 	function (name, story, tree) {
 		return A2(
 			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$updateItem,
@@ -23515,7 +24031,7 @@ var _user$project$Model_ViewTree$setFormStory = F3(
 			},
 			tree);
 	});
-var _user$project$Model_ViewTree$toggleStoryMode = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$toggleStoryMode = function (tree) {
 	return A2(
 		_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$updateItem,
 		function (item) {
@@ -23530,7 +24046,7 @@ var _user$project$Model_ViewTree$toggleStoryMode = function (tree) {
 		},
 		tree);
 };
-var _user$project$Model_ViewTree$toggleTree = function (zipper) {
+var _miyamoen$bibliopola$Model_ViewTree$toggleTree = function (zipper) {
 	return A2(
 		_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$updateItem,
 		function (item) {
@@ -23540,16 +24056,16 @@ var _user$project$Model_ViewTree$toggleTree = function (zipper) {
 					state: function () {
 						var _p3 = item.state;
 						if (_p3.ctor === 'Open') {
-							return _user$project$Types$Close;
+							return _miyamoen$bibliopola$Types$Close;
 						} else {
-							return _user$project$Types$Open;
+							return _miyamoen$bibliopola$Types$Open;
 						}
 					}()
 				});
 		},
 		zipper);
 };
-var _user$project$Model_ViewTree$openRecursively = function (zipper) {
+var _miyamoen$bibliopola$Model_ViewTree$openRecursively = function (zipper) {
 	return {
 		ctor: '::',
 		_0: zipper,
@@ -23558,14 +24074,14 @@ var _user$project$Model_ViewTree$openRecursively = function (zipper) {
 				return _.state;
 			}(
 				_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(zipper)),
-			_user$project$Types$Close) ? {ctor: '[]'} : _elm_lang$core$List$concat(
+			_miyamoen$bibliopola$Types$Close) ? {ctor: '[]'} : _elm_lang$core$List$concat(
 			A2(
 				_elm_lang$core$List$map,
-				_user$project$Model_ViewTree$openRecursively,
+				_miyamoen$bibliopola$Model_ViewTree$openRecursively,
 				_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$openAll(zipper)))
 	};
 };
-var _user$project$Model_ViewTree$listCombine = A2(
+var _miyamoen$bibliopola$Model_ViewTree$listCombine = A2(
 	_elm_lang$core$List$foldr,
 	_elm_lang$core$Result$map2(
 		F2(
@@ -23574,15 +24090,15 @@ var _user$project$Model_ViewTree$listCombine = A2(
 			})),
 	_elm_lang$core$Result$Ok(
 		{ctor: '[]'}));
-var _user$project$Model_ViewTree$PathNotFound = function (a) {
+var _miyamoen$bibliopola$Model_ViewTree$PathNotFound = function (a) {
 	return {ctor: 'PathNotFound', _0: a};
 };
-var _user$project$Model_ViewTree$openPath = F2(
+var _miyamoen$bibliopola$Model_ViewTree$openPath = F2(
 	function (path, zipper) {
 		return A2(
 			_elm_lang$core$Result$mapError,
 			function (_p4) {
-				return _user$project$Model_ViewTree$PathNotFound(path);
+				return _miyamoen$bibliopola$Model_ViewTree$PathNotFound(path);
 			},
 			A3(
 				_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$openPath,
@@ -23593,32 +24109,32 @@ var _user$project$Model_ViewTree$openPath = F2(
 				path,
 				zipper));
 	});
-var _user$project$Model_ViewTree$attemptOpenPath = F2(
+var _miyamoen$bibliopola$Model_ViewTree$attemptOpenPath = F2(
 	function (paths, zipper) {
 		return A2(
 			_elm_lang$core$Result$withDefault,
 			zipper,
-			A2(_user$project$Model_ViewTree$openPath, paths, zipper));
+			A2(_miyamoen$bibliopola$Model_ViewTree$openPath, paths, zipper));
 	});
-var _user$project$Model_ViewTree$currentViewTree = function (_p5) {
+var _miyamoen$bibliopola$Model_ViewTree$currentViewTree = function (_p5) {
 	var _p6 = _p5;
 	var _p7 = _p6.route;
 	if (_p7.ctor === 'BadUrl') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
 		return _elm_lang$core$Result$toMaybe(
-			A2(_user$project$Model_ViewTree$openPath, _p7._0, _p6.views));
+			A2(_miyamoen$bibliopola$Model_ViewTree$openPath, _p7._0, _p6.views));
 	}
 };
-var _user$project$Model_ViewTree$StoryNotFound = function (a) {
+var _miyamoen$bibliopola$Model_ViewTree$StoryNotFound = function (a) {
 	return {ctor: 'StoryNotFound', _0: a};
 };
-var _user$project$Model_ViewTree$StoryArityError = function (a) {
+var _miyamoen$bibliopola$Model_ViewTree$StoryArityError = function (a) {
 	return {ctor: 'StoryArityError', _0: a};
 };
-var _user$project$Model_ViewTree$storyList = F2(
+var _miyamoen$bibliopola$Model_ViewTree$storyList = F2(
 	function (tree, query) {
-		return _user$project$Model_ViewTree$listCombine(
+		return _miyamoen$bibliopola$Model_ViewTree$listCombine(
 			A2(
 				_elm_lang$core$List$map,
 				function (_p8) {
@@ -23626,7 +24142,7 @@ var _user$project$Model_ViewTree$storyList = F2(
 					var _p10 = _p9._0;
 					return A2(
 						_elm_lang$core$Result$fromMaybe,
-						_user$project$Model_ViewTree$StoryArityError(_p10),
+						_miyamoen$bibliopola$Model_ViewTree$StoryArityError(_p10),
 						A2(_elm_lang$core$Dict$get, _p10, query));
 				},
 				function (_) {
@@ -23634,11 +24150,11 @@ var _user$project$Model_ViewTree$storyList = F2(
 				}(
 					_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(tree))));
 	});
-var _user$project$Model_ViewTree$DefaultStoryNotFound = {ctor: 'DefaultStoryNotFound'};
-var _user$project$Model_ViewTree$openDefaultStory = function (tree) {
+var _miyamoen$bibliopola$Model_ViewTree$DefaultStoryNotFound = {ctor: 'DefaultStoryNotFound'};
+var _miyamoen$bibliopola$Model_ViewTree$openDefaultStory = function (tree) {
 	return A2(
 		_elm_lang$core$Result$fromMaybe,
-		_user$project$Model_ViewTree$DefaultStoryNotFound,
+		_miyamoen$bibliopola$Model_ViewTree$DefaultStoryNotFound,
 		A2(
 			_elm_lang$core$Dict$get,
 			'default',
@@ -23647,14 +24163,14 @@ var _user$project$Model_ViewTree$openDefaultStory = function (tree) {
 			}(
 				_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(tree))));
 };
-var _user$project$Model_ViewTree$openStory = F2(
+var _miyamoen$bibliopola$Model_ViewTree$openStory = F2(
 	function (query, tree) {
-		return _elm_lang$core$Dict$isEmpty(query) ? _user$project$Model_ViewTree$openDefaultStory(tree) : A2(
+		return _elm_lang$core$Dict$isEmpty(query) ? _miyamoen$bibliopola$Model_ViewTree$openDefaultStory(tree) : A2(
 			_elm_lang$core$Result$andThen,
 			function (storyList) {
 				return A2(
 					_elm_lang$core$Result$fromMaybe,
-					_user$project$Model_ViewTree$StoryNotFound(storyList),
+					_miyamoen$bibliopola$Model_ViewTree$StoryNotFound(storyList),
 					A2(
 						_elm_lang$core$Dict$get,
 						A2(_elm_lang$core$String$join, '/', storyList),
@@ -23663,27 +24179,51 @@ var _user$project$Model_ViewTree$openStory = F2(
 						}(
 							_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(tree))));
 			},
-			A2(_user$project$Model_ViewTree$storyList, tree, query));
+			A2(_miyamoen$bibliopola$Model_ViewTree$storyList, tree, query));
 	});
-var _user$project$Update$update = F2(
+var _miyamoen$bibliopola$Update$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'NoOp':
-				return A2(_user$project$Types_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
-			case 'Print':
-				var _p1 = A2(_elm_lang$core$Debug$log, 'Msg', _p0._0);
-				return A2(_user$project$Types_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+				return A2(_miyamoen$bibliopola$Types_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+			case 'LogMsg':
+				var _p2 = _p0._0;
+				var log = function () {
+					var _p1 = model.logs;
+					if (_p1.ctor === '::') {
+						return {message: _p2, id: _p1._0.id + 1};
+					} else {
+						return {message: _p2, id: 0};
+					}
+				}();
+				return A2(
+					_miyamoen$bibliopola$Types_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							logs: {ctor: '::', _0: log, _1: model.logs}
+						}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'ClearLogs':
+				return A2(
+					_miyamoen$bibliopola$Types_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							logs: {ctor: '[]'}
+						}),
+					_elm_lang$core$Platform_Cmd$none);
 			case 'SetRoute':
 				return A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{route: _p0._0}),
 					_elm_lang$core$Platform_Cmd$none);
 			case 'SetViewTree':
 				return A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
@@ -23691,34 +24231,122 @@ var _user$project$Update$update = F2(
 						}),
 					_elm_lang$core$Platform_Cmd$none);
 			case 'SetViewTreeWithRoute':
-				var _p3 = _p0._0;
-				var _p2 = A2(
-					_user$project$Update$update,
-					_user$project$Types$GoToRoute(
-						_user$project$Model_ViewTree$getRoute(_p3)),
+				var _p4 = _p0._0;
+				var _p3 = A2(
+					_miyamoen$bibliopola$Update$update,
+					_miyamoen$bibliopola$Types$GoToRoute(
+						_miyamoen$bibliopola$Model_ViewTree$getRoute(_p4)),
 					model);
-				var model_ = _p2._0;
-				var cmd = _p2._1;
+				var model_ = _p3._0;
+				var cmd = _p3._1;
 				return A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					_elm_lang$core$Native_Utils.update(
 						model_,
 						{
-							views: _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$root(_p3)
+							views: _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$root(_p4)
 						}),
 					cmd);
-			default:
-				var _p4 = _p0._0;
+			case 'GoToRoute':
+				var _p5 = _p0._0;
 				return A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					model,
-					A2(_user$project$Route$isEqualPath, model.route, _p4) ? _user$project$Route$modifyUrl(_p4) : _user$project$Route$newUrl(_p4));
+					A2(_miyamoen$bibliopola$Route$isEqualPath, model.route, _p5) ? _miyamoen$bibliopola$Route$modifyUrl(_p5) : _miyamoen$bibliopola$Route$newUrl(_p5));
+			default:
+				return A2(
+					_miyamoen$bibliopola$Types_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{panel: _p0._0}),
+					_elm_lang$core$Platform_Cmd$none);
 		}
 	});
-var _user$project$Organism_StorySelector$view = function (tree) {
+var _miyamoen$bibliopola$Molecule_Tabs$view = function (panel) {
 	return A3(
-		_mdgriffith$style_elements$Element$column,
-		_user$project$Types$None,
+		_mdgriffith$style_elements$Element$row,
+		_miyamoen$bibliopola$Types$None,
+		{
+			ctor: '::',
+			_0: _mdgriffith$style_elements$Element_Attributes$spacing(3),
+			_1: {
+				ctor: '::',
+				_0: _mdgriffith$style_elements$Element_Attributes$spread,
+				_1: {ctor: '[]'}
+			}
+		},
+		A2(
+			_miyamoen$select_list$SelectList$mapBy,
+			F2(
+				function (position, item) {
+					return A2(
+						_miyamoen$bibliopola$Atom_Tab$view,
+						{
+							selected: _elm_lang$core$Native_Utils.eq(position, _miyamoen$select_list$SelectList$Selected),
+							onClick: _miyamoen$bibliopola$Types$SetPanel(item)
+						},
+						function () {
+							var _p0 = _miyamoen$select_list$SelectList$selected(item);
+							switch (_p0.ctor) {
+								case 'StoryPanel':
+									return 'Story Mode';
+								case 'MsgLoggerPanel':
+									return 'Msg Logger';
+								default:
+									return 'Author';
+							}
+						}());
+				}),
+			panel));
+};
+var _miyamoen$bibliopola$Organism_Logger$view = function (logs) {
+	return A3(
+		_mdgriffith$style_elements$Element$row,
+		_miyamoen$bibliopola$Types$None,
+		{
+			ctor: '::',
+			_0: _mdgriffith$style_elements$Element_Attributes$spacing(5),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _miyamoen$bibliopola$Atom_Ban$view(
+				{
+					onClick: _elm_lang$core$Maybe$Just(_miyamoen$bibliopola$Types$ClearLogs),
+					pallet: _miyamoen$bibliopola$Color_Pallet$Black,
+					size: 20
+				}),
+			_1: {
+				ctor: '::',
+				_0: A3(
+					_mdgriffith$style_elements$Element_Keyed$column,
+					_miyamoen$bibliopola$Types$None,
+					{
+						ctor: '::',
+						_0: _mdgriffith$style_elements$Element_Attributes$spacing(5),
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$style_elements$Element_Attributes$width(_mdgriffith$style_elements$Element_Attributes$fill),
+							_1: {ctor: '[]'}
+						}
+					},
+					A2(
+						_elm_lang$core$List$map,
+						function (log) {
+							return A2(
+								_miyamoen$bibliopola$Types_ops['=>'],
+								_elm_lang$core$Basics$toString(log.id),
+								_miyamoen$bibliopola$Atom_LogLine$view(log));
+						},
+						logs)),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _miyamoen$bibliopola$Organism_StorySelector$view = function (tree) {
+	return A3(
+		_mdgriffith$style_elements$Element$row,
+		_miyamoen$bibliopola$Types$None,
 		{
 			ctor: '::',
 			_0: _mdgriffith$style_elements$Element_Attributes$spacing(10),
@@ -23727,18 +24355,18 @@ var _user$project$Organism_StorySelector$view = function (tree) {
 		{
 			ctor: '::',
 			_0: A2(
-				_user$project$Atom_Toggle$view,
+				_miyamoen$bibliopola$Atom_Toggle$view,
 				{
 					name: 'Story Mode',
-					onClick: _user$project$Types$SetViewTreeWithRoute(
-						_user$project$Model_ViewTree$toggleStoryMode(tree))
+					onClick: _miyamoen$bibliopola$Types$SetViewTreeWithRoute(
+						_miyamoen$bibliopola$Model_ViewTree$toggleStoryMode(tree))
 				},
-				_user$project$Model_ViewTree$isStoryMode(tree)),
+				_miyamoen$bibliopola$Model_ViewTree$isStoryMode(tree)),
 			_1: {
 				ctor: '::',
 				_0: A3(
-					_mdgriffith$style_elements$Element$row,
-					_user$project$Types$None,
+					_mdgriffith$style_elements$Element$wrappedRow,
+					_miyamoen$bibliopola$Types$None,
 					{
 						ctor: '::',
 						_0: _mdgriffith$style_elements$Element_Attributes$paddingLeft(10),
@@ -23754,30 +24382,156 @@ var _user$project$Organism_StorySelector$view = function (tree) {
 							var _p1 = _p0;
 							var _p2 = _p1.name;
 							return A2(
-								_user$project$Atom_SelectBox$view,
+								_miyamoen$bibliopola$Atom_SelectBox$view,
 								{
 									name: _p2,
 									options: _p1.options,
 									onChange: function ($new) {
-										return _user$project$Types$SetViewTreeWithRoute(
-											A3(_user$project$Model_ViewTree$setFormStory, _p2, $new, tree));
+										return _miyamoen$bibliopola$Types$SetViewTreeWithRoute(
+											A3(_miyamoen$bibliopola$Model_ViewTree$setFormStory, _p2, $new, tree));
 									},
-									disabled: !_user$project$Model_ViewTree$isStoryMode(tree)
+									disabled: !_miyamoen$bibliopola$Model_ViewTree$isStoryMode(tree)
 								},
 								_p1.selected);
 						},
-						_user$project$Model_ViewTree$getFormStories(tree))),
+						_miyamoen$bibliopola$Model_ViewTree$getFormStories(tree))),
 				_1: {ctor: '[]'}
 			}
 		});
 };
-var _user$project$Organism_ViewItem$QueryError = function (a) {
+var _miyamoen$bibliopola$Organism_Panel$twitterLink = 'https://twitter.com/miyamo_madoka';
+var _miyamoen$bibliopola$Organism_Panel$packageLink = 'http://package.elm-lang.org/packages/miyamoen/bibliopola/latest';
+var _miyamoen$bibliopola$Organism_Panel$gitHubLink = 'https://github.com/miyamoen/bibliopola';
+var _miyamoen$bibliopola$Organism_Panel$view = function (_p0) {
+	var _p1 = _p0;
+	var _p3 = _p1.panel;
+	return A3(
+		_mdgriffith$style_elements$Element$column,
+		_miyamoen$bibliopola$Types$None,
+		{
+			ctor: '::',
+			_0: _mdgriffith$style_elements$Element_Attributes$height(_mdgriffith$style_elements$Element_Attributes$fill),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _miyamoen$bibliopola$Molecule_Tabs$view(_p3),
+			_1: {
+				ctor: '::',
+				_0: A3(
+					_mdgriffith$style_elements$Element$el,
+					_miyamoen$bibliopola$Types$None,
+					{
+						ctor: '::',
+						_0: _mdgriffith$style_elements$Element_Attributes$padding(10),
+						_1: {
+							ctor: '::',
+							_0: _mdgriffith$style_elements$Element_Attributes$height(_mdgriffith$style_elements$Element_Attributes$fill),
+							_1: {
+								ctor: '::',
+								_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
+									{
+										ctor: '::',
+										_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-radius', '0px 0px 5px 5px'),
+										_1: {
+											ctor: '::',
+											_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-color', 'rgb(135, 135, 150)'),
+											_1: {
+												ctor: '::',
+												_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-width', '0px 2px 2px 2px'),
+												_1: {
+													ctor: '::',
+													_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'background-color', 'rgb(240, 240, 240)'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					function () {
+						var _p2 = _miyamoen$select_list$SelectList$selected(_p3);
+						switch (_p2.ctor) {
+							case 'StoryPanel':
+								return A2(
+									_elm_lang$core$Maybe$withDefault,
+									_mdgriffith$style_elements$Element$empty,
+									A2(
+										_elm_lang$core$Maybe$map,
+										_miyamoen$bibliopola$Organism_StorySelector$view,
+										_miyamoen$bibliopola$Model_ViewTree$currentViewTree(_p1)));
+							case 'MsgLoggerPanel':
+								return _miyamoen$bibliopola$Organism_Logger$view(_p1.logs);
+							default:
+								return A3(
+									_mdgriffith$style_elements$Element$column,
+									_miyamoen$bibliopola$Types$None,
+									{
+										ctor: '::',
+										_0: _mdgriffith$style_elements$Element_Attributes$spacing(10),
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
+												{
+													ctor: '::',
+													_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'font-size', '18px'),
+													_1: {
+														ctor: '::',
+														_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'font-style', 'italic'),
+														_1: {
+															ctor: '::',
+															_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'text-decoration', 'underline'),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_miyamoen$bibliopola$Types_ops['=>'],
+																	'color',
+																	_miyamoen$bibliopola$Color_Pallet$css(_miyamoen$bibliopola$Color_Pallet$Blue)),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_mdgriffith$style_elements$Element$newTab,
+											_miyamoen$bibliopola$Organism_Panel$packageLink,
+											_mdgriffith$style_elements$Element$text('package site')),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_mdgriffith$style_elements$Element$newTab,
+												_miyamoen$bibliopola$Organism_Panel$gitHubLink,
+												_mdgriffith$style_elements$Element$text('GitHub')),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_mdgriffith$style_elements$Element$newTab,
+													_miyamoen$bibliopola$Organism_Panel$twitterLink,
+													_mdgriffith$style_elements$Element$text('author twitter')),
+												_1: {ctor: '[]'}
+											}
+										}
+									});
+						}
+					}()),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _miyamoen$bibliopola$Organism_ViewItem$QueryError = function (a) {
 	return {ctor: 'QueryError', _0: a};
 };
-var _user$project$Organism_ViewItem$PathError = function (a) {
+var _miyamoen$bibliopola$Organism_ViewItem$PathError = function (a) {
 	return {ctor: 'PathError', _0: a};
 };
-var _user$project$Organism_ViewItem$view = F3(
+var _miyamoen$bibliopola$Organism_ViewItem$view = F3(
 	function (paths, queries, model) {
 		var res = A2(
 			_elm_lang$core$Result$map,
@@ -23787,21 +24541,21 @@ var _user$project$Organism_ViewItem$view = F3(
 				function (_p0) {
 					return A2(
 						_elm_lang$core$Result$mapError,
-						_user$project$Organism_ViewItem$QueryError,
-						A2(_user$project$Model_ViewTree$openStory, queries, _p0));
+						_miyamoen$bibliopola$Organism_ViewItem$QueryError,
+						A2(_miyamoen$bibliopola$Model_ViewTree$openStory, queries, _p0));
 				},
 				A2(
 					_elm_lang$core$Result$mapError,
-					_user$project$Organism_ViewItem$PathError,
-					A2(_user$project$Model_ViewTree$openPath, paths, model.views))));
+					_miyamoen$bibliopola$Organism_ViewItem$PathError,
+					A2(_miyamoen$bibliopola$Model_ViewTree$openPath, paths, model.views))));
 		var _p1 = res;
 		if (_p1.ctor === 'Ok') {
-			return A4(_mdgriffith$style_elements$Element$mapAll, _elm_lang$core$Basics$identity, _user$project$Types$Child, _user$project$Types$ChildVar, _p1._0);
+			return A4(_mdgriffith$style_elements$Element$mapAll, _elm_lang$core$Basics$identity, _miyamoen$bibliopola$Types$Child, _miyamoen$bibliopola$Types$ChildVar, _p1._0);
 		} else {
 			if (_p1._0.ctor === 'PathError') {
 				return A3(
 					_mdgriffith$style_elements$Element$textLayout,
-					_user$project$Types$Text,
+					_miyamoen$bibliopola$Types$Text,
 					{ctor: '[]'},
 					{
 						ctor: '::',
@@ -23817,7 +24571,7 @@ var _user$project$Organism_ViewItem$view = F3(
 					case 'DefaultStoryNotFound':
 						return A3(
 							_mdgriffith$style_elements$Element$textLayout,
-							_user$project$Types$Text,
+							_miyamoen$bibliopola$Types$Text,
 							{ctor: '[]'},
 							{
 								ctor: '::',
@@ -23827,7 +24581,7 @@ var _user$project$Organism_ViewItem$view = F3(
 					case 'StoryArityError':
 						return A3(
 							_mdgriffith$style_elements$Element$textLayout,
-							_user$project$Types$Text,
+							_miyamoen$bibliopola$Types$Text,
 							{ctor: '[]'},
 							{
 								ctor: '::',
@@ -23841,7 +24595,7 @@ var _user$project$Organism_ViewItem$view = F3(
 					default:
 						return A3(
 							_mdgriffith$style_elements$Element$textLayout,
-							_user$project$Types$Text,
+							_miyamoen$bibliopola$Types$Text,
 							{ctor: '[]'},
 							{
 								ctor: '::',
@@ -23859,24 +24613,24 @@ var _user$project$Organism_ViewItem$view = F3(
 			}
 		}
 	});
-var _user$project$Molecule_ViewTreeLine$icon = function (zipper) {
+var _miyamoen$bibliopola$Molecule_ViewTreeLine$icon = function (zipper) {
 	return (_elm_lang$core$Dict$isEmpty(
 		function (_) {
 			return _.variations;
 		}(
-			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(zipper))) ? _user$project$Atom_Folder$view : _user$project$Atom_File$view)(
-		{size: 16, pallet: _user$project$Color_Pallet$Black, onClick: _elm_lang$core$Maybe$Nothing});
+			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(zipper))) ? _miyamoen$bibliopola$Atom_Folder$view : _miyamoen$bibliopola$Atom_File$view)(
+		{size: 16, pallet: _miyamoen$bibliopola$Color_Pallet$Black, onClick: _elm_lang$core$Maybe$Nothing});
 };
-var _user$project$Molecule_ViewTreeLine$caret = function (zipper) {
+var _miyamoen$bibliopola$Molecule_ViewTreeLine$caret = function (zipper) {
 	return _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$isEmpty(zipper) ? _mdgriffith$style_elements$Element$empty : A2(
-		_user$project$Atom_Caret$view,
+		_miyamoen$bibliopola$Atom_Caret$view,
 		{
 			size: 16,
-			pallet: _user$project$Color_Pallet$Grey,
+			pallet: _miyamoen$bibliopola$Color_Pallet$Grey,
 			onClick: _elm_lang$core$Maybe$Just(
 				function (_p0) {
-					return _user$project$Types$SetViewTree(
-						_user$project$Model_ViewTree$toggleTree(zipper));
+					return _miyamoen$bibliopola$Types$SetViewTree(
+						_miyamoen$bibliopola$Model_ViewTree$toggleTree(zipper));
 				})
 		},
 		function () {
@@ -23885,19 +24639,19 @@ var _user$project$Molecule_ViewTreeLine$caret = function (zipper) {
 			}(
 				_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$current(zipper));
 			if (_p1.ctor === 'Open') {
-				return _user$project$Atom_Caret$Down;
+				return _miyamoen$bibliopola$Atom_Caret$Down;
 			} else {
-				return _user$project$Atom_Caret$Right;
+				return _miyamoen$bibliopola$Atom_Caret$Right;
 			}
 		}());
 };
-var _user$project$Molecule_ViewTreeLine$borderCss = '2px solid rgba(138, 142, 180, 0.22)';
-var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
+var _miyamoen$bibliopola$Molecule_ViewTreeLine$borderCss = '2px solid rgba(138, 142, 180, 0.22)';
+var _miyamoen$bibliopola$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 	return _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$isEmpty(zipper) ? {
 		ctor: '::',
 		_0: A3(
 			_mdgriffith$style_elements$Element$el,
-			_user$project$Types$None,
+			_miyamoen$bibliopola$Types$None,
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23909,7 +24663,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 			ctor: '::',
 			_0: A3(
 				_mdgriffith$style_elements$Element$el,
-				_user$project$Types$None,
+				_miyamoen$bibliopola$Types$None,
 				{
 					ctor: '::',
 					_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23919,7 +24673,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 						_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 							{
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'border-left', _user$project$Molecule_ViewTreeLine$borderCss),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-left', _miyamoen$bibliopola$Molecule_ViewTreeLine$borderCss),
 								_1: {ctor: '[]'}
 							}),
 						_1: {ctor: '[]'}
@@ -23930,7 +24684,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 				ctor: '::',
 				_0: A3(
 					_mdgriffith$style_elements$Element$el,
-					_user$project$Types$None,
+					_miyamoen$bibliopola$Types$None,
 					{
 						ctor: '::',
 						_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23944,7 +24698,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 								_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 									{
 										ctor: '::',
-										_0: A2(_user$project$Types_ops['=>'], 'border-bottom', _user$project$Molecule_ViewTreeLine$borderCss),
+										_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-bottom', _miyamoen$bibliopola$Molecule_ViewTreeLine$borderCss),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -23956,7 +24710,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 					ctor: '::',
 					_0: A3(
 						_mdgriffith$style_elements$Element$el,
-						_user$project$Types$None,
+						_miyamoen$bibliopola$Types$None,
 						{
 							ctor: '::',
 							_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23972,7 +24726,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 		ctor: '::',
 		_0: A3(
 			_mdgriffith$style_elements$Element$el,
-			_user$project$Types$None,
+			_miyamoen$bibliopola$Types$None,
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23984,7 +24738,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 			ctor: '::',
 			_0: A3(
 				_mdgriffith$style_elements$Element$el,
-				_user$project$Types$None,
+				_miyamoen$bibliopola$Types$None,
 				{
 					ctor: '::',
 					_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -23994,7 +24748,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 						_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 							{
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'border-left', _user$project$Molecule_ViewTreeLine$borderCss),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-left', _miyamoen$bibliopola$Molecule_ViewTreeLine$borderCss),
 								_1: {ctor: '[]'}
 							}),
 						_1: {ctor: '[]'}
@@ -24005,7 +24759,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 				ctor: '::',
 				_0: A3(
 					_mdgriffith$style_elements$Element$el,
-					_user$project$Types$None,
+					_miyamoen$bibliopola$Types$None,
 					{
 						ctor: '::',
 						_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -24019,7 +24773,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 								_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 									{
 										ctor: '::',
-										_0: A2(_user$project$Types_ops['=>'], 'border-bottom', _user$project$Molecule_ViewTreeLine$borderCss),
+										_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-bottom', _miyamoen$bibliopola$Molecule_ViewTreeLine$borderCss),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}
@@ -24031,7 +24785,7 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 					ctor: '::',
 					_0: A3(
 						_mdgriffith$style_elements$Element$el,
-						_user$project$Types$None,
+						_miyamoen$bibliopola$Types$None,
 						{
 							ctor: '::',
 							_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -24045,11 +24799,11 @@ var _user$project$Molecule_ViewTreeLine$lastSpace = function (zipper) {
 		}
 	};
 };
-var _user$project$Molecule_ViewTreeLine$oneSpace = {
+var _miyamoen$bibliopola$Molecule_ViewTreeLine$oneSpace = {
 	ctor: '::',
 	_0: A3(
 		_mdgriffith$style_elements$Element$el,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{
 			ctor: '::',
 			_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -24061,7 +24815,7 @@ var _user$project$Molecule_ViewTreeLine$oneSpace = {
 		ctor: '::',
 		_0: A3(
 			_mdgriffith$style_elements$Element$el,
-			_user$project$Types$None,
+			_miyamoen$bibliopola$Types$None,
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -24071,7 +24825,7 @@ var _user$project$Molecule_ViewTreeLine$oneSpace = {
 					_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 						{
 							ctor: '::',
-							_0: A2(_user$project$Types_ops['=>'], 'border-left', _user$project$Molecule_ViewTreeLine$borderCss),
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'border-left', _miyamoen$bibliopola$Molecule_ViewTreeLine$borderCss),
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
@@ -24082,7 +24836,7 @@ var _user$project$Molecule_ViewTreeLine$oneSpace = {
 			ctor: '::',
 			_0: A3(
 				_mdgriffith$style_elements$Element$el,
-				_user$project$Types$None,
+				_miyamoen$bibliopola$Types$None,
 				{
 					ctor: '::',
 					_0: _mdgriffith$style_elements$Element_Attributes$width(
@@ -24094,33 +24848,33 @@ var _user$project$Molecule_ViewTreeLine$oneSpace = {
 		}
 	}
 };
-var _user$project$Molecule_ViewTreeLine$spacer = function (zipper) {
+var _miyamoen$bibliopola$Molecule_ViewTreeLine$spacer = function (zipper) {
 	var depth = _elm_lang$core$List$length(
 		_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$breadcrumbs(zipper));
 	return _elm_lang$core$Native_Utils.eq(depth, 0) ? _mdgriffith$style_elements$Element$empty : A3(
 		_mdgriffith$style_elements$Element$row,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{ctor: '[]'},
 		A3(
 			_elm_lang$core$Basics$flip,
 			_elm_lang$core$List$append,
-			_user$project$Molecule_ViewTreeLine$lastSpace(zipper),
+			_miyamoen$bibliopola$Molecule_ViewTreeLine$lastSpace(zipper),
 			_elm_lang$core$List$concat(
-				A2(_elm_lang$core$List$repeat, depth - 1, _user$project$Molecule_ViewTreeLine$oneSpace))));
+				A2(_elm_lang$core$List$repeat, depth - 1, _miyamoen$bibliopola$Molecule_ViewTreeLine$oneSpace))));
 };
-var _user$project$Molecule_ViewTreeLine$view = function (zipper) {
+var _miyamoen$bibliopola$Molecule_ViewTreeLine$view = function (zipper) {
 	return A3(
 		_mdgriffith$style_elements$Element$row,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _user$project$Molecule_ViewTreeLine$spacer(zipper),
+			_0: _miyamoen$bibliopola$Molecule_ViewTreeLine$spacer(zipper),
 			_1: {
 				ctor: '::',
 				_0: A3(
 					_mdgriffith$style_elements$Element$row,
-					_user$project$Types$None,
+					_miyamoen$bibliopola$Types$None,
 					{
 						ctor: '::',
 						_0: _mdgriffith$style_elements$Element_Attributes$spacing(10),
@@ -24132,12 +24886,12 @@ var _user$project$Molecule_ViewTreeLine$view = function (zipper) {
 					},
 					{
 						ctor: '::',
-						_0: _user$project$Molecule_ViewTreeLine$caret(zipper),
+						_0: _miyamoen$bibliopola$Molecule_ViewTreeLine$caret(zipper),
 						_1: {
 							ctor: '::',
 							_0: A3(
 								_mdgriffith$style_elements$Element$row,
-								_user$project$Types$None,
+								_miyamoen$bibliopola$Types$None,
 								_elm_lang$core$Dict$isEmpty(
 									function (_) {
 										return _.variations;
@@ -24153,14 +24907,14 @@ var _user$project$Molecule_ViewTreeLine$view = function (zipper) {
 								} : {
 									ctor: '::',
 									_0: _mdgriffith$style_elements$Element_Events$onClick(
-										_user$project$Types$GoToRoute(
-											_user$project$Model_ViewTree$getRoute(zipper))),
+										_miyamoen$bibliopola$Types$GoToRoute(
+											_miyamoen$bibliopola$Model_ViewTree$getRoute(zipper))),
 									_1: {
 										ctor: '::',
 										_0: _mdgriffith$style_elements$Element_Attributes$inlineStyle(
 											{
 												ctor: '::',
-												_0: A2(_user$project$Types_ops['=>'], 'cursor', 'pointer'),
+												_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cursor', 'pointer'),
 												_1: {ctor: '[]'}
 											}),
 										_1: {
@@ -24176,12 +24930,12 @@ var _user$project$Molecule_ViewTreeLine$view = function (zipper) {
 								},
 								{
 									ctor: '::',
-									_0: _user$project$Molecule_ViewTreeLine$icon(zipper),
+									_0: _miyamoen$bibliopola$Molecule_ViewTreeLine$icon(zipper),
 									_1: {
 										ctor: '::',
 										_0: A3(
 											_mdgriffith$style_elements$Element$el,
-											_user$project$Types$Text,
+											_miyamoen$bibliopola$Types$Text,
 											{ctor: '[]'},
 											_mdgriffith$style_elements$Element$text(
 												function (_) {
@@ -24198,17 +24952,17 @@ var _user$project$Molecule_ViewTreeLine$view = function (zipper) {
 			}
 		});
 };
-var _user$project$Organism_ViewTree$line = function (tree) {
+var _miyamoen$bibliopola$Organism_ViewTree$line = function (tree) {
 	return A2(
-		_user$project$Types_ops['=>'],
-		_user$project$Model_ViewTree$getPathString(tree),
-		_user$project$Molecule_ViewTreeLine$view(tree));
+		_miyamoen$bibliopola$Types_ops['=>'],
+		_miyamoen$bibliopola$Model_ViewTree$getPathString(tree),
+		_miyamoen$bibliopola$Molecule_ViewTreeLine$view(tree));
 };
-var _user$project$Organism_ViewTree$view = function (_p0) {
+var _miyamoen$bibliopola$Organism_ViewTree$view = function (_p0) {
 	var _p1 = _p0;
 	return A3(
 		_mdgriffith$style_elements$Element_Keyed$column,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{
 			ctor: '::',
 			_0: _mdgriffith$style_elements$Element_Attributes$spacing(5),
@@ -24216,13 +24970,13 @@ var _user$project$Organism_ViewTree$view = function (_p0) {
 		},
 		A2(
 			_elm_lang$core$List$map,
-			_user$project$Organism_ViewTree$line,
-			_user$project$Model_ViewTree$openRecursively(_p1.views)));
+			_miyamoen$bibliopola$Organism_ViewTree$line,
+			_miyamoen$bibliopola$Model_ViewTree$openRecursively(_p1.views)));
 };
-var _user$project$Page_Main$view = function (model) {
+var _miyamoen$bibliopola$Page_Main$view = function (model) {
 	return A3(
 		_mdgriffith$style_elements$Element$namedGrid,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{
 			ctor: '::',
 			_0: _mdgriffith$style_elements$Element_Attributes$padding(5),
@@ -24250,7 +25004,7 @@ var _user$project$Page_Main$view = function (model) {
 			rows: {
 				ctor: '::',
 				_0: A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					_mdgriffith$style_elements$Element_Attributes$fill,
 					{
 						ctor: '::',
@@ -24264,8 +25018,8 @@ var _user$project$Page_Main$view = function (model) {
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
-						_mdgriffith$style_elements$Element_Attributes$px(200),
+						_miyamoen$bibliopola$Types_ops['=>'],
+						_mdgriffith$style_elements$Element_Attributes$px(210),
 						{
 							ctor: '::',
 							_0: _mdgriffith$style_elements$Element$spanAll('Panel'),
@@ -24281,13 +25035,13 @@ var _user$project$Page_Main$view = function (model) {
 					'ViewTree',
 					A3(
 						_mdgriffith$style_elements$Element$el,
-						_user$project$Types$None,
+						_miyamoen$bibliopola$Types$None,
 						{
 							ctor: '::',
 							_0: _mdgriffith$style_elements$Element_Attributes$scrollbars,
 							_1: {ctor: '[]'}
 						},
-						_user$project$Organism_ViewTree$view(model))),
+						_miyamoen$bibliopola$Organism_ViewTree$view(model))),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -24300,7 +25054,7 @@ var _user$project$Page_Main$view = function (model) {
 									A2(_elm_lang$core$Basics_ops['++'], 'BadUrl : ', _p0._0));
 							} else {
 								var _p1 = _p0._0;
-								return (_elm_lang$core$List$isEmpty(_p1) && _user$project$Model_ViewTree$isEmpty(model.views)) ? _mdgriffith$style_elements$Element$text('Start Page') : A3(_user$project$Organism_ViewItem$view, _p1, _p0._1, model);
+								return (_elm_lang$core$List$isEmpty(_p1) && _miyamoen$bibliopola$Model_ViewTree$isEmpty(model.views)) ? _mdgriffith$style_elements$Element$text('Start Page') : A3(_miyamoen$bibliopola$Organism_ViewItem$view, _p1, _p0._1, model);
 							}
 						}()),
 					_1: {
@@ -24308,58 +25062,69 @@ var _user$project$Page_Main$view = function (model) {
 						_0: A2(
 							_mdgriffith$style_elements$Element$named,
 							'Panel',
-							A2(
-								_elm_lang$core$Maybe$withDefault,
-								_mdgriffith$style_elements$Element$empty,
-								A2(
-									_elm_lang$core$Maybe$map,
-									_user$project$Organism_StorySelector$view,
-									_user$project$Model_ViewTree$currentViewTree(model)))),
+							A3(
+								_mdgriffith$style_elements$Element$el,
+								_miyamoen$bibliopola$Types$None,
+								{
+									ctor: '::',
+									_0: _mdgriffith$style_elements$Element_Attributes$yScrollbar,
+									_1: {
+										ctor: '::',
+										_0: _mdgriffith$style_elements$Element_Attributes$clipX,
+										_1: {
+											ctor: '::',
+											_0: _mdgriffith$style_elements$Element_Attributes$height(
+												_mdgriffith$style_elements$Element_Attributes$percent(100)),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								_miyamoen$bibliopola$Organism_Panel$view(model))),
 						_1: {ctor: '[]'}
 					}
 				}
 			}
 		});
 };
-var _user$project$Styles$backgroundPalletVars = A2(
+var _miyamoen$bibliopola$Styles$backgroundPalletVars = A2(
 	_elm_lang$core$List$map,
 	function (pallet) {
 		return A2(
 			_mdgriffith$style_elements$Style$variation,
-			_user$project$Types$PalletVar(pallet),
+			_miyamoen$bibliopola$Types$PalletVar(pallet),
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Style_Color$background(
-					_user$project$Color_Pallet$color(pallet)),
+					_miyamoen$bibliopola$Color_Pallet$color(pallet)),
 				_1: {ctor: '[]'}
 			});
 	},
-	_user$project$Color_Pallet$pallets);
-var _user$project$Styles$textPalletVars = A2(
+	_miyamoen$bibliopola$Color_Pallet$pallets);
+var _miyamoen$bibliopola$Styles$textPalletVars = A2(
 	_elm_lang$core$List$map,
 	function (pallet) {
 		return A2(
 			_mdgriffith$style_elements$Style$variation,
-			_user$project$Types$PalletVar(pallet),
+			_miyamoen$bibliopola$Types$PalletVar(pallet),
 			{
 				ctor: '::',
 				_0: _mdgriffith$style_elements$Style_Color$text(
-					_user$project$Color_Pallet$color(pallet)),
+					_miyamoen$bibliopola$Color_Pallet$color(pallet)),
 				_1: {ctor: '[]'}
 			});
 	},
-	_user$project$Color_Pallet$pallets);
-var _user$project$Styles$styles = {
+	_miyamoen$bibliopola$Color_Pallet$pallets);
+var _miyamoen$bibliopola$Styles$styles = {
 	ctor: '::',
 	_0: A2(
 		_mdgriffith$style_elements$Style$style,
-		_user$project$Types$None,
+		_miyamoen$bibliopola$Types$None,
 		{ctor: '[]'}),
 	_1: {
 		ctor: '::',
 		_0: A2(
 			_mdgriffith$style_elements$Style$style,
-			_user$project$Types$Text,
+			_miyamoen$bibliopola$Types$Text,
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				{
@@ -24367,12 +25132,12 @@ var _user$project$Styles$styles = {
 					_0: _mdgriffith$style_elements$Style_Font$size(20),
 					_1: {ctor: '[]'}
 				},
-				_user$project$Styles$textPalletVars)),
+				_miyamoen$bibliopola$Styles$textPalletVars)),
 		_1: {
 			ctor: '::',
 			_0: A2(
 				_mdgriffith$style_elements$Style$style,
-				_user$project$Types$Box,
+				_miyamoen$bibliopola$Types$Box,
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					{
@@ -24380,43 +25145,43 @@ var _user$project$Styles$styles = {
 						_0: _mdgriffith$style_elements$Style_Border$rounded(5),
 						_1: {ctor: '[]'}
 					},
-					_user$project$Styles$backgroundPalletVars)),
+					_miyamoen$bibliopola$Styles$backgroundPalletVars)),
 			_1: {ctor: '[]'}
 		}
 	}
 };
-var _user$project$Styles$styleSheet = function (child) {
+var _miyamoen$bibliopola$Styles$styleSheet = function (child) {
 	return _mdgriffith$style_elements$Style$styleSheet(
 		{
 			ctor: '::',
 			_0: _mdgriffith$style_elements$Style_Sheet$merge(
-				A3(_mdgriffith$style_elements$Style_Sheet$map, _user$project$Types$Child, _user$project$Types$ChildVar, child)),
-			_1: _user$project$Styles$styles
+				A3(_mdgriffith$style_elements$Style_Sheet$map, _miyamoen$bibliopola$Types$Child, _miyamoen$bibliopola$Types$ChildVar, child)),
+			_1: _miyamoen$bibliopola$Styles$styles
 		});
 };
-var _user$project$View$view = function (model) {
+var _miyamoen$bibliopola$View$view = function (model) {
 	return A2(
 		_mdgriffith$style_elements$Element$viewport,
-		_user$project$Styles$styleSheet(model.styles),
-		_user$project$Page_Main$view(model));
+		_miyamoen$bibliopola$Styles$styleSheet(model.styles),
+		_miyamoen$bibliopola$Page_Main$view(model));
 };
-var _user$project$Bibliopola$insertViewTree = F2(
+var _miyamoen$bibliopola$Bibliopola$insertViewTree = F2(
 	function (_p0, tree) {
 		var _p1 = _p0;
 		return A2(_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$insert, _p1._0, tree);
 	});
-var _user$project$Bibliopola$insertViewItem = F2(
+var _miyamoen$bibliopola$Bibliopola$insertViewItem = F2(
 	function (item, tree) {
 		return A2(
 			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$insert,
 			_turboMaCk$lazy_tree_with_zipper$Lazy_Tree$singleton(item),
 			tree);
 	});
-var _user$project$Bibliopola$createViewTreeFromItem = function (item) {
+var _miyamoen$bibliopola$Bibliopola$createViewTreeFromItem = function (item) {
 	return _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$fromTree(
 		_turboMaCk$lazy_tree_with_zipper$Lazy_Tree$singleton(item));
 };
-var _user$project$Bibliopola$initFormStories = function (stories) {
+var _miyamoen$bibliopola$Bibliopola$initFormStories = function (stories) {
 	return _elm_lang$core$Dict$fromList(
 		A2(
 			_elm_lang$core$List$map,
@@ -24429,7 +25194,7 @@ var _user$project$Bibliopola$initFormStories = function (stories) {
 				}),
 			stories));
 };
-var _user$project$Bibliopola$withDefaultVariation = F2(
+var _miyamoen$bibliopola$Bibliopola$withDefaultVariation = F2(
 	function (view, viewItem) {
 		return _elm_lang$core$Native_Utils.update(
 			viewItem,
@@ -24442,7 +25207,7 @@ var _user$project$Bibliopola$withDefaultVariation = F2(
 							return A2(
 								_mdgriffith$style_elements$Element$map,
 								function (_p4) {
-									return _user$project$Types$Print(
+									return _miyamoen$bibliopola$Types$LogMsg(
 										_elm_lang$core$Basics$toString(_p4));
 								},
 								view);
@@ -24450,7 +25215,7 @@ var _user$project$Bibliopola$withDefaultVariation = F2(
 					viewItem.variations)
 			});
 	});
-var _user$project$Bibliopola$createViewItem4 = F6(
+var _miyamoen$bibliopola$Bibliopola$createViewItem4 = F6(
 	function (name, view, _p8, _p7, _p6, _p5) {
 		var _p9 = _p8;
 		var _p27 = _p9._1;
@@ -24463,25 +25228,25 @@ var _user$project$Bibliopola$createViewItem4 = F6(
 		var stories_ = {
 			ctor: '::',
 			_0: A2(
-				_user$project$Types_ops['=>'],
+				_miyamoen$bibliopola$Types_ops['=>'],
 				_p9._0,
 				A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p27)),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					_p10._0,
 					A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p26)),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
+						_miyamoen$bibliopola$Types_ops['=>'],
 						_p11._0,
 						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p25)),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							_p12._0,
 							A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p24)),
 						_1: {ctor: '[]'}
@@ -24491,11 +25256,11 @@ var _user$project$Bibliopola$createViewItem4 = F6(
 		};
 		return {
 			name: name,
-			state: _user$project$Types$Close,
+			state: _miyamoen$bibliopola$Types$Close,
 			stories: stories_,
 			variations: _elm_lang$core$Dict$fromList(
 				A5(
-					_user$project$List_Extra$lift4,
+					_miyamoen$bibliopola$List_Extra$lift4,
 					F4(
 						function (_p16, _p15, _p14, _p13) {
 							var _p17 = _p16;
@@ -24503,7 +25268,7 @@ var _user$project$Bibliopola$createViewItem4 = F6(
 							var _p19 = _p14;
 							var _p20 = _p13;
 							return A2(
-								_user$project$Types_ops['=>'],
+								_miyamoen$bibliopola$Types_ops['=>'],
 								A2(
 									_elm_lang$core$String$join,
 									'/',
@@ -24530,7 +25295,7 @@ var _user$project$Bibliopola$createViewItem4 = F6(
 										return A2(
 											_mdgriffith$style_elements$Element$map,
 											function (_p23) {
-												return _user$project$Types$Print(
+												return _miyamoen$bibliopola$Types$LogMsg(
 													_elm_lang$core$Basics$toString(_p23));
 											},
 											A4(view, _p17._1, _p18._1, _p19._1, _p20._1));
@@ -24542,11 +25307,11 @@ var _user$project$Bibliopola$createViewItem4 = F6(
 					_p24)),
 			form: {
 				storyOn: false,
-				stories: _user$project$Bibliopola$initFormStories(stories_)
+				stories: _miyamoen$bibliopola$Bibliopola$initFormStories(stories_)
 			}
 		};
 	});
-var _user$project$Bibliopola$createViewItem3 = F5(
+var _miyamoen$bibliopola$Bibliopola$createViewItem3 = F5(
 	function (name, view, _p30, _p29, _p28) {
 		var _p31 = _p30;
 		var _p45 = _p31._1;
@@ -24557,19 +25322,19 @@ var _user$project$Bibliopola$createViewItem3 = F5(
 		var stories_ = {
 			ctor: '::',
 			_0: A2(
-				_user$project$Types_ops['=>'],
+				_miyamoen$bibliopola$Types_ops['=>'],
 				_p31._0,
 				A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p45)),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					_p32._0,
 					A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p44)),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
+						_miyamoen$bibliopola$Types_ops['=>'],
 						_p33._0,
 						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p43)),
 					_1: {ctor: '[]'}
@@ -24578,18 +25343,18 @@ var _user$project$Bibliopola$createViewItem3 = F5(
 		};
 		return {
 			name: name,
-			state: _user$project$Types$Close,
+			state: _miyamoen$bibliopola$Types$Close,
 			stories: stories_,
 			variations: _elm_lang$core$Dict$fromList(
 				A4(
-					_user$project$List_Extra$lift3,
+					_miyamoen$bibliopola$List_Extra$lift3,
 					F3(
 						function (_p36, _p35, _p34) {
 							var _p37 = _p36;
 							var _p38 = _p35;
 							var _p39 = _p34;
 							return A2(
-								_user$project$Types_ops['=>'],
+								_miyamoen$bibliopola$Types_ops['=>'],
 								A2(
 									_elm_lang$core$String$join,
 									'/',
@@ -24612,7 +25377,7 @@ var _user$project$Bibliopola$createViewItem3 = F5(
 										return A2(
 											_mdgriffith$style_elements$Element$map,
 											function (_p42) {
-												return _user$project$Types$Print(
+												return _miyamoen$bibliopola$Types$LogMsg(
 													_elm_lang$core$Basics$toString(_p42));
 											},
 											A3(view, _p37._1, _p38._1, _p39._1));
@@ -24623,11 +25388,11 @@ var _user$project$Bibliopola$createViewItem3 = F5(
 					_p43)),
 			form: {
 				storyOn: false,
-				stories: _user$project$Bibliopola$initFormStories(stories_)
+				stories: _miyamoen$bibliopola$Bibliopola$initFormStories(stories_)
 			}
 		};
 	});
-var _user$project$Bibliopola$createViewItem2 = F4(
+var _miyamoen$bibliopola$Bibliopola$createViewItem2 = F4(
 	function (name, view, _p47, _p46) {
 		var _p48 = _p47;
 		var _p58 = _p48._1;
@@ -24636,13 +25401,13 @@ var _user$project$Bibliopola$createViewItem2 = F4(
 		var stories_ = {
 			ctor: '::',
 			_0: A2(
-				_user$project$Types_ops['=>'],
+				_miyamoen$bibliopola$Types_ops['=>'],
 				_p48._0,
 				A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p58)),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					_p49._0,
 					A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p57)),
 				_1: {ctor: '[]'}
@@ -24650,17 +25415,17 @@ var _user$project$Bibliopola$createViewItem2 = F4(
 		};
 		return {
 			name: name,
-			state: _user$project$Types$Close,
+			state: _miyamoen$bibliopola$Types$Close,
 			stories: stories_,
 			variations: _elm_lang$core$Dict$fromList(
 				A3(
-					_user$project$List_Extra$lift2,
+					_miyamoen$bibliopola$List_Extra$lift2,
 					F2(
 						function (_p51, _p50) {
 							var _p52 = _p51;
 							var _p53 = _p50;
 							return A2(
-								_user$project$Types_ops['=>'],
+								_miyamoen$bibliopola$Types_ops['=>'],
 								A2(
 									_elm_lang$core$String$join,
 									'/',
@@ -24679,7 +25444,7 @@ var _user$project$Bibliopola$createViewItem2 = F4(
 										return A2(
 											_mdgriffith$style_elements$Element$map,
 											function (_p56) {
-												return _user$project$Types$Print(
+												return _miyamoen$bibliopola$Types$LogMsg(
 													_elm_lang$core$Basics$toString(_p56));
 											},
 											A2(view, _p52._1, _p53._1));
@@ -24689,25 +25454,25 @@ var _user$project$Bibliopola$createViewItem2 = F4(
 					_p57)),
 			form: {
 				storyOn: false,
-				stories: _user$project$Bibliopola$initFormStories(stories_)
+				stories: _miyamoen$bibliopola$Bibliopola$initFormStories(stories_)
 			}
 		};
 	});
-var _user$project$Bibliopola$createViewItem = F3(
+var _miyamoen$bibliopola$Bibliopola$createViewItem = F3(
 	function (name, view, _p59) {
 		var _p60 = _p59;
 		var _p64 = _p60._1;
 		var stories_ = {
 			ctor: '::',
 			_0: A2(
-				_user$project$Types_ops['=>'],
+				_miyamoen$bibliopola$Types_ops['=>'],
 				_p60._0,
 				A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, _p64)),
 			_1: {ctor: '[]'}
 		};
 		return {
 			name: name,
-			state: _user$project$Types$Close,
+			state: _miyamoen$bibliopola$Types$Close,
 			stories: stories_,
 			variations: _elm_lang$core$Dict$fromList(
 				A2(
@@ -24720,7 +25485,7 @@ var _user$project$Bibliopola$createViewItem = F3(
 									return A2(
 										_mdgriffith$style_elements$Element$map,
 										function (_p63) {
-											return _user$project$Types$Print(
+											return _miyamoen$bibliopola$Types$LogMsg(
 												_elm_lang$core$Basics$toString(_p63));
 										},
 										view(a));
@@ -24729,95 +25494,209 @@ var _user$project$Bibliopola$createViewItem = F3(
 					_p64)),
 			form: {
 				storyOn: false,
-				stories: _user$project$Bibliopola$initFormStories(stories_)
+				stories: _miyamoen$bibliopola$Bibliopola$initFormStories(stories_)
 			}
 		};
 	});
-var _user$project$Bibliopola$createEmptyViewItem = function (name) {
+var _miyamoen$bibliopola$Bibliopola$createEmptyViewItem = function (name) {
 	return {
 		name: name,
-		state: _user$project$Types$Close,
+		state: _miyamoen$bibliopola$Types$Close,
 		stories: {ctor: '[]'},
 		variations: _elm_lang$core$Dict$empty,
 		form: {storyOn: false, stories: _elm_lang$core$Dict$empty}
 	};
 };
-var _user$project$Bibliopola$createEmptyViewTree = function (name) {
-	return _user$project$Bibliopola$createViewTreeFromItem(
-		_user$project$Bibliopola$createEmptyViewItem(name));
+var _miyamoen$bibliopola$Bibliopola$createEmptyViewTree = function (name) {
+	return _miyamoen$bibliopola$Bibliopola$createViewTreeFromItem(
+		_miyamoen$bibliopola$Bibliopola$createEmptyViewItem(name));
 };
-var _user$project$Bibliopola$createMain = function (model) {
+var _miyamoen$bibliopola$Bibliopola$createMain = function (model) {
 	return A2(
 		_elm_lang$navigation$Navigation$program,
 		function (_p65) {
-			return _user$project$Types$SetRoute(
-				_user$project$Route$route(_p65));
+			return _miyamoen$bibliopola$Types$SetRoute(
+				_miyamoen$bibliopola$Route$route(_p65));
 		},
 		{
-			view: _user$project$View$view,
+			view: _miyamoen$bibliopola$View$view,
 			init: function (location) {
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							route: _user$project$Route$route(location)
+							route: _miyamoen$bibliopola$Route$route(location)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			},
-			update: _user$project$Update$update,
+			update: _miyamoen$bibliopola$Update$update,
 			subscriptions: _elm_lang$core$Basics$always(_elm_lang$core$Platform_Sub$none)
 		});
 };
-var _user$project$Bibliopola$createMainFromViewTree = F2(
+var _miyamoen$bibliopola$Bibliopola$createProgramFromViewTree = F2(
 	function (styles, tree) {
-		return _user$project$Bibliopola$createMain(
+		return _miyamoen$bibliopola$Bibliopola$createMain(
 			{
 				route: A2(
-					_user$project$Route$View,
+					_miyamoen$bibliopola$Route$View,
 					{ctor: '[]'},
 					_elm_lang$core$Dict$fromList(
 						{ctor: '[]'})),
 				views: tree,
-				styles: styles
+				styles: styles,
+				panel: A3(
+					_miyamoen$select_list$SelectList$fromLists,
+					{ctor: '[]'},
+					_miyamoen$bibliopola$Types$StoryPanel,
+					{
+						ctor: '::',
+						_0: _miyamoen$bibliopola$Types$MsgLoggerPanel,
+						_1: {
+							ctor: '::',
+							_0: _miyamoen$bibliopola$Types$AuthorPanel,
+							_1: {ctor: '[]'}
+						}
+					}),
+				logs: {ctor: '[]'}
 			});
 	});
-var _user$project$Bibliopola$createMainFromViewItem = F2(
+var _miyamoen$bibliopola$Bibliopola$createProgramFromViewItem = F2(
 	function (styles, item) {
 		return A2(
-			_user$project$Bibliopola$createMainFromViewTree,
+			_miyamoen$bibliopola$Bibliopola$createProgramFromViewTree,
 			styles,
-			_user$project$Bibliopola$createViewTreeFromItem(item));
+			_miyamoen$bibliopola$Bibliopola$createViewTreeFromItem(item));
 	});
-var _user$project$Atom_Index$toggle = A2(
-	_user$project$Bibliopola$withDefaultVariation,
+var _miyamoen$bibliopola$Atom_Index$logLine = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+	_miyamoen$bibliopola$Atom_LogLine$view(
+		{id: 0, message: 'dummy message'}),
+	A4(
+		_miyamoen$bibliopola$Bibliopola$createViewItem2,
+		'LogLine',
+		F2(
+			function (id, message) {
+				return _miyamoen$bibliopola$Atom_LogLine$view(
+					{id: id, message: message});
+			}),
+		{
+			ctor: '_Tuple2',
+			_0: 'id',
+			_1: {
+				ctor: '::',
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], '1', 1),
+				_1: {
+					ctor: '::',
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], '99', 99),
+					_1: {
+						ctor: '::',
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], '999', 999),
+						_1: {
+							ctor: '::',
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], '9999', 9999),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		},
+		{
+			ctor: '_Tuple2',
+			_0: 'message',
+			_1: {
+				ctor: '::',
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'empty', ''),
+				_1: {
+					ctor: '::',
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'one', 's'),
+					_1: {
+						ctor: '::',
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'middle', 'mmmmmmmmmmmmmmmmmmmmmmmm'),
+						_1: {
+							ctor: '::',
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'long', 'HogehogehogehogeHogehogehogehogeHogehogehogehogeHogeh ogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogeho geHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehoge HogehogehogehogeHogehogehogehogeHogehogehogehoge'),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}));
+var _miyamoen$bibliopola$Atom_Index$tab = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
 	A2(
-		_user$project$Atom_Toggle$view,
+		_miyamoen$bibliopola$Atom_Tab$view,
+		{selected: true, onClick: _elm_lang$core$Basics$identity},
+		'Tab Label'),
+	A4(
+		_miyamoen$bibliopola$Bibliopola$createViewItem2,
+		'Tab',
+		F2(
+			function (selected, label) {
+				return A2(
+					_miyamoen$bibliopola$Atom_Tab$view,
+					{selected: selected, onClick: _elm_lang$core$Basics$identity},
+					label);
+			}),
+		{
+			ctor: '_Tuple2',
+			_0: 'selected',
+			_1: {
+				ctor: '::',
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'True', true),
+				_1: {
+					ctor: '::',
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'False', false),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '_Tuple2',
+			_0: 'label',
+			_1: {
+				ctor: '::',
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'short', 's'),
+				_1: {
+					ctor: '::',
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'middle', 'Middle'),
+					_1: {
+						ctor: '::',
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'long', 'Hogehogehogehoge'),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}));
+var _miyamoen$bibliopola$Atom_Index$toggle = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+	A2(
+		_miyamoen$bibliopola$Atom_Toggle$view,
 		{name: 'On', onClick: 'Clicked'},
 		true),
 	A3(
-		_user$project$Bibliopola$createViewItem,
+		_miyamoen$bibliopola$Bibliopola$createViewItem,
 		'Toggle',
-		_user$project$Atom_Toggle$view(
+		_miyamoen$bibliopola$Atom_Toggle$view(
 			{name: 'On', onClick: 'Clicked'}),
 		{
 			ctor: '_Tuple2',
 			_0: 'on',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'True', true),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'True', true),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'False', false),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'False', false),
 					_1: {ctor: '[]'}
 				}
 			}
 		}));
-var _user$project$Atom_Index$selectBox = A2(
-	_user$project$Bibliopola$withDefaultVariation,
+var _miyamoen$bibliopola$Atom_Index$selectBox = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
 	A3(
-		_user$project$Atom_SelectBox$view_,
+		_miyamoen$bibliopola$Atom_SelectBox$view_,
 		{
 			ctor: '::',
 			_0: 'a',
@@ -24850,16 +25729,16 @@ var _user$project$Atom_Index$selectBox = A2(
 		'e',
 		false),
 	A5(
-		_user$project$Bibliopola$createViewItem3,
+		_miyamoen$bibliopola$Bibliopola$createViewItem3,
 		'SelectBox',
-		_user$project$Atom_SelectBox$view_,
+		_miyamoen$bibliopola$Atom_SelectBox$view_,
 		{
 			ctor: '_Tuple2',
 			_0: 'options',
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					'one',
 					{
 						ctor: '::',
@@ -24893,7 +25772,7 @@ var _user$project$Atom_Index$selectBox = A2(
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
+						_miyamoen$bibliopola$Types_ops['=>'],
 						'long',
 						{
 							ctor: '::',
@@ -24909,23 +25788,23 @@ var _user$project$Atom_Index$selectBox = A2(
 			}
 		},
 		A2(
-			_user$project$Types_ops['=>'],
+			_miyamoen$bibliopola$Types_ops['=>'],
 			'selected',
 			{
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'a', 'a'),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'a', 'a'),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'c', 'c'),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'c', 'c'),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$Types_ops['=>'], 'e', 'e'),
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'e', 'e'),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$Types_ops['=>'], 'g', 'g'),
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'g', 'g'),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'miyamiyamiyamiya', 'miyamiyamiyamiya'),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'miyamiyamiyamiya', 'miyamiyamiyamiya'),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -24937,15 +25816,45 @@ var _user$project$Atom_Index$selectBox = A2(
 			_0: 'disabled',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'False', false),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'False', false),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'True', true),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'True', true),
 					_1: {ctor: '[]'}
 				}
 			}
 		}));
-var _user$project$Atom_Index$folder = function () {
+var _miyamoen$bibliopola$Atom_Index$ban = function () {
+	var config = function (pallet) {
+		return {
+			pallet: pallet,
+			onClick: _elm_lang$core$Maybe$Just('Ban clicked!'),
+			size: 256
+		};
+	};
+	return A2(
+		_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+		_miyamoen$bibliopola$Atom_Ban$view(
+			config(_miyamoen$bibliopola$Color_Pallet$Black)),
+		A3(
+			_miyamoen$bibliopola$Bibliopola$createViewItem,
+			'Ban',
+			_miyamoen$bibliopola$Atom_Ban$view,
+			{
+				ctor: '_Tuple2',
+				_0: 'pallet',
+				_1: A2(
+					_elm_lang$core$List$map,
+					function (p) {
+						return A2(
+							_miyamoen$bibliopola$Types_ops['=>'],
+							_elm_lang$core$Basics$toString(p),
+							config(p));
+					},
+					_miyamoen$bibliopola$Color_Pallet$pallets)
+			}));
+}();
+var _miyamoen$bibliopola$Atom_Index$folder = function () {
 	var config = function (pallet) {
 		return {
 			pallet: pallet,
@@ -24954,13 +25863,13 @@ var _user$project$Atom_Index$folder = function () {
 		};
 	};
 	return A2(
-		_user$project$Bibliopola$withDefaultVariation,
-		_user$project$Atom_Folder$view(
-			config(_user$project$Color_Pallet$Black)),
+		_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+		_miyamoen$bibliopola$Atom_Folder$view(
+			config(_miyamoen$bibliopola$Color_Pallet$Black)),
 		A3(
-			_user$project$Bibliopola$createViewItem,
+			_miyamoen$bibliopola$Bibliopola$createViewItem,
 			'Folder',
-			_user$project$Atom_Folder$view,
+			_miyamoen$bibliopola$Atom_Folder$view,
 			{
 				ctor: '_Tuple2',
 				_0: 'pallet',
@@ -24968,14 +25877,14 @@ var _user$project$Atom_Index$folder = function () {
 					_elm_lang$core$List$map,
 					function (p) {
 						return A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							_elm_lang$core$Basics$toString(p),
 							config(p));
 					},
-					_user$project$Color_Pallet$pallets)
+					_miyamoen$bibliopola$Color_Pallet$pallets)
 			}));
 }();
-var _user$project$Atom_Index$file = function () {
+var _miyamoen$bibliopola$Atom_Index$file = function () {
 	var config = function (pallet) {
 		return {
 			pallet: pallet,
@@ -24984,13 +25893,13 @@ var _user$project$Atom_Index$file = function () {
 		};
 	};
 	return A2(
-		_user$project$Bibliopola$withDefaultVariation,
-		_user$project$Atom_File$view(
-			config(_user$project$Color_Pallet$Black)),
+		_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+		_miyamoen$bibliopola$Atom_File$view(
+			config(_miyamoen$bibliopola$Color_Pallet$Black)),
 		A3(
-			_user$project$Bibliopola$createViewItem,
+			_miyamoen$bibliopola$Bibliopola$createViewItem,
 			'File',
-			_user$project$Atom_File$view,
+			_miyamoen$bibliopola$Atom_File$view,
 			{
 				ctor: '_Tuple2',
 				_0: 'pallet',
@@ -24998,14 +25907,14 @@ var _user$project$Atom_Index$file = function () {
 					_elm_lang$core$List$map,
 					function (p) {
 						return A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							_elm_lang$core$Basics$toString(p),
 							config(p));
 					},
-					_user$project$Color_Pallet$pallets)
+					_miyamoen$bibliopola$Color_Pallet$pallets)
 			}));
 }();
-var _user$project$Atom_Index$caret = function () {
+var _miyamoen$bibliopola$Atom_Index$caret = function () {
 	var config = function (pallet) {
 		return {
 			pallet: pallet,
@@ -25020,15 +25929,15 @@ var _user$project$Atom_Index$caret = function () {
 		};
 	};
 	return A2(
-		_user$project$Bibliopola$withDefaultVariation,
+		_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
 		A2(
-			_user$project$Atom_Caret$view,
-			config(_user$project$Color_Pallet$Black),
-			_user$project$Atom_Caret$Up),
+			_miyamoen$bibliopola$Atom_Caret$view,
+			config(_miyamoen$bibliopola$Color_Pallet$Black),
+			_miyamoen$bibliopola$Atom_Caret$Up),
 		A4(
-			_user$project$Bibliopola$createViewItem2,
+			_miyamoen$bibliopola$Bibliopola$createViewItem2,
 			'Caret',
-			_user$project$Atom_Caret$view,
+			_miyamoen$bibliopola$Atom_Caret$view,
 			{
 				ctor: '_Tuple2',
 				_0: 'pallet',
@@ -25036,11 +25945,11 @@ var _user$project$Atom_Index$caret = function () {
 					_elm_lang$core$List$map,
 					function (p) {
 						return A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							_elm_lang$core$Basics$toString(p),
 							config(p));
 					},
-					_user$project$Color_Pallet$pallets)
+					_miyamoen$bibliopola$Color_Pallet$pallets)
 			},
 			{
 				ctor: '_Tuple2',
@@ -25049,39 +25958,48 @@ var _user$project$Atom_Index$caret = function () {
 					_elm_lang$core$List$map,
 					function (dir) {
 						return A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							_elm_lang$core$Basics$toString(dir),
 							dir);
 					},
-					_user$project$Atom_Caret$directions)
+					_miyamoen$bibliopola$Atom_Caret$directions)
 			}));
 }();
-var _user$project$Atom_Index$tree = A2(
-	_user$project$Bibliopola$insertViewTree,
+var _miyamoen$bibliopola$Atom_Index$tree = A2(
+	_miyamoen$bibliopola$Bibliopola$insertViewItem,
+	_miyamoen$bibliopola$Atom_Index$logLine,
 	A2(
-		_user$project$Bibliopola$insertViewItem,
-		_user$project$Atom_Index$toggle,
+		_miyamoen$bibliopola$Bibliopola$insertViewItem,
+		_miyamoen$bibliopola$Atom_Index$tab,
 		A2(
-			_user$project$Bibliopola$insertViewItem,
-			_user$project$Atom_Index$selectBox,
-			_user$project$Bibliopola$createEmptyViewTree('Form'))),
-	A2(
-		_user$project$Bibliopola$insertViewTree,
-		A2(
-			_user$project$Bibliopola$insertViewItem,
-			_user$project$Atom_Index$folder,
+			_miyamoen$bibliopola$Bibliopola$insertViewTree,
 			A2(
-				_user$project$Bibliopola$insertViewItem,
-				_user$project$Atom_Index$file,
+				_miyamoen$bibliopola$Bibliopola$insertViewItem,
+				_miyamoen$bibliopola$Atom_Index$toggle,
 				A2(
-					_user$project$Bibliopola$insertViewItem,
-					_user$project$Atom_Index$caret,
-					_user$project$Bibliopola$createEmptyViewTree('Icon')))),
-		_user$project$Bibliopola$createEmptyViewTree('Atom')));
-var _user$project$Atom_Index$main = A2(_user$project$Bibliopola$createMainFromViewTree, _user$project$Styles$styles, _user$project$Atom_Index$tree)();
-var _user$project$Dummy$storyTree = _user$project$Bibliopola$createViewTreeFromItem(
+					_miyamoen$bibliopola$Bibliopola$insertViewItem,
+					_miyamoen$bibliopola$Atom_Index$selectBox,
+					_miyamoen$bibliopola$Bibliopola$createEmptyViewTree('Form'))),
+			A2(
+				_miyamoen$bibliopola$Bibliopola$insertViewTree,
+				A2(
+					_miyamoen$bibliopola$Bibliopola$insertViewItem,
+					_miyamoen$bibliopola$Atom_Index$ban,
+					A2(
+						_miyamoen$bibliopola$Bibliopola$insertViewItem,
+						_miyamoen$bibliopola$Atom_Index$folder,
+						A2(
+							_miyamoen$bibliopola$Bibliopola$insertViewItem,
+							_miyamoen$bibliopola$Atom_Index$file,
+							A2(
+								_miyamoen$bibliopola$Bibliopola$insertViewItem,
+								_miyamoen$bibliopola$Atom_Index$caret,
+								_miyamoen$bibliopola$Bibliopola$createEmptyViewTree('Icon'))))),
+				_miyamoen$bibliopola$Bibliopola$createEmptyViewTree('Atom')))));
+var _miyamoen$bibliopola$Atom_Index$main = A2(_miyamoen$bibliopola$Bibliopola$createProgramFromViewTree, _miyamoen$bibliopola$Styles$styles, _miyamoen$bibliopola$Atom_Index$tree)();
+var _miyamoen$bibliopola$Dummy$storyTree = _miyamoen$bibliopola$Bibliopola$createViewTreeFromItem(
 	A6(
-		_user$project$Bibliopola$createViewItem4,
+		_miyamoen$bibliopola$Bibliopola$createViewItem4,
 		'4Stories',
 		F4(
 			function (a, b, c, d) {
@@ -25112,19 +26030,19 @@ var _user$project$Dummy$storyTree = _user$project$Bibliopola$createViewTreeFromI
 			_0: 'aStory',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'aStory1', 'aStory1'),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'aStory1', 'aStory1'),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'aStory2', 'aStory2'),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'aStory2', 'aStory2'),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$Types_ops['=>'], 'aStory3', 'aStory3'),
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'aStory3', 'aStory3'),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$Types_ops['=>'], 'aStory4', 'aStory4'),
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'aStory4', 'aStory4'),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'aStory5', 'aStory5'),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'aStory5', 'aStory5'),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -25137,19 +26055,19 @@ var _user$project$Dummy$storyTree = _user$project$Bibliopola$createViewTreeFromI
 			_0: 'bStory',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'bStory1', 'bStory1'),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'bStory1', 'bStory1'),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'bStory2', 'bStory2'),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'bStory2', 'bStory2'),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$Types_ops['=>'], 'bStory3', 'bStory3'),
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'bStory3', 'bStory3'),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$Types_ops['=>'], 'bStory4', 'bStory4'),
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'bStory4', 'bStory4'),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'bStory5', 'bStory5'),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'bStory5', 'bStory5'),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -25162,19 +26080,19 @@ var _user$project$Dummy$storyTree = _user$project$Bibliopola$createViewTreeFromI
 			_0: 'cStory',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'cStory1', 'cStory1'),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cStory1', 'cStory1'),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'cStory2', 'cStory2'),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cStory2', 'cStory2'),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$Types_ops['=>'], 'cStory3', 'cStory3'),
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cStory3', 'cStory3'),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$Types_ops['=>'], 'cStory4', 'cStory4'),
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cStory4', 'cStory4'),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'cStory5', 'cStory5'),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'cStory5', 'cStory5'),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -25187,19 +26105,19 @@ var _user$project$Dummy$storyTree = _user$project$Bibliopola$createViewTreeFromI
 			_0: 'dStory',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'dStory1', 'dStory1'),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'dStory1', 'dStory1'),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'dStory2', 'dStory2'),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'dStory2', 'dStory2'),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$Types_ops['=>'], 'dStory3', 'dStory3'),
+						_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'dStory3', 'dStory3'),
 						_1: {
 							ctor: '::',
-							_0: A2(_user$project$Types_ops['=>'], 'dStory4', 'dStory4'),
+							_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'dStory4', 'dStory4'),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Types_ops['=>'], 'dStory5', 'dStory5'),
+								_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'dStory5', 'dStory5'),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -25207,7 +26125,7 @@ var _user$project$Dummy$storyTree = _user$project$Bibliopola$createViewTreeFromI
 				}
 			}
 		}));
-var _user$project$Dummy$emptyItem = F2(
+var _miyamoen$bibliopola$Dummy$emptyItem = F2(
 	function (state, name) {
 		return {
 			name: name,
@@ -25217,7 +26135,7 @@ var _user$project$Dummy$emptyItem = F2(
 			form: {storyOn: false, stories: _elm_lang$core$Dict$empty}
 		};
 	});
-var _user$project$Dummy$item = F2(
+var _miyamoen$bibliopola$Dummy$item = F2(
 	function (state, name) {
 		return {
 			name: name,
@@ -25227,7 +26145,7 @@ var _user$project$Dummy$item = F2(
 				{
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
+						_miyamoen$bibliopola$Types_ops['=>'],
 						'default',
 						_elm_lang$lazy$Lazy$lazy(
 							function (_p0) {
@@ -25239,33 +26157,33 @@ var _user$project$Dummy$item = F2(
 			form: {storyOn: false, stories: _elm_lang$core$Dict$empty}
 		};
 	});
-var _user$project$Dummy$views = _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$fromTree(
+var _miyamoen$bibliopola$Dummy$views = _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zipper$fromTree(
 	A2(
 		_turboMaCk$lazy_tree_with_zipper$Lazy_Tree$Tree,
-		A2(_user$project$Dummy$item, _user$project$Types$Open, 'root'),
+		A2(_miyamoen$bibliopola$Dummy$item, _miyamoen$bibliopola$Types$Open, 'root'),
 		_turboMaCk$lazy_tree_with_zipper$Lazy_LList$fromList(
 			{
 				ctor: '::',
 				_0: _turboMaCk$lazy_tree_with_zipper$Lazy_Tree$singleton(
-					A2(_user$project$Dummy$item, _user$project$Types$Open, 'ham')),
+					A2(_miyamoen$bibliopola$Dummy$item, _miyamoen$bibliopola$Types$Open, 'ham')),
 				_1: {
 					ctor: '::',
 					_0: A2(
 						_turboMaCk$lazy_tree_with_zipper$Lazy_Tree$Tree,
-						A2(_user$project$Dummy$emptyItem, _user$project$Types$Close, 'egg'),
+						A2(_miyamoen$bibliopola$Dummy$emptyItem, _miyamoen$bibliopola$Types$Close, 'egg'),
 						_turboMaCk$lazy_tree_with_zipper$Lazy_LList$fromList(
 							{
 								ctor: '::',
 								_0: _turboMaCk$lazy_tree_with_zipper$Lazy_Tree$singleton(
-									A2(_user$project$Dummy$item, _user$project$Types$Close, 'boiled')),
+									A2(_miyamoen$bibliopola$Dummy$item, _miyamoen$bibliopola$Types$Close, 'boiled')),
 								_1: {
 									ctor: '::',
 									_0: _turboMaCk$lazy_tree_with_zipper$Lazy_Tree$singleton(
-										A2(_user$project$Dummy$item, _user$project$Types$Close, 'fried')),
+										A2(_miyamoen$bibliopola$Dummy$item, _miyamoen$bibliopola$Types$Close, 'fried')),
 									_1: {
 										ctor: '::',
 										_0: _turboMaCk$lazy_tree_with_zipper$Lazy_Tree$singleton(
-											A2(_user$project$Dummy$item, _user$project$Types$Close, 'scrambled')),
+											A2(_miyamoen$bibliopola$Dummy$item, _miyamoen$bibliopola$Types$Close, 'scrambled')),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -25274,18 +26192,18 @@ var _user$project$Dummy$views = _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zippe
 						ctor: '::',
 						_0: A2(
 							_turboMaCk$lazy_tree_with_zipper$Lazy_Tree$Tree,
-							A2(_user$project$Dummy$item, _user$project$Types$Open, 'spam'),
+							A2(_miyamoen$bibliopola$Dummy$item, _miyamoen$bibliopola$Types$Open, 'spam'),
 							_turboMaCk$lazy_tree_with_zipper$Lazy_LList$fromList(
 								{
 									ctor: '::',
 									_0: A2(
 										_turboMaCk$lazy_tree_with_zipper$Lazy_Tree$Tree,
-										A2(_user$project$Dummy$emptyItem, _user$project$Types$Open, 'spamspam'),
+										A2(_miyamoen$bibliopola$Dummy$emptyItem, _miyamoen$bibliopola$Types$Open, 'spamspam'),
 										_turboMaCk$lazy_tree_with_zipper$Lazy_LList$fromList(
 											{
 												ctor: '::',
 												_0: _turboMaCk$lazy_tree_with_zipper$Lazy_Tree$singleton(
-													A2(_user$project$Dummy$item, _user$project$Types$Close, 'spamspamspam')),
+													A2(_miyamoen$bibliopola$Dummy$item, _miyamoen$bibliopola$Types$Close, 'spamspamspam')),
 												_1: {ctor: '[]'}
 											})),
 									_1: {ctor: '[]'}
@@ -25294,61 +26212,99 @@ var _user$project$Dummy$views = _turboMaCk$lazy_tree_with_zipper$Lazy_Tree_Zippe
 					}
 				}
 			})));
-var _user$project$Dummy$model = {
+var _miyamoen$bibliopola$Dummy$model = {
 	styles: {ctor: '[]'},
-	views: _user$project$Dummy$views,
+	views: _miyamoen$bibliopola$Dummy$views,
 	route: A2(
-		_user$project$Route$View,
+		_miyamoen$bibliopola$Route$View,
 		{ctor: '[]'},
 		_elm_lang$core$Dict$fromList(
-			{ctor: '[]'}))
+			{ctor: '[]'})),
+	panel: A3(
+		_miyamoen$select_list$SelectList$fromLists,
+		{ctor: '[]'},
+		_miyamoen$bibliopola$Types$StoryPanel,
+		{
+			ctor: '::',
+			_0: _miyamoen$bibliopola$Types$StoryPanel,
+			_1: {
+				ctor: '::',
+				_0: _miyamoen$bibliopola$Types$StoryPanel,
+				_1: {
+					ctor: '::',
+					_0: _miyamoen$bibliopola$Types$StoryPanel,
+					_1: {
+						ctor: '::',
+						_0: _miyamoen$bibliopola$Types$StoryPanel,
+						_1: {
+							ctor: '::',
+							_0: _miyamoen$bibliopola$Types$StoryPanel,
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}),
+	logs: {
+		ctor: '::',
+		_0: {id: 2, message: 'dummy msg'},
+		_1: {
+			ctor: '::',
+			_0: {id: 1, message: 'dummy msg'},
+			_1: {
+				ctor: '::',
+				_0: {id: 0, message: 'dummy msg'},
+				_1: {ctor: '[]'}
+			}
+		}
+	}
 };
-var _user$project$Molecule_Index$viewItemTreeLine = A2(
-	_user$project$Bibliopola$withDefaultVariation,
-	_user$project$Molecule_ViewTreeLine$view(_user$project$Dummy$views),
+var _miyamoen$bibliopola$Molecule_Index$viewItemTreeLine = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+	_miyamoen$bibliopola$Molecule_ViewTreeLine$view(_miyamoen$bibliopola$Dummy$views),
 	A3(
-		_user$project$Bibliopola$createViewItem,
+		_miyamoen$bibliopola$Bibliopola$createViewItem,
 		'ViewTreeLine',
-		_user$project$Molecule_ViewTreeLine$view,
+		_miyamoen$bibliopola$Molecule_ViewTreeLine$view,
 		{
 			ctor: '_Tuple2',
 			_0: 'views',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'root', _user$project$Dummy$views),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'root', _miyamoen$bibliopola$Dummy$views),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_user$project$Types_ops['=>'],
+						_miyamoen$bibliopola$Types_ops['=>'],
 						'ham',
 						A2(
-							_user$project$Model_ViewTree$attemptOpenPath,
+							_miyamoen$bibliopola$Model_ViewTree$attemptOpenPath,
 							{
 								ctor: '::',
 								_0: 'ham',
 								_1: {ctor: '[]'}
 							},
-							_user$project$Dummy$views)),
+							_miyamoen$bibliopola$Dummy$views)),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_user$project$Types_ops['=>'],
+							_miyamoen$bibliopola$Types_ops['=>'],
 							'egg',
 							A2(
-								_user$project$Model_ViewTree$attemptOpenPath,
+								_miyamoen$bibliopola$Model_ViewTree$attemptOpenPath,
 								{
 									ctor: '::',
 									_0: 'egg',
 									_1: {ctor: '[]'}
 								},
-								_user$project$Dummy$views)),
+								_miyamoen$bibliopola$Dummy$views)),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_user$project$Types_ops['=>'],
+								_miyamoen$bibliopola$Types_ops['=>'],
 								'boiled_egg',
 								A2(
-									_user$project$Model_ViewTree$attemptOpenPath,
+									_miyamoen$bibliopola$Model_ViewTree$attemptOpenPath,
 									{
 										ctor: '::',
 										_0: 'egg',
@@ -25358,58 +26314,184 @@ var _user$project$Molecule_Index$viewItemTreeLine = A2(
 											_1: {ctor: '[]'}
 										}
 									},
-									_user$project$Dummy$views)),
+									_miyamoen$bibliopola$Dummy$views)),
 							_1: {ctor: '[]'}
 						}
 					}
 				}
 			}
 		}));
-var _user$project$Molecule_Index$tree = A2(
-	_user$project$Bibliopola$insertViewItem,
-	_user$project$Molecule_Index$viewItemTreeLine,
-	_user$project$Bibliopola$createEmptyViewTree('Molecule'));
-var _user$project$Molecule_Index$main = A2(_user$project$Bibliopola$createMainFromViewTree, _user$project$Styles$styles, _user$project$Molecule_Index$tree)();
-var _user$project$Organism_Index$storySelector = A2(
-	_user$project$Bibliopola$withDefaultVariation,
-	_user$project$Organism_StorySelector$view(_user$project$Dummy$storyTree),
+var _miyamoen$bibliopola$Molecule_Index$tabs = function () {
+	var view = function (size) {
+		return _miyamoen$bibliopola$Molecule_Tabs$view(
+			A3(
+				_miyamoen$select_list$SelectList$fromLists,
+				{ctor: '[]'},
+				_miyamoen$bibliopola$Types$StoryPanel,
+				A2(_elm_lang$core$List$repeat, size, _miyamoen$bibliopola$Types$StoryPanel)));
+	};
+	return A2(
+		_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+		view(4),
+		A3(
+			_miyamoen$bibliopola$Bibliopola$createViewItem,
+			'Tabs',
+			view,
+			{
+				ctor: '_Tuple2',
+				_0: 'size',
+				_1: A2(
+					_elm_lang$core$List$map,
+					function (num) {
+						return A2(
+							_miyamoen$bibliopola$Types_ops['=>'],
+							_elm_lang$core$Basics$toString(num),
+							num);
+					},
+					A2(_elm_lang$core$List$range, 0, 10))
+			}));
+}();
+var _miyamoen$bibliopola$Molecule_Index$tree = A2(
+	_miyamoen$bibliopola$Bibliopola$insertViewItem,
+	_miyamoen$bibliopola$Molecule_Index$tabs,
+	A2(
+		_miyamoen$bibliopola$Bibliopola$insertViewItem,
+		_miyamoen$bibliopola$Molecule_Index$viewItemTreeLine,
+		_miyamoen$bibliopola$Bibliopola$createEmptyViewTree('Molecule')));
+var _miyamoen$bibliopola$Molecule_Index$main = A2(_miyamoen$bibliopola$Bibliopola$createProgramFromViewTree, _miyamoen$bibliopola$Styles$styles, _miyamoen$bibliopola$Molecule_Index$tree)();
+var _miyamoen$bibliopola$Organism_Index$logger = function () {
+	var logs = A2(
+		_elm_lang$core$List$map,
+		function (id) {
+			return {id: id, message: 'dummy message'};
+		},
+		A2(_elm_lang$core$List$range, 0, 100));
+	return A2(
+		_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+		_miyamoen$bibliopola$Organism_Logger$view(
+			function (_) {
+				return _.logs;
+			}(_miyamoen$bibliopola$Dummy$model)),
+		A3(
+			_miyamoen$bibliopola$Bibliopola$createViewItem,
+			'Logger',
+			_miyamoen$bibliopola$Organism_Logger$view,
+			{
+				ctor: '_Tuple2',
+				_0: 'size',
+				_1: A2(
+					_elm_lang$core$List$map,
+					function (size) {
+						return A2(
+							_miyamoen$bibliopola$Types_ops['=>'],
+							_elm_lang$core$Basics$toString(size),
+							_elm_lang$core$List$reverse(
+								A2(_elm_lang$core$List$take, size, logs)));
+					},
+					{
+						ctor: '::',
+						_0: 0,
+						_1: {
+							ctor: '::',
+							_0: 1,
+							_1: {
+								ctor: '::',
+								_0: 5,
+								_1: {
+									ctor: '::',
+									_0: 10,
+									_1: {
+										ctor: '::',
+										_0: 20,
+										_1: {
+											ctor: '::',
+											_0: 100,
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					})
+			}));
+}();
+var _miyamoen$bibliopola$Organism_Index$panel = function () {
+	var panel = function (_) {
+		return _.panel;
+	}(_miyamoen$bibliopola$Dummy$model);
+	var model = _miyamoen$bibliopola$Dummy$model;
+	var view = function (index) {
+		return _miyamoen$bibliopola$Organism_Panel$view(
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					panel: A2(
+						_miyamoen$select_list$SelectList$attempt,
+						A2(_miyamoen$select_list$SelectList$steps, _miyamoen$select_list$SelectList$After, index),
+						panel)
+				}));
+	};
+	return A2(
+		_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+		_miyamoen$bibliopola$Organism_Panel$view(_miyamoen$bibliopola$Dummy$model),
+		A3(
+			_miyamoen$bibliopola$Bibliopola$createViewItem,
+			'Panel',
+			view,
+			{
+				ctor: '_Tuple2',
+				_0: 'index',
+				_1: A2(
+					_elm_lang$core$List$map,
+					function (num) {
+						return A2(
+							_miyamoen$bibliopola$Types_ops['=>'],
+							_elm_lang$core$Basics$toString(num),
+							num);
+					},
+					A2(_elm_lang$core$List$range, 0, 5))
+			}));
+}();
+var _miyamoen$bibliopola$Organism_Index$storySelector = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+	_miyamoen$bibliopola$Organism_StorySelector$view(_miyamoen$bibliopola$Dummy$storyTree),
 	A3(
-		_user$project$Bibliopola$createViewItem,
+		_miyamoen$bibliopola$Bibliopola$createViewItem,
 		'StorySelector',
 		function (on) {
-			return on ? _user$project$Organism_StorySelector$view(
-				_user$project$Model_ViewTree$toggleStoryMode(_user$project$Dummy$storyTree)) : _user$project$Organism_StorySelector$view(_user$project$Dummy$storyTree);
+			return on ? _miyamoen$bibliopola$Organism_StorySelector$view(
+				_miyamoen$bibliopola$Model_ViewTree$toggleStoryMode(_miyamoen$bibliopola$Dummy$storyTree)) : _miyamoen$bibliopola$Organism_StorySelector$view(_miyamoen$bibliopola$Dummy$storyTree);
 		},
 		{
 			ctor: '_Tuple2',
 			_0: 'on',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'True', true),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'True', true),
 				_1: {
 					ctor: '::',
-					_0: A2(_user$project$Types_ops['=>'], 'False', false),
+					_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'False', false),
 					_1: {ctor: '[]'}
 				}
 			}
 		}));
-var _user$project$Organism_Index$viewItemTree = A2(
-	_user$project$Bibliopola$withDefaultVariation,
-	_user$project$Organism_ViewTree$view(_user$project$Dummy$model),
-	_user$project$Bibliopola$createEmptyViewItem('ViewTree'));
-var _user$project$Organism_Index$viewItem = A2(
-	_user$project$Bibliopola$withDefaultVariation,
+var _miyamoen$bibliopola$Organism_Index$viewItemTree = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+	_miyamoen$bibliopola$Organism_ViewTree$view(_miyamoen$bibliopola$Dummy$model),
+	_miyamoen$bibliopola$Bibliopola$createEmptyViewItem('ViewTree'));
+var _miyamoen$bibliopola$Organism_Index$viewItem = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
 	A3(
-		_user$project$Organism_ViewItem$view,
+		_miyamoen$bibliopola$Organism_ViewItem$view,
 		{ctor: '[]'},
 		_elm_lang$core$Dict$empty,
-		_user$project$Dummy$model),
+		_miyamoen$bibliopola$Dummy$model),
 	A4(
-		_user$project$Bibliopola$createViewItem2,
+		_miyamoen$bibliopola$Bibliopola$createViewItem2,
 		'ViewItem',
 		F2(
 			function (path, query) {
-				return A3(_user$project$Organism_ViewItem$view, path, query, _user$project$Dummy$model);
+				return A3(_miyamoen$bibliopola$Organism_ViewItem$view, path, query, _miyamoen$bibliopola$Dummy$model);
 			}),
 		{
 			ctor: '_Tuple2',
@@ -25417,7 +26499,7 @@ var _user$project$Organism_Index$viewItem = A2(
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_user$project$Types_ops['=>'],
+					_miyamoen$bibliopola$Types_ops['=>'],
 					'empty',
 					{ctor: '[]'}),
 				_1: {ctor: '[]'}
@@ -25428,48 +26510,54 @@ var _user$project$Organism_Index$viewItem = A2(
 			_0: 'query',
 			_1: {
 				ctor: '::',
-				_0: A2(_user$project$Types_ops['=>'], 'empty', _elm_lang$core$Dict$empty),
+				_0: A2(_miyamoen$bibliopola$Types_ops['=>'], 'empty', _elm_lang$core$Dict$empty),
 				_1: {ctor: '[]'}
 			}
 		}));
-var _user$project$Organism_Index$tree = A2(
-	_user$project$Bibliopola$insertViewItem,
-	_user$project$Organism_Index$storySelector,
+var _miyamoen$bibliopola$Organism_Index$tree = A2(
+	_miyamoen$bibliopola$Bibliopola$insertViewItem,
+	_miyamoen$bibliopola$Organism_Index$logger,
 	A2(
-		_user$project$Bibliopola$insertViewItem,
-		_user$project$Organism_Index$viewItemTree,
+		_miyamoen$bibliopola$Bibliopola$insertViewItem,
+		_miyamoen$bibliopola$Organism_Index$storySelector,
 		A2(
-			_user$project$Bibliopola$insertViewItem,
-			_user$project$Organism_Index$viewItem,
-			_user$project$Bibliopola$createEmptyViewTree('Organism'))));
-var _user$project$Organism_Index$main = A2(_user$project$Bibliopola$createMainFromViewTree, _user$project$Styles$styles, _user$project$Organism_Index$tree)();
-var _user$project$Page_Index$mainPage = A2(
-	_user$project$Bibliopola$withDefaultVariation,
-	_user$project$Page_Main$view(_user$project$Dummy$model),
-	_user$project$Bibliopola$createEmptyViewItem('Main'));
-var _user$project$Page_Index$tree = A2(
-	_user$project$Bibliopola$insertViewItem,
-	_user$project$Page_Index$mainPage,
-	_user$project$Bibliopola$createEmptyViewTree('Page'));
-var _user$project$Page_Index$main = A2(_user$project$Bibliopola$createMainFromViewTree, _user$project$Styles$styles, _user$project$Page_Index$tree)();
-var _user$project$Main$tree = A2(
-	_user$project$Bibliopola$insertViewTree,
-	_user$project$Page_Index$tree,
-	A2(
-		_user$project$Bibliopola$insertViewTree,
-		_user$project$Organism_Index$tree,
-		A2(
-			_user$project$Bibliopola$insertViewTree,
-			_user$project$Molecule_Index$tree,
+			_miyamoen$bibliopola$Bibliopola$insertViewItem,
+			_miyamoen$bibliopola$Organism_Index$panel,
 			A2(
-				_user$project$Bibliopola$insertViewTree,
-				_user$project$Atom_Index$tree,
-				_user$project$Bibliopola$createEmptyViewTree('Bibliopola')))));
-var _user$project$Main$main = A2(_user$project$Bibliopola$createMainFromViewTree, _user$project$Styles$styles, _user$project$Main$tree)();
+				_miyamoen$bibliopola$Bibliopola$insertViewItem,
+				_miyamoen$bibliopola$Organism_Index$viewItemTree,
+				A2(
+					_miyamoen$bibliopola$Bibliopola$insertViewItem,
+					_miyamoen$bibliopola$Organism_Index$viewItem,
+					_miyamoen$bibliopola$Bibliopola$createEmptyViewTree('Organism'))))));
+var _miyamoen$bibliopola$Organism_Index$main = A2(_miyamoen$bibliopola$Bibliopola$createProgramFromViewTree, _miyamoen$bibliopola$Styles$styles, _miyamoen$bibliopola$Organism_Index$tree)();
+var _miyamoen$bibliopola$Page_Index$mainPage = A2(
+	_miyamoen$bibliopola$Bibliopola$withDefaultVariation,
+	_miyamoen$bibliopola$Page_Main$view(_miyamoen$bibliopola$Dummy$model),
+	_miyamoen$bibliopola$Bibliopola$createEmptyViewItem('Main'));
+var _miyamoen$bibliopola$Page_Index$tree = A2(
+	_miyamoen$bibliopola$Bibliopola$insertViewItem,
+	_miyamoen$bibliopola$Page_Index$mainPage,
+	_miyamoen$bibliopola$Bibliopola$createEmptyViewTree('Page'));
+var _miyamoen$bibliopola$Page_Index$main = A2(_miyamoen$bibliopola$Bibliopola$createProgramFromViewTree, _miyamoen$bibliopola$Styles$styles, _miyamoen$bibliopola$Page_Index$tree)();
+var _miyamoen$bibliopola$Main$tree = A2(
+	_miyamoen$bibliopola$Bibliopola$insertViewTree,
+	_miyamoen$bibliopola$Page_Index$tree,
+	A2(
+		_miyamoen$bibliopola$Bibliopola$insertViewTree,
+		_miyamoen$bibliopola$Organism_Index$tree,
+		A2(
+			_miyamoen$bibliopola$Bibliopola$insertViewTree,
+			_miyamoen$bibliopola$Molecule_Index$tree,
+			A2(
+				_miyamoen$bibliopola$Bibliopola$insertViewTree,
+				_miyamoen$bibliopola$Atom_Index$tree,
+				_miyamoen$bibliopola$Bibliopola$createEmptyViewTree('Bibliopola')))));
+var _miyamoen$bibliopola$Main$main = A2(_miyamoen$bibliopola$Bibliopola$createProgramFromViewTree, _miyamoen$bibliopola$Styles$styles, _miyamoen$bibliopola$Main$tree)();
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
-if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', undefined);
+if (typeof _miyamoen$bibliopola$Main$main !== 'undefined') {
+    _miyamoen$bibliopola$Main$main(Elm['Main'], 'Main', undefined);
 }
 
 if (typeof define === "function" && define['amd'])
