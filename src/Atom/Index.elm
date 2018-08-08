@@ -1,5 +1,6 @@
 module Atom.Index exposing (..)
 
+import Atom.Ban as Ban
 import Atom.Caret as Caret
 import Atom.File as File
 import Atom.Folder as Folder
@@ -21,6 +22,7 @@ tree =
                 |> insertViewItem caret
                 |> insertViewItem file
                 |> insertViewItem folder
+                |> insertViewItem ban
             )
         |> insertViewTree
             (createEmptyViewTree "Form"
@@ -83,6 +85,23 @@ folder =
         , List.map (\p -> toString p => config p) Pallet.pallets
         )
         |> withDefaultVariation (Folder.view <| config Black)
+
+
+ban : ViewItem (Styles s) (Variation v)
+ban =
+    let
+        config pallet =
+            { pallet = pallet
+            , onClick = Just "Ban clicked!"
+            , size = 256
+            }
+    in
+    createViewItem "Ban"
+        Ban.view
+        ( "pallet"
+        , List.map (\p -> toString p => config p) Pallet.pallets
+        )
+        |> withDefaultVariation (Ban.view <| config Black)
 
 
 selectBox : ViewItem (Styles s) (Variation v)
