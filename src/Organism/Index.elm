@@ -93,6 +93,6 @@ logger =
         |> withDefaultVariation (Logger.view <| .logs Dummy.model)
 
 
-main : MyProgram (Styles s) (Variation v)
+main : BibliopolaProgram (Styles s) (Variation v)
 main =
-    createMainFromViewTree styles tree
+    createProgramFromViewTree styles tree

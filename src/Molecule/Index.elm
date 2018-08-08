@@ -45,6 +45,6 @@ viewItemTreeLine =
         |> withDefaultVariation (ViewTreeLine.view Dummy.views)
 
 
-main : MyProgram (Styles s) (Variation v)
+main : BibliopolaProgram (Styles s) (Variation v)
 main =
-    createMainFromViewTree styles tree
+    createProgramFromViewTree styles tree

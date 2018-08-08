@@ -10,37 +10,37 @@ import SelectList exposing (SelectList)
 import Style exposing (Style)
 
 
-type Msg child childVar
+type Msg style variation
     = NoOp
     | LogMsg String
     | ClearLogs
     | SetRoute Route
     | GoToRoute Route
-    | SetViewTree (ViewTree child childVar)
-    | SetViewTreeWithRoute (ViewTree child childVar)
+    | SetViewTree (ViewTree style variation)
+    | SetViewTreeWithRoute (ViewTree style variation)
     | SetPanel Panel
 
 
-type alias Model child childVar =
+type alias Model style variation =
     { route : Route
-    , views : ViewTree child childVar
-    , styles : List (Style child childVar)
+    , views : ViewTree style variation
+    , styles : List (Style style variation)
     , panel : Panel
     , logs : List Log
     }
 
 
-type alias ViewItem child childVar =
+type alias ViewItem style variation =
     { name : String
     , state : State
     , stories : List ( String, List String )
-    , variations : Dict String (Lazy (Element child childVar (Msg child childVar)))
+    , variations : Dict String (Lazy (Element style variation (Msg style variation)))
     , form : { stories : Dict String String, storyOn : Bool }
     }
 
 
-type alias ViewTree child childVar =
-    Zipper (ViewItem child childVar)
+type alias ViewTree style variation =
+    Zipper (ViewItem style variation)
 
 
 type State
@@ -66,29 +66,29 @@ type alias Log =
 -- alias
 
 
-type alias MyElement child childVar =
-    Element (Styles child) (Variation childVar) (Msg child childVar)
+type alias MyElement style variation =
+    Element (Styles style) (Variation variation) (Msg style variation)
 
 
-type alias MyProgram child childVar =
-    Program Never (Model child childVar) (Msg child childVar)
+type alias BibliopolaProgram style variation =
+    Program Never (Model style variation) (Msg style variation)
 
 
 
 -- style
 
 
-type Styles child
+type Styles style
     = None
     | Text
     | Box
-    | Child child
+    | Child style
 
 
-type Variation childVar
+type Variation variation
     = NoVar
     | PalletVar Pallet
-    | ChildVar childVar
+    | ChildVar variation
 
 
 (=>) : a -> b -> ( a, b )

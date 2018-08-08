@@ -1,4 +1,50 @@
-module Bibliopola exposing (..)
+module Bibliopola
+    exposing
+        ( BibliopolaProgram
+        , ViewItem
+        , ViewTree
+        , createEmptyViewItem
+        , createEmptyViewTree
+        , createProgramFromViewItem
+        , createProgramFromViewTree
+        , createViewItem
+        , createViewItem2
+        , createViewItem3
+        , createViewItem4
+        , createViewTreeFromItem
+        , insertViewItem
+        , insertViewTree
+        , withDefaultVariation
+        )
+
+{-| UI Catalog for Elm applications built by style-elements inspired by Storybook
+
+[demo](https://miyamoen.github.io/bibliopola/)
+
+
+# Types
+
+@docs BibliopolaProgram, ViewItem, ViewTree
+
+
+## Program
+
+@docs createProgramFromViewItem, createProgramFromViewTree
+
+
+# ViewItem
+
+@docs createEmptyViewItem, createViewItem, createViewItem2, createViewItem3, createViewItem4
+
+@docs withDefaultVariation
+
+
+# ViewTree
+
+@docs createEmptyViewTree, createViewTreeFromItem
+@docs insertViewItem, insertViewTree
+
+-}
 
 import Dict exposing (Dict)
 import Element exposing (Element)
@@ -15,7 +61,23 @@ import Update exposing (update)
 import View exposing (view)
 
 
-createMain : Model child childVar -> MyProgram child childVar
+{-| -}
+type alias BibliopolaProgram style variation =
+    Types.BibliopolaProgram style variation
+
+
+{-| -}
+type alias ViewItem style variation =
+    Types.ViewItem style variation
+
+
+{-| -}
+type alias ViewTree style variation =
+    Types.ViewTree style variation
+
+
+{-| -}
+createMain : Model style variation -> BibliopolaProgram style variation
 createMain model =
     Navigation.program (Route.route >> SetRoute)
         { view = view
@@ -27,19 +89,21 @@ createMain model =
         }
 
 
-createMainFromViewItem :
-    List (Style child childVar)
-    -> ViewItem child childVar
-    -> MyProgram child childVar
-createMainFromViewItem styles item =
-    createMainFromViewTree styles <| createViewTreeFromItem item
+{-| -}
+createProgramFromViewItem :
+    List (Style style variation)
+    -> ViewItem style variation
+    -> BibliopolaProgram style variation
+createProgramFromViewItem styles item =
+    createProgramFromViewTree styles <| createViewTreeFromItem item
 
 
-createMainFromViewTree :
-    List (Style child childVar)
-    -> ViewTree child childVar
-    -> MyProgram child childVar
-createMainFromViewTree styles tree =
+{-| -}
+createProgramFromViewTree :
+    List (Style style variation)
+    -> ViewTree style variation
+    -> BibliopolaProgram style variation
+createProgramFromViewTree styles tree =
     createMain
         { route = Route.View [] <| Dict.fromList []
         , views = tree
@@ -56,7 +120,8 @@ createMainFromViewTree styles tree =
 -- ViewItem
 
 
-createEmptyViewItem : String -> ViewItem child childVar
+{-| -}
+createEmptyViewItem : String -> ViewItem style variation
 createEmptyViewItem name =
     { name = name
     , state = Close
@@ -66,11 +131,12 @@ createEmptyViewItem name =
     }
 
 
+{-| -}
 createViewItem :
     String
-    -> (a -> Element child childVar msg)
+    -> (a -> Element style variation msg)
     -> ( String, List ( String, a ) )
-    -> ViewItem child childVar
+    -> ViewItem style variation
 createViewItem name view ( storyName, stories ) =
     let
         stories_ =
@@ -90,12 +156,13 @@ createViewItem name view ( storyName, stories ) =
     }
 
 
+{-| -}
 createViewItem2 :
     String
-    -> (a -> b -> Element child childVar msg)
+    -> (a -> b -> Element style variation msg)
     -> ( String, List ( String, a ) )
     -> ( String, List ( String, b ) )
-    -> ViewItem child childVar
+    -> ViewItem style variation
 createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
     let
         stories_ =
@@ -119,13 +186,14 @@ createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
     }
 
 
+{-| -}
 createViewItem3 :
     String
-    -> (a -> b -> c -> Element child childVar msg)
+    -> (a -> b -> c -> Element style variation msg)
     -> ( String, List ( String, a ) )
     -> ( String, List ( String, b ) )
     -> ( String, List ( String, c ) )
-    -> ViewItem child childVar
+    -> ViewItem style variation
 createViewItem3 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) =
     let
         stories_ =
@@ -151,14 +219,15 @@ createViewItem3 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cS
     }
 
 
+{-| -}
 createViewItem4 :
     String
-    -> (a -> b -> c -> d -> Element child childVar msg)
+    -> (a -> b -> c -> d -> Element style variation msg)
     -> ( String, List ( String, a ) )
     -> ( String, List ( String, b ) )
     -> ( String, List ( String, c ) )
     -> ( String, List ( String, d ) )
-    -> ViewItem child childVar
+    -> ViewItem style variation
 createViewItem4 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) ( dStoryName, dStories ) =
     let
         stories_ =
@@ -186,10 +255,11 @@ createViewItem4 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cS
     }
 
 
+{-| -}
 withDefaultVariation :
-    Element child childVar msg
-    -> ViewItem child childVar
-    -> ViewItem child childVar
+    Element style variation msg
+    -> ViewItem style variation
+    -> ViewItem style variation
 withDefaultVariation view viewItem =
     { viewItem
         | variations =
@@ -211,22 +281,26 @@ initFormStories stories =
 -- ViewTree
 
 
-createViewTreeFromItem : ViewItem child childVar -> ViewTree child childVar
+{-| -}
+createViewTreeFromItem : ViewItem style variation -> ViewTree style variation
 createViewTreeFromItem item =
     Zipper.fromTree <| Tree.singleton item
 
 
-createEmptyViewTree : String -> ViewTree child childVar
+{-| -}
+createEmptyViewTree : String -> ViewTree style variation
 createEmptyViewTree name =
     createEmptyViewItem name
         |> createViewTreeFromItem
 
 
+{-| -}
 insertViewItem : ViewItem s v -> ViewTree s v -> ViewTree s v
 insertViewItem item tree =
     Zipper.insert (Tree.singleton item) tree
 
 
+{-| -}
 insertViewTree : ViewTree s v -> ViewTree s v -> ViewTree s v
 insertViewTree (Zipper childTree _) tree =
     Zipper.insert childTree tree
