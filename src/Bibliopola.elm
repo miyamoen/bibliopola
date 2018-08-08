@@ -44,7 +44,10 @@ createMainFromViewTree styles tree =
         { route = Route.View [] <| Dict.fromList []
         , views = tree
         , styles = styles
-        , panel = SelectList.fromLists [] StoryPanel [ MsgLoggerPanel ]
+        , panel =
+            SelectList.fromLists []
+                StoryPanel
+                [ MsgLoggerPanel, AuthorPanel ]
         , logs = []
         }
 

@@ -1,5 +1,6 @@
-module Organism.Panel exposing (..)
+module Organism.Panel exposing (view)
 
+import Color.Pallet as Pallet exposing (Pallet(Blue))
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Model.ViewTree as ViewTree exposing (currentViewTree)
@@ -34,4 +35,34 @@ view ({ panel, logs } as model) =
 
                 MsgLoggerPanel ->
                     Logger.view logs
+
+                Types.AuthorPanel ->
+                    column None
+                        [ spacing 10
+                        , inlineStyle
+                            [ "font-size" => "18px"
+                            , "font-style" => "italic"
+                            , "text-decoration" => "underline"
+                            , "color" => Pallet.css Blue
+                            ]
+                        ]
+                        [ newTab packageLink <| text "package site"
+                        , newTab gitHubLink <| text "GitHub"
+                        , newTab twitterLink <| text "author twitter"
+                        ]
         ]
+
+
+gitHubLink : String
+gitHubLink =
+    "https://github.com/miyamoen/bibliopola"
+
+
+packageLink : String
+packageLink =
+    "http://package.elm-lang.org/packages/miyamoen/bibliopola/latest"
+
+
+twitterLink : String
+twitterLink =
+    "https://twitter.com/miyamo_madoka"

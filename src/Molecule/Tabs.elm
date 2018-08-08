@@ -23,5 +23,8 @@ view panel =
 
                         MsgLoggerPanel ->
                             "Msg Logger"
+
+                        AuthorPanel ->
+                            "Author"
             )
             panel
