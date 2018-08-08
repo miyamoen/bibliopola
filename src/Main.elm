@@ -6,7 +6,7 @@ import Molecule.Index
 import Organism.Index
 import Page.Index
 import Styles exposing (styles)
-import Types exposing (..)
+import Types exposing ((=>), Styles, Variation)
 
 
 tree : ViewTree (Styles s) (Variation v)

@@ -7,7 +7,7 @@ import Molecule.Tabs as Tabs
 import Molecule.ViewTreeLine as ViewTreeLine
 import SelectList exposing (SelectList)
 import Styles exposing (styles)
-import Types exposing (..)
+import Types exposing ((=>), PanelItem(StoryPanel), Styles, Variation)
 
 
 tree : ViewTree (Styles s) (Variation v)

@@ -11,7 +11,7 @@ import Organism.ViewItem as ViewItem
 import Organism.ViewTree as ViewTree
 import SelectList exposing (Direction(After))
 import Styles exposing (styles)
-import Types exposing (..)
+import Types exposing ((=>), Styles, Variation)
 
 
 tree : ViewTree (Styles s) (Variation v)

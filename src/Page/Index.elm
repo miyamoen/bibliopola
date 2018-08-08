@@ -4,7 +4,7 @@ import Bibliopola exposing (..)
 import Dummy
 import Page.Main as Main
 import Styles exposing (styles)
-import Types exposing (..)
+import Types exposing ((=>), Styles, Variation)
 
 
 tree : ViewTree (Styles s) (Variation v)

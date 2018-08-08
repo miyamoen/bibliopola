@@ -11,7 +11,7 @@ import Atom.Toggle as Toggle
 import Bibliopola exposing (..)
 import Color.Pallet as Pallet exposing (Pallet(..))
 import Styles exposing (styles)
-import Types exposing (..)
+import Types exposing ((=>), Styles, Variation)
 
 
 tree : ViewTree (Styles s) (Variation v)
