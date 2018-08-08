@@ -22,7 +22,7 @@ update msg model =
                         [] ->
                             { message = message, id = 0 }
             in
-            { model | logs = Debug.log "log" log :: model.logs } => Cmd.none
+            { model | logs = log :: model.logs } => Cmd.none
 
         ClearLogs ->
             { model | logs = [] } => Cmd.none

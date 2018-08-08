@@ -20,5 +20,8 @@ view panel =
                     case SelectList.selected item of
                         StoryPanel ->
                             "Story Mode"
+
+                        MsgLoggerPanel ->
+                            "Msg Logger"
             )
             panel

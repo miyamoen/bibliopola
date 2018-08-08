@@ -9,6 +9,7 @@ view : Log -> Element (Styles s) v msg
 view { id, message } =
     row None
         [ spacing 5
+        , paddingBottom 5
         , inlineStyle
             [ "border-bottom" => borderCss ]
         ]

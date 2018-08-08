@@ -4,13 +4,14 @@ import Element exposing (..)
 import Element.Attributes exposing (..)
 import Model.ViewTree as ViewTree exposing (currentViewTree)
 import Molecule.Tabs as Tabs
+import Organism.Logger as Logger
 import Organism.StorySelector as StorySelector
 import SelectList exposing (SelectList)
 import Types exposing (..)
 
 
 view : Model s v -> MyElement s v
-view ({ panel } as model) =
+view ({ panel, logs } as model) =
     column None
         []
         [ Tabs.view panel
@@ -19,7 +20,7 @@ view ({ panel } as model) =
             , height fill
             , inlineStyle
                 [ "border-radius" => "0px 0px 5px 5px"
-                , "border-color" => "rgba(138, 142, 180, 0.22)"
+                , "border-color" => "rgb(135, 135, 150)"
                 , "border-width" => "0px 2px 2px 2px"
                 , "background-color" => "rgb(240, 240, 240)"
                 ]
@@ -30,4 +31,7 @@ view ({ panel } as model) =
                     currentViewTree model
                         |> Maybe.map StorySelector.view
                         |> Maybe.withDefault empty
+
+                MsgLoggerPanel ->
+                    Logger.view logs
         ]

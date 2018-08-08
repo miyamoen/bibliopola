@@ -4,6 +4,7 @@ import Bibliopola exposing (..)
 import Dict exposing (Dict)
 import Dummy
 import Model.ViewTree exposing (toggleStoryMode)
+import Organism.Logger as Logger
 import Organism.Panel as Panel
 import Organism.StorySelector as StorySelector
 import Organism.ViewItem as ViewItem
@@ -20,6 +21,7 @@ tree =
         |> insertViewItem viewItemTree
         |> insertViewItem panel
         |> insertViewItem storySelector
+        |> insertViewItem logger
 
 
 viewItem : ViewItem (Styles s) (Variation v)
@@ -70,6 +72,25 @@ panel =
         view
         ( "index", List.range 0 5 |> List.map (\num -> toString num => num) )
         |> withDefaultVariation (Panel.view Dummy.model)
+
+
+logger : ViewItem (Styles s) (Variation v)
+logger =
+    let
+        logs =
+            List.range 0 100
+                |> List.map (\id -> { id = id, message = "dummy message" })
+    in
+    createViewItem "Logger"
+        Logger.view
+        ( "size"
+        , [ 0, 1, 5, 10, 20, 100 ]
+            |> List.map
+                (\size ->
+                    toString size => (List.reverse <| List.take size logs)
+                )
+        )
+        |> withDefaultVariation (Logger.view <| .logs Dummy.model)
 
 
 main : MyProgram (Styles s) (Variation v)
