@@ -4,6 +4,8 @@ import Atom.Ban as Ban
 import Atom.Caret as Caret
 import Atom.File as File
 import Atom.Folder as Folder
+import Atom.Icon.Book as Book
+import Atom.Icon.Books as Books
 import Atom.LogLine as LogLine
 import Atom.SelectBox as SelectBox
 import Atom.Tab as Tab
@@ -23,6 +25,8 @@ tree =
                 |> insertViewItem file
                 |> insertViewItem folder
                 |> insertViewItem ban
+                |> insertViewItem book
+                |> insertViewItem books
             )
         |> insertViewTree
             (createEmptyViewTree "Form"
@@ -102,6 +106,40 @@ ban =
         , List.map (\p -> toString p => config p) Pallet.pallets
         )
         |> withDefaultVariation (Ban.view <| config Black)
+
+
+book : ViewItem (Styles s) (Variation v)
+book =
+    let
+        config pallet =
+            { pallet = pallet
+            , onClick = Just "Book clicked!"
+            , size = 256
+            }
+    in
+    createViewItem "Book"
+        Book.view
+        ( "pallet"
+        , List.map (\p -> toString p => config p) Pallet.pallets
+        )
+        |> withDefaultVariation (Book.view <| config Black)
+
+
+books : ViewItem (Styles s) (Variation v)
+books =
+    let
+        config pallet =
+            { pallet = pallet
+            , onClick = Just "Books clicked!"
+            , size = 256
+            }
+    in
+    createViewItem "Books"
+        Books.view
+        ( "pallet"
+        , List.map (\p -> toString p => config p) Pallet.pallets
+        )
+        |> withDefaultVariation (Books.view <| config Black)
 
 
 selectBox : ViewItem (Styles s) (Variation v)
