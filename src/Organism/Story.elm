@@ -1,21 +1,21 @@
-module Organism.ViewItem exposing (view)
+module Organism.Story exposing (view)
 
 import Element exposing (..)
 import Lazy
-import Model.ViewTree as ViewTree exposing (OpenPathError(..), OpenStoryError(..))
+import Model.Shelf as Shelf exposing (OpenPathError(..), OpenStoryError(..))
 import Route exposing (Path, Query)
 import Types exposing (..)
 
 
-view : Path -> Query -> Model s v -> MyElement s v
+view : Path -> Query -> Model s v -> BibliopolaElement s v
 view paths queries model =
     let
         res =
-            model.views
-                |> ViewTree.openPath paths
+            model.shelf
+                |> Shelf.openPath paths
                 |> Result.mapError PathError
                 |> Result.andThen
-                    (ViewTree.openStory queries >> Result.mapError QueryError)
+                    (Shelf.openStory queries >> Result.mapError QueryError)
                 |> Result.map Lazy.force
     in
     case res of
