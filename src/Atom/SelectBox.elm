@@ -4,20 +4,20 @@ import Element exposing (..)
 import Element.Attributes exposing (..)
 import Element.Events exposing (on, targetValue)
 import Json.Decode exposing (Decoder)
+import SelectList exposing (Position(..), SelectList)
 import Types exposing (..)
 
 
 type alias Config a msg =
     { a
         | name : String
-        , onChange : String -> msg
-        , options : List String
+        , onChange : SelectList String -> msg
         , disabled : Bool
     }
 
 
-view : Config a msg -> String -> Element (Styles s) v msg
-view { name, options, onChange, disabled } selected =
+view : Config a msg -> SelectList String -> Element (Styles s) v msg
+view { name, onChange, disabled } selectList =
     column None
         [ spacing 5 ]
         [ el None
@@ -42,23 +42,33 @@ view { name, options, onChange, disabled } selected =
                         [ "border" => "1px solid rgba(138, 142, 180, 0.22)"
                         , "border-radius" => "4px"
                         ]
-                    , on "change" <| decoder onChange
+                    , on "change" <|
+                        decoder <|
+                            \selected ->
+                                SelectList.attempt
+                                    (SelectList.select ((==) selected))
+                                    selectList
+                                    |> onChange
                     , if disabled then
                         attribute "disabled" ""
                       else
                         classList []
                     ]
                 <|
-                    List.map (option selected) options
+                    SelectList.mapBy option selectList
         ]
 
 
-option : String -> String -> Element (Styles s) v msg
-option selected option =
+option : Position -> SelectList String -> Element (Styles s) v msg
+option position selectList =
+    let
+        option =
+            SelectList.selected selectList
+    in
     node "option" <|
         el None
             [ attribute "value" option
-            , if selected == option then
+            , if position == Selected then
                 attribute "selected" ""
               else
                 classList []
@@ -73,12 +83,11 @@ decoder f =
         |> Json.Decode.map f
 
 
-view_ : List String -> String -> Bool -> Element (Styles s) v String
-view_ options selected disabled =
+view_ : SelectList String -> Bool -> Element (Styles s) v (SelectList String)
+view_ selectList disabled =
     view
-        { options = options
-        , name = "exampleName"
+        { name = "exampleName"
         , onChange = identity
         , disabled = disabled
         }
-        selected
+        selectList
