@@ -7,7 +7,7 @@ module Model.Shelf
         , isStoryMode
         , moveToRoot
         , name
-        , openRecursively
+        , openAllShelves
         , pages
         , path
         , pathString
@@ -46,14 +46,14 @@ takeBookHelp path (Shelf zipper) =
         |> Result.toMaybe
 
 
-openRecursively : Shelf s v -> List (Shelf s v)
-openRecursively ((Shelf zipper) as shelf) =
-    if (Zipper.current zipper |> Book.state) == Close then
+openAllShelves : Shelf s v -> List (Shelf s v)
+openAllShelves ((Shelf zipper) as shelf) =
+    if state shelf == Close then
         [ shelf ]
     else
         shelf
             :: (Zipper.openAll zipper
-                    |> List.concatMap (Shelf >> openRecursively)
+                    |> List.concatMap (Shelf >> openAllShelves)
                )
 
 

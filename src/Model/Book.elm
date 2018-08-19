@@ -7,14 +7,18 @@ module Model.Book
         , name
         , pages
         , selectedStory
+        , setPages
         , setStories
         , state
         , stories
         , toggle
         , toggleStoryMode
+        , withFrontCover
         )
 
 import Dict exposing (Dict)
+import Element exposing (Element)
+import Lazy exposing (lazy)
 import SelectList exposing (SelectList)
 import Types exposing (..)
 
@@ -81,6 +85,23 @@ currentPage book =
 setStories : List ( String, SelectList String ) -> Book s v -> Book s v
 setStories stories (Book book) =
     Book { book | stories = stories }
+
+
+setPages : Dict String (LazyElement s v) -> Book s v -> Book s v
+setPages pages (Book book) =
+    Book { book | pages = pages }
+
+
+withFrontCover : Element s v msg -> Book s v -> Book s v
+withFrontCover view book =
+    let
+        pages_ =
+            pages book
+                |> Dict.insert
+                    "frontCover"
+                    (lazy <| \_ -> Element.map (toString >> LogMsg) view)
+    in
+    setPages pages_ book
 
 
 toggle : Book s v -> Book s v

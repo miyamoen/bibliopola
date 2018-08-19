@@ -3,6 +3,7 @@ module Bibliopola
         ( Book
         , Program
         , Shelf
+        , Story
         , addBook
         , addShelf
         , bookWith
@@ -13,7 +14,7 @@ module Bibliopola
         , fromBook
         , fromShelf
         , shelfWith
-        , shelfWithoutBooks
+        , shelfWithoutBook
         , withFrontCover
         )
 
@@ -34,6 +35,8 @@ module Bibliopola
 
 # Book
 
+@docs Story
+
 @docs bookWithoutStory, bookWith, bookWith2, bookWith3, bookWith4
 
 @docs withFrontCover
@@ -41,7 +44,7 @@ module Bibliopola
 
 # Shelf
 
-@docs shelfWithoutBooks, shelfWith
+@docs shelfWithoutBook, shelfWith
 @docs addBook, addShelf
 
 -}
@@ -52,6 +55,8 @@ import Lazy exposing (lazy)
 import Lazy.Tree as Tree
 import Lazy.Tree.Zipper as Zipper exposing (Zipper(Zipper))
 import List.Extra as List
+import Maybe.Extra as Maybe
+import Model.Book as Book
 import Navigation
 import Route
 import SelectList exposing (SelectList)
@@ -77,10 +82,9 @@ type alias Shelf style variation =
 
 
 {-| -}
-type alias Options a =
+type alias Story a =
     { label : String
-    , options :
-        ( String, List ( String, a ) )
+    , options : List ( String, a )
     }
 
 
@@ -134,134 +138,163 @@ bookWithoutStory name =
     Book
         { name = name
         , state = Close
-        , stories = Dict.empty
-        , options = []
-        , optionModeOn = False
+        , pages = Dict.empty
+        , stories = []
+        , storyModeOn = False
         }
+
+
+convertStory : Story a -> ( String, List String )
+convertStory story =
+    story.label => List.map Tuple.first story.options
+
+
+convertToSelectList :
+    List ( String, List String )
+    -> List ( String, SelectList String )
+convertToSelectList list =
+    List.map
+        (\( label, options ) ->
+            SelectList.fromList options
+                |> Maybe.map (\options -> label => options)
+        )
+        list
+        |> Maybe.combine
+        |> Maybe.withDefault []
 
 
 {-| -}
 bookWith :
     String
     -> (a -> Element style variation msg)
-    -> ( String, List ( String, a ) )
+    -> Story a
     -> Book style variation
-bookWith name view ( storyName, stories ) =
+bookWith name view story =
     let
-        stories_ =
-            [ storyName => List.map Tuple.first stories ]
+        stories =
+            convertToSelectList [ convertStory story ]
+
+        lazyView a =
+            lazy (\() -> view a)
+                |> Lazy.map (Element.map (toString >> LogMsg))
+
+        pages =
+            List.map (Tuple.mapSecond lazyView) story.options
+                |> Dict.fromList
     in
-    { name = name
-    , state = Close
-    , stories = stories_
-    , variations =
-        List.map
-            (Tuple.mapSecond
-                (\a -> lazy (\() -> view a |> Element.map (toString >> LogMsg)))
-            )
-            stories
-            |> Dict.fromList
-    , form = { storyOn = False, stories = initFormStories stories_ }
-    }
+    bookWithoutStory name
+        |> Book.setStories stories
+        |> Book.setPages pages
 
 
 {-| -}
 bookWith2 :
     String
     -> (a -> b -> Element style variation msg)
-    -> ( String, List ( String, a ) )
-    -> ( String, List ( String, b ) )
+    -> Story a
+    -> Story b
     -> Book style variation
-bookWith2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
+bookWith2 name view storyA storyB =
     let
-        stories_ =
-            [ aStoryName => List.map Tuple.first aStories
-            , bStoryName => List.map Tuple.first bStories
-            ]
+        stories =
+            convertToSelectList
+                [ convertStory storyA
+                , convertStory storyB
+                ]
+
+        lazyView a b =
+            lazy (\() -> view a b)
+                |> Lazy.map (Element.map (toString >> LogMsg))
+
+        pages =
+            List.lift2
+                (\( nameA, a ) ( nameB, b ) ->
+                    String.join "/" [ nameA, nameB ] => lazyView a b
+                )
+                storyA.options
+                storyB.options
+                |> Dict.fromList
     in
-    { name = name
-    , state = Close
-    , stories = stories_
-    , variations =
-        List.lift2
-            (\( aName, a ) ( bName, b ) ->
-                String.join "/" [ aName, bName ]
-                    => lazy (\() -> view a b |> Element.map (toString >> LogMsg))
-            )
-            aStories
-            bStories
-            |> Dict.fromList
-    , form = { storyOn = False, stories = initFormStories stories_ }
-    }
+    bookWithoutStory name
+        |> Book.setStories stories
+        |> Book.setPages pages
 
 
 {-| -}
 bookWith3 :
     String
     -> (a -> b -> c -> Element style variation msg)
-    -> ( String, List ( String, a ) )
-    -> ( String, List ( String, b ) )
-    -> ( String, List ( String, c ) )
+    -> Story a
+    -> Story b
+    -> Story c
     -> Book style variation
-bookWith3 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) =
+bookWith3 name view storyA storyB storyC =
     let
-        stories_ =
-            [ aStoryName => List.map Tuple.first aStories
-            , bStoryName => List.map Tuple.first bStories
-            , cStoryName => List.map Tuple.first cStories
-            ]
+        stories =
+            convertToSelectList
+                [ convertStory storyA
+                , convertStory storyB
+                , convertStory storyC
+                ]
+
+        lazyView a b c =
+            lazy (\() -> view a b c)
+                |> Lazy.map (Element.map (toString >> LogMsg))
+
+        pages =
+            List.lift3
+                (\( nameA, a ) ( nameB, b ) ( nameC, c ) ->
+                    String.join "/" [ nameA, nameB, nameC ]
+                        => lazyView a b c
+                )
+                storyA.options
+                storyB.options
+                storyC.options
+                |> Dict.fromList
     in
-    { name = name
-    , state = Close
-    , stories = stories_
-    , variations =
-        List.lift3
-            (\( aName, a ) ( bName, b ) ( cName, c ) ->
-                String.join "/" [ aName, bName, cName ]
-                    => lazy (\() -> view a b c |> Element.map (toString >> LogMsg))
-            )
-            aStories
-            bStories
-            cStories
-            |> Dict.fromList
-    , form = { storyOn = False, stories = initFormStories stories_ }
-    }
+    bookWithoutStory name
+        |> Book.setStories stories
+        |> Book.setPages pages
 
 
 {-| -}
 bookWith4 :
     String
     -> (a -> b -> c -> d -> Element style variation msg)
-    -> ( String, List ( String, a ) )
-    -> ( String, List ( String, b ) )
-    -> ( String, List ( String, c ) )
-    -> ( String, List ( String, d ) )
+    -> Story a
+    -> Story b
+    -> Story c
+    -> Story d
     -> Book style variation
-bookWith4 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) ( dStoryName, dStories ) =
+bookWith4 name view storyA storyB storyC storyD =
     let
-        stories_ =
-            [ aStoryName => List.map Tuple.first aStories
-            , bStoryName => List.map Tuple.first bStories
-            , cStoryName => List.map Tuple.first cStories
-            , dStoryName => List.map Tuple.first dStories
-            ]
+        stories =
+            convertToSelectList
+                [ convertStory storyA
+                , convertStory storyB
+                , convertStory storyC
+                , convertStory storyD
+                ]
+
+        lazyView a b c d =
+            lazy (\() -> view a b c d)
+                |> Lazy.map (Element.map (toString >> LogMsg))
+
+        pages =
+            List.lift4
+                (\( nameA, a ) ( nameB, b ) ( nameC, c ) ( nameD, d ) ->
+                    String.join "/" [ nameA, nameB, nameC, nameD ]
+                        => lazyView a b c d
+                )
+                storyA.options
+                storyB.options
+                storyC.options
+                storyD.options
+                |> Dict.fromList
     in
-    { name = name
-    , state = Close
-    , stories = stories_
-    , variations =
-        List.lift4
-            (\( aName, a ) ( bName, b ) ( cName, c ) ( dName, d ) ->
-                String.join "/" [ aName, bName, cName, dName ]
-                    => lazy (\() -> view a b c d |> Element.map (toString >> LogMsg))
-            )
-            aStories
-            bStories
-            cStories
-            dStories
-            |> Dict.fromList
-    , form = { storyOn = False, stories = initFormStories stories_ }
-    }
+    bookWithoutStory name
+        |> Book.setStories stories
+        |> Book.setPages pages
 
 
 {-| -}
@@ -269,21 +302,8 @@ withFrontCover :
     Element style variation msg
     -> Book style variation
     -> Book style variation
-withFrontCover view viewItem =
-    { viewItem
-        | variations =
-            viewItem.variations
-                |> Dict.insert
-                    "default"
-                    (lazy <| \_ -> Element.map (toString >> LogMsg) view)
-    }
-
-
-initFormStories : List ( String, List String ) -> Dict String String
-initFormStories stories =
-    stories
-        |> List.map (Tuple.mapSecond (List.head >> Maybe.withDefault ""))
-        |> Dict.fromList
+withFrontCover view book =
+    Book.withFrontCover view book
 
 
 
@@ -292,24 +312,24 @@ initFormStories stories =
 
 {-| -}
 shelfWith : Book style variation -> Shelf style variation
-shelfWith item =
-    Zipper.fromTree <| Tree.singleton item
+shelfWith book =
+    Shelf <| Zipper.fromTree <| Tree.singleton book
 
 
 {-| -}
-shelfWithoutBooks : String -> Shelf style variation
-shelfWithoutBooks name =
+shelfWithoutBook : String -> Shelf style variation
+shelfWithoutBook name =
     bookWithoutStory name
         |> shelfWith
 
 
 {-| -}
 addBook : Book s v -> Shelf s v -> Shelf s v
-addBook item tree =
-    Zipper.insert (Tree.singleton item) tree
+addBook book (Shelf zipper) =
+    Shelf <| Zipper.insert (Tree.singleton book) zipper
 
 
 {-| -}
 addShelf : Shelf s v -> Shelf s v -> Shelf s v
-addShelf (Zipper childTree _) tree =
-    Zipper.insert childTree tree
+addShelf (Shelf (Zipper childTree _)) (Shelf zipper) =
+    Shelf <| Zipper.insert childTree zipper
