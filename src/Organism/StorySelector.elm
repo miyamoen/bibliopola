@@ -4,31 +4,41 @@ import Atom.SelectBox as SelectBox
 import Atom.Toggle as Toggle
 import Element exposing (..)
 import Element.Attributes exposing (..)
-import Model.ViewTree exposing (..)
+import Model.Shelf as Shelf
+import SelectList
 import Types exposing (..)
 
 
-view : ViewTree s v -> MyElement s v
-view tree =
+view : Shelf s v -> BibliopolaElement s v
+view shelf =
     row None
         [ spacing 10 ]
         [ Toggle.view
             { name = "Story Mode"
-            , onClick = SetViewTreeWithRoute <| toggleStoryMode tree
+            , onClick = SetShelfWithRoute <| Shelf.toggleOptionMode shelf
             }
           <|
-            isStoryMode tree
-        , getFormStories tree
-            |> List.map
-                (\{ name, selected, options } ->
+            Shelf.isOptionMode shelf
+        , Shelf.options shelf
+            |> SelectList.mapBy_
+                (\pos options ->
+                    let
+                        ( label, list ) =
+                            SelectList.selected options
+                    in
                     SelectBox.view
-                        { name = name
-                        , options = options
+                        { name = label
                         , onChange =
-                            \new -> SetViewTreeWithRoute <| setFormStory name new tree
-                        , disabled = not <| isStoryMode tree
+                            \new ->
+                                SetShelfWithRoute <|
+                                    Shelf.setOptions
+                                        (SelectList.toList <|
+                                            SelectList.set ( label, new ) options
+                                        )
+                                        shelf
+                        , disabled = not <| Shelf.isOptionMode shelf
                         }
-                        selected
+                        list
                 )
             |> wrappedRow None [ paddingLeft 10, spacing 10 ]
         ]
