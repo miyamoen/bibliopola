@@ -37,9 +37,9 @@ type Shelf style variation
 type Book style variation
     = Book
         { name : String
-        , stories : Dict String (LazyElement style variation)
-        , options : List ( String, SelectList String )
-        , optionModeOn : Bool
+        , pages : Dict String (LazyElement style variation)
+        , stories : List ( String, SelectList String )
+        , storyModeOn : Bool
         , state : State
         }
 

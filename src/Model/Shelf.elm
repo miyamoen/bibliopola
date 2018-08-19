@@ -1,32 +1,27 @@
 module Model.Shelf
     exposing
-        ( OpenPathError(..)
-        , OpenStoryError(..)
-        , attemptOpenPath
-        , currentViewTree
+        ( currentShelf
         , depth
         , hasBooks
-        , hasNoStory
-        , isOptionMode
+        , hasNoPage
+        , isStoryMode
         , moveToRoot
         , name
-        , openPath
         , openRecursively
-        , openStory
-        , options
+        , pages
         , path
         , pathString
         , route
-        , selectedOptions
-        , setOptions
+        , selectedStory
+        , setStories
         , state
-        , toggleOptionMode
+        , stories
+        , takeBook
         , toggleShelf
+        , toggleStoryMode
         )
 
 import Dict exposing (Dict)
-import Element exposing (Element)
-import Lazy exposing (Lazy)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Model.Book as Book
 import Route exposing (Path, Query, Route(BadUrl, View))
@@ -34,72 +29,21 @@ import SelectList exposing (SelectList)
 import Types exposing (..)
 
 
-type OpenPathError
-    = PathNotFound (List String)
-
-
-type OpenStoryError
-    = DefaultStoryNotFound
-    | StoryArityError String
-    | StoryNotFound (List String)
-
-
 moveToRoot : Shelf s v -> Shelf s v
 moveToRoot (Shelf zipper) =
     Shelf <| Zipper.root zipper
 
 
-attemptOpenPath : Path -> Shelf s v -> Shelf s v
-attemptOpenPath paths zipper =
-    openPath paths zipper
-        |> Result.withDefault zipper
+takeBook : Path -> Shelf s v -> Maybe (Book s v)
+takeBook path shelf =
+    takeBookHelp path shelf
+        |> Maybe.map Zipper.current
 
 
-openPath : Path -> Shelf s v -> Result OpenPathError (Shelf s v)
-openPath path (Shelf zipper) =
-    Zipper.openPath (\path (Book book) -> book.name == path) path zipper
-        |> Result.map Shelf
-        |> Result.mapError (\_ -> PathNotFound path)
-
-
-openStory : Query -> Shelf s v -> Result OpenStoryError (Lazy (Element s v (Msg s v)))
-openStory query ((Shelf zipper) as shelf) =
-    if Dict.isEmpty query then
-        openDefaultStory shelf
-    else
-        storyList shelf query
-            |> Result.andThen
-                (\storyList ->
-                    Zipper.current zipper
-                        |> Book.stories
-                        |> Dict.get (String.join "/" storyList)
-                        |> Result.fromMaybe (StoryNotFound storyList)
-                )
-
-
-storyList : Shelf s v -> Query -> Result OpenStoryError (List String)
-storyList (Shelf zipper) query =
-    Zipper.current zipper
-        |> Book.options
-        |> List.map
-            (\( key, _ ) ->
-                Dict.get key query
-                    |> Result.fromMaybe (StoryArityError key)
-            )
-        |> listCombine
-
-
-openDefaultStory : Shelf s v -> Result OpenStoryError (LazyElement s v)
-openDefaultStory (Shelf zipper) =
-    Zipper.current zipper
-        |> Book.stories
-        |> Dict.get "default"
-        |> Result.fromMaybe DefaultStoryNotFound
-
-
-listCombine : List (Result x a) -> Result x (List a)
-listCombine =
-    List.foldr (Result.map2 (::)) (Ok [])
+takeBookHelp : List String -> Shelf s v -> Maybe (Zipper (Book s v))
+takeBookHelp path (Shelf zipper) =
+    Zipper.openPath (\path book -> Book.name book == path) path zipper
+        |> Result.toMaybe
 
 
 openRecursively : Shelf s v -> List (Shelf s v)
@@ -113,15 +57,15 @@ openRecursively ((Shelf zipper) as shelf) =
                )
 
 
-currentViewTree : Model s v -> Maybe (Shelf s v)
-currentViewTree { route, shelf } =
+currentShelf : Model s v -> Maybe (Shelf s v)
+currentShelf { route, shelf } =
     case route of
         BadUrl _ ->
             Nothing
 
         View path _ ->
-            openPath path shelf
-                |> Result.toMaybe
+            takeBookHelp path shelf
+                |> Maybe.map Shelf
 
 
 
@@ -143,23 +87,23 @@ toggleShelf shelf =
     updateBook Book.toggle shelf
 
 
-toggleOptionMode : Shelf s v -> Shelf s v
-toggleOptionMode shelf =
-    updateBook Book.toggleOptionMode shelf
+toggleStoryMode : Shelf s v -> Shelf s v
+toggleStoryMode shelf =
+    updateBook Book.toggleStoryMode shelf
 
 
-setOptions : List ( String, SelectList String ) -> Shelf s v -> Shelf s v
-setOptions options shelf =
-    updateBook (Book.setOptions options) shelf
+setStories : List ( String, SelectList String ) -> Shelf s v -> Shelf s v
+setStories stories shelf =
+    updateBook (Book.setStories stories) shelf
 
 
 
 -- Query
 
 
-hasNoStory : Shelf s v -> Bool
-hasNoStory shelf =
-    mapBook Book.hasNoStory shelf
+hasNoPage : Shelf s v -> Bool
+hasNoPage shelf =
+    mapBook Book.hasNoPage shelf
 
 
 hasBooks : Shelf s v -> Bool
@@ -167,19 +111,24 @@ hasBooks (Shelf zipper) =
     not <| Zipper.isEmpty zipper
 
 
-isOptionMode : Shelf s v -> Bool
-isOptionMode shelf =
-    mapBook Book.isOptionMode shelf
+isStoryMode : Shelf s v -> Bool
+isStoryMode shelf =
+    mapBook Book.isStoryMode shelf
 
 
-options : Shelf s v -> List ( String, SelectList String )
-options shelf =
-    mapBook Book.options shelf
+pages : Shelf s v -> Dict String (LazyElement s v)
+pages shelf =
+    mapBook Book.pages shelf
 
 
-selectedOptions : Shelf s v -> List ( String, String )
-selectedOptions shelf =
-    mapBook Book.selectedOptions shelf
+stories : Shelf s v -> List ( String, SelectList String )
+stories shelf =
+    mapBook Book.stories shelf
+
+
+selectedStory : Shelf s v -> List ( String, String )
+selectedStory shelf =
+    mapBook Book.selectedStory shelf
 
 
 state : Shelf s v -> State
@@ -205,8 +154,8 @@ depth (Shelf zipper) =
 route : Shelf s v -> Route
 route shelf =
     View (path shelf) <|
-        if isOptionMode shelf then
-            selectedOptions shelf
+        if isStoryMode shelf then
+            selectedStory shelf
                 |> Dict.fromList
         else
             Dict.empty

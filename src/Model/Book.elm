@@ -1,15 +1,17 @@
 module Model.Book
     exposing
-        ( hasNoStory
-        , isOptionMode
+        ( currentPage
+        , frontCover
+        , hasNoPage
+        , isStoryMode
         , name
-        , options
-        , selectedOptions
-        , setOptions
+        , pages
+        , selectedStory
+        , setStories
         , state
         , stories
         , toggle
-        , toggleOptionMode
+        , toggleStoryMode
         )
 
 import Dict exposing (Dict)
@@ -17,19 +19,22 @@ import SelectList exposing (SelectList)
 import Types exposing (..)
 
 
-stories : Book s v -> Dict String (LazyElement s v)
+-- Query
+
+
+pages : Book s v -> Dict String (LazyElement s v)
+pages (Book book) =
+    book.pages
+
+
+stories : Book s v -> List ( String, SelectList String )
 stories (Book book) =
     book.stories
 
 
-options : Book s v -> List ( String, SelectList String )
-options (Book book) =
-    book.options
-
-
-selectedOptions : Book s v -> List ( String, String )
-selectedOptions book =
-    options book
+selectedStory : Book s v -> List ( String, String )
+selectedStory book =
+    stories book
         |> List.map (Tuple.mapSecond SelectList.selected)
 
 
@@ -43,20 +48,39 @@ name (Book book) =
     book.name
 
 
-hasNoStory : Book s v -> Bool
-hasNoStory book =
-    stories book
+hasNoPage : Book s v -> Bool
+hasNoPage book =
+    pages book
         |> Dict.isEmpty
 
 
-isOptionMode : Book s v -> Bool
-isOptionMode (Book book) =
-    book.optionModeOn
+isStoryMode : Book s v -> Bool
+isStoryMode (Book book) =
+    book.storyModeOn
 
 
-setOptions : List ( String, SelectList String ) -> Book s v -> Book s v
-setOptions options (Book book) =
-    Book { book | options = options }
+frontCover : Book s v -> Maybe (LazyElement s v)
+frontCover book =
+    Dict.get "frontCover" (pages book)
+
+
+currentPage : Book s v -> Maybe (LazyElement s v)
+currentPage book =
+    Dict.get
+        (selectedStory book
+            |> List.map Tuple.second
+            |> String.join "/"
+        )
+        (pages book)
+
+
+
+-- Operation
+
+
+setStories : List ( String, SelectList String ) -> Book s v -> Book s v
+setStories stories (Book book) =
+    Book { book | stories = stories }
 
 
 toggle : Book s v -> Book s v
@@ -73,6 +97,6 @@ toggle (Book book) =
         }
 
 
-toggleOptionMode : Book s v -> Book s v
-toggleOptionMode (Book book) =
-    Book { book | optionModeOn = not book.optionModeOn }
+toggleStoryMode : Book s v -> Book s v
+toggleStoryMode (Book book) =
+    Book { book | storyModeOn = not book.storyModeOn }
