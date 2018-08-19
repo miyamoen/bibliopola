@@ -16,31 +16,36 @@ type Msg style variation
     | ClearLogs
     | SetRoute Route
     | GoToRoute Route
-    | SetViewTree (ViewTree style variation)
-    | SetViewTreeWithRoute (ViewTree style variation)
+    | SetShelf (Shelf style variation)
+    | SetShelfWithRoute (Shelf style variation)
     | SetPanel Panel
 
 
 type alias Model style variation =
     { route : Route
-    , views : ViewTree style variation
+    , shelf : Shelf style variation
     , styles : List (Style style variation)
     , panel : Panel
     , logs : List Log
     }
 
 
-type alias ViewItem style variation =
-    { name : String
-    , state : State
-    , stories : List ( String, List String )
-    , variations : Dict String (Lazy (Element style variation (Msg style variation)))
-    , form : { stories : Dict String String, storyOn : Bool }
-    }
+type Shelf style variation
+    = Shelf (Zipper (Book style variation))
 
 
-type alias ViewTree style variation =
-    Zipper (ViewItem style variation)
+type Book style variation
+    = Book
+        { name : String
+        , stories : Dict String (LazyElement style variation)
+        , options : List ( String, SelectList String )
+        , optionModeOn : Bool
+        , state : State
+        }
+
+
+type alias LazyElement style variation =
+    Lazy (Element style variation (Msg style variation))
 
 
 type State
@@ -66,12 +71,12 @@ type alias Log =
 -- alias
 
 
-type alias MyElement style variation =
+type alias BibliopolaElement style variation =
     Element (Styles style) (Variation variation) (Msg style variation)
 
 
-type alias BibliopolaProgram style variation =
-    Program Never (Model style variation) (Msg style variation)
+type alias Program style variation =
+    Platform.Program Never (Model style variation) (Msg style variation)
 
 
 

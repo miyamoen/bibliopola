@@ -1,7 +1,6 @@
 module Update exposing (update)
 
-import Lazy.Tree.Zipper as Zipper
-import Model.ViewTree exposing (getRoute)
+import Model.Shelf as Shelf
 import Route exposing (..)
 import Types exposing (..)
 
@@ -30,15 +29,15 @@ update msg model =
         SetRoute route ->
             { model | route = route } => Cmd.none
 
-        SetViewTree tree ->
-            { model | views = Zipper.root tree } => Cmd.none
+        SetShelf shelf ->
+            { model | shelf = Shelf.moveToRoot shelf } => Cmd.none
 
-        SetViewTreeWithRoute tree ->
+        SetShelfWithRoute shelf ->
             let
                 ( model_, cmd ) =
-                    update (GoToRoute <| getRoute tree) model
+                    update (GoToRoute <| Shelf.route shelf) model
             in
-            { model_ | views = Zipper.root tree } => cmd
+            { model_ | shelf = Shelf.moveToRoot shelf } => cmd
 
         GoToRoute route ->
             model

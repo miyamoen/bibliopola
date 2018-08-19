@@ -1,8 +1,8 @@
 module Bibliopola
     exposing
-        ( BibliopolaProgram
-        , ViewItem
-        , ViewTree
+        ( Book
+        , Program
+        , Shelf
         , createEmptyViewItem
         , createEmptyViewTree
         , createProgramFromViewItem
@@ -24,7 +24,7 @@ module Bibliopola
 
 # Types
 
-@docs BibliopolaProgram, ViewItem, ViewTree
+@docs Program, Book, Shelf
 
 
 ## Program
@@ -32,14 +32,14 @@ module Bibliopola
 @docs createProgramFromViewItem, createProgramFromViewTree
 
 
-# ViewItem
+# Book
 
 @docs createEmptyViewItem, createViewItem, createViewItem2, createViewItem3, createViewItem4
 
 @docs withDefaultVariation
 
 
-# ViewTree
+# Shelf
 
 @docs createEmptyViewTree, createViewTreeFromItem
 @docs insertViewItem, insertViewTree
@@ -62,18 +62,18 @@ import View exposing (view)
 
 
 {-| -}
-type alias BibliopolaProgram style variation =
-    Types.BibliopolaProgram style variation
+type alias Program style variation =
+    Types.Program style variation
 
 
 {-| -}
-type alias ViewItem style variation =
-    Types.ViewItem style variation
+type alias Book style variation =
+    Types.Book style variation
 
 
 {-| -}
-type alias ViewTree style variation =
-    Types.ViewTree style variation
+type alias Shelf style variation =
+    Types.Shelf style variation
 
 
 {-| -}
@@ -92,7 +92,7 @@ createMain model =
 {-| -}
 createProgramFromViewItem :
     List (Style style variation)
-    -> ViewItem style variation
+    -> Book style variation
     -> BibliopolaProgram style variation
 createProgramFromViewItem styles item =
     createProgramFromViewTree styles <| createViewTreeFromItem item
@@ -101,7 +101,7 @@ createProgramFromViewItem styles item =
 {-| -}
 createProgramFromViewTree :
     List (Style style variation)
-    -> ViewTree style variation
+    -> Shelf style variation
     -> BibliopolaProgram style variation
 createProgramFromViewTree styles tree =
     createMain
@@ -117,11 +117,11 @@ createProgramFromViewTree styles tree =
 
 
 
--- ViewItem
+-- Book
 
 
 {-| -}
-createEmptyViewItem : String -> ViewItem style variation
+createEmptyViewItem : String -> Book style variation
 createEmptyViewItem name =
     { name = name
     , state = Close
@@ -136,7 +136,7 @@ createViewItem :
     String
     -> (a -> Element style variation msg)
     -> ( String, List ( String, a ) )
-    -> ViewItem style variation
+    -> Book style variation
 createViewItem name view ( storyName, stories ) =
     let
         stories_ =
@@ -162,7 +162,7 @@ createViewItem2 :
     -> (a -> b -> Element style variation msg)
     -> ( String, List ( String, a ) )
     -> ( String, List ( String, b ) )
-    -> ViewItem style variation
+    -> Book style variation
 createViewItem2 name view ( aStoryName, aStories ) ( bStoryName, bStories ) =
     let
         stories_ =
@@ -193,7 +193,7 @@ createViewItem3 :
     -> ( String, List ( String, a ) )
     -> ( String, List ( String, b ) )
     -> ( String, List ( String, c ) )
-    -> ViewItem style variation
+    -> Book style variation
 createViewItem3 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) =
     let
         stories_ =
@@ -227,7 +227,7 @@ createViewItem4 :
     -> ( String, List ( String, b ) )
     -> ( String, List ( String, c ) )
     -> ( String, List ( String, d ) )
-    -> ViewItem style variation
+    -> Book style variation
 createViewItem4 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cStoryName, cStories ) ( dStoryName, dStories ) =
     let
         stories_ =
@@ -258,8 +258,8 @@ createViewItem4 name view ( aStoryName, aStories ) ( bStoryName, bStories ) ( cS
 {-| -}
 withDefaultVariation :
     Element style variation msg
-    -> ViewItem style variation
-    -> ViewItem style variation
+    -> Book style variation
+    -> Book style variation
 withDefaultVariation view viewItem =
     { viewItem
         | variations =
@@ -278,29 +278,29 @@ initFormStories stories =
 
 
 
--- ViewTree
+-- Shelf
 
 
 {-| -}
-createViewTreeFromItem : ViewItem style variation -> ViewTree style variation
+createViewTreeFromItem : Book style variation -> Shelf style variation
 createViewTreeFromItem item =
     Zipper.fromTree <| Tree.singleton item
 
 
 {-| -}
-createEmptyViewTree : String -> ViewTree style variation
+createEmptyViewTree : String -> Shelf style variation
 createEmptyViewTree name =
     createEmptyViewItem name
         |> createViewTreeFromItem
 
 
 {-| -}
-insertViewItem : ViewItem s v -> ViewTree s v -> ViewTree s v
+insertViewItem : Book s v -> Shelf s v -> Shelf s v
 insertViewItem item tree =
     Zipper.insert (Tree.singleton item) tree
 
 
 {-| -}
-insertViewTree : ViewTree s v -> ViewTree s v -> ViewTree s v
+insertViewTree : Shelf s v -> Shelf s v -> Shelf s v
 insertViewTree (Zipper childTree _) tree =
     Zipper.insert childTree tree
