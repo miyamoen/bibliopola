@@ -20,7 +20,7 @@ view shelf =
             [ spacing 10, verticalCenter ]
             [ caret shelf
             , row None
-                (if Shelf.hasNoStory shelf then
+                (if Shelf.hasNoPage shelf then
                     [ spacing 5, verticalCenter ]
                  else
                     [ onClick <| GoToRoute <| Shelf.route shelf
@@ -123,7 +123,7 @@ caret shelf =
 
 icon : Shelf s v -> BibliopolaElement s v
 icon shelf =
-    (if Shelf.hasNoStory shelf then
+    (if Shelf.hasNoPage shelf then
         Folder.view
      else
         File.view

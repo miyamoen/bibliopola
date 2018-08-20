@@ -1,23 +1,24 @@
 module Molecule.Index exposing (..)
 
 import Bibliopola exposing (..)
+import Bibliopola.Story as Story
 import Dummy
-import Model.ViewTree as ViewTree
+import Model.Shelf as Shelf
+import Molecule.ShelfLine as ShelfLine
 import Molecule.Tabs as Tabs
-import Molecule.ViewTreeLine as ViewTreeLine
 import SelectList exposing (SelectList)
 import Styles exposing (styles)
 import Types exposing ((=>), PanelItem(StoryPanel), Styles, Variation)
 
 
-tree : ViewTree (Styles s) (Variation v)
-tree =
-    createEmptyViewTree "Molecule"
-        |> insertViewItem viewItemTreeLine
-        |> insertViewItem tabs
+shelf : Shelf (Styles s) (Variation v)
+shelf =
+    shelfWithoutBook "Molecule"
+        |> addBook shelfLine
+        |> addBook tabs
 
 
-tabs : ViewItem (Styles s) (Variation v)
+tabs : Book (Styles s) (Variation v)
 tabs =
     let
         view size =
@@ -25,26 +26,26 @@ tabs =
                 SelectList.fromLists [] StoryPanel <|
                     List.repeat size StoryPanel
     in
-    createViewItem "Tabs"
+    bookWith "Tabs"
         view
-        ( "size", List.range 0 10 |> List.map (\num -> toString num => num) )
-        |> withDefaultVariation (view 4)
+        (Story.fromList "size" <| List.range 0 10)
+        |> withFrontCover (view 4)
 
 
-viewItemTreeLine : ViewItem (Styles s) (Variation v)
-viewItemTreeLine =
-    createViewItem "ViewTreeLine"
-        ViewTreeLine.view
-        ( "views"
-        , [ "root" => Dummy.views
-          , "ham" => ViewTree.attemptOpenPath [ "ham" ] Dummy.views
-          , "egg" => ViewTree.attemptOpenPath [ "egg" ] Dummy.views
-          , "boiled_egg" => ViewTree.attemptOpenPath [ "egg", "boiled" ] Dummy.views
-          ]
+shelfLine : Book (Styles s) (Variation v)
+shelfLine =
+    let
+        toString shelf =
+            "#" ++ Shelf.pathString shelf
+    in
+    bookWith "ShelfLine"
+        ShelfLine.view
+        (Story.fromListWith toString "shelf" <|
+            Shelf.openAllShelves Dummy.shelf
         )
-        |> withDefaultVariation (ViewTreeLine.view Dummy.views)
+        |> withFrontCover (ShelfLine.view Dummy.shelf)
 
 
-main : BibliopolaProgram (Styles s) (Variation v)
+main : Bibliopola.Program (Styles s) (Variation v)
 main =
-    createProgramFromViewTree styles tree
+    fromShelf styles shelf

@@ -7,7 +7,7 @@ import SelectList as SelectList exposing (Position(..), SelectList)
 import Types exposing (..)
 
 
-view : Panel -> MyElement s v
+view : Panel -> BibliopolaElement s v
 view panel =
     row None [ spacing 3, spread ] <|
         SelectList.mapBy
