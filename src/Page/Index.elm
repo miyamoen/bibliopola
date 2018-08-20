@@ -7,18 +7,18 @@ import Styles exposing (styles)
 import Types exposing ((=>), Styles, Variation)
 
 
-tree : ViewTree (Styles s) (Variation v)
-tree =
-    createEmptyViewTree "Page"
-        |> insertViewItem mainPage
+shelf : Shelf (Styles s) (Variation v)
+shelf =
+    shelfWithoutBook "Page"
+        |> addBook mainPage
 
 
-mainPage : ViewItem (Styles s) (Variation v)
+mainPage : Book (Styles s) (Variation v)
 mainPage =
-    createEmptyViewItem "Main"
-        |> withDefaultVariation (Main.view Dummy.model)
+    bookWithoutStory "Main"
+        |> withFrontCover (Main.view Dummy.model)
 
 
-main : BibliopolaProgram (Styles s) (Variation v)
+main : Bibliopola.Program (Styles s) (Variation v)
 main =
-    createProgramFromViewTree styles tree
+    fromShelf styles shelf

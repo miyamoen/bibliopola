@@ -9,15 +9,15 @@ import Styles exposing (styles)
 import Types exposing ((=>), Styles, Variation)
 
 
-tree : ViewTree (Styles s) (Variation v)
+tree : Shelf (Styles s) (Variation v)
 tree =
-    createEmptyViewTree "Bibliopola"
-        |> insertViewTree Atom.Index.tree
-        |> insertViewTree Molecule.Index.tree
-        |> insertViewTree Organism.Index.tree
-        |> insertViewTree Page.Index.tree
+    shelfWithoutBook "Bibliopola"
+        |> addShelf Atom.Index.shelf
+        |> addShelf Molecule.Index.shelf
+        |> addShelf Organism.Index.shelf
+        |> addShelf Page.Index.shelf
 
 
-main : BibliopolaProgram (Styles s) (Variation v)
+main : Bibliopola.Program (Styles s) (Variation v)
 main =
-    createProgramFromViewTree styles tree
+    fromShelf styles tree

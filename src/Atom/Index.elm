@@ -18,8 +18,8 @@ import Styles exposing (styles)
 import Types exposing ((=>), Styles, Variation)
 
 
-tree : Shelf (Styles s) (Variation v)
-tree =
+shelf : Shelf (Styles s) (Variation v)
+shelf =
     shelfWithoutBook "Atom"
         |> addShelf
             (shelfWithoutBook "Icon"
@@ -217,4 +217,4 @@ logLine =
 
 main : Bibliopola.Program (Styles s) (Variation v)
 main =
-    fromShelf styles tree
+    fromShelf styles shelf
