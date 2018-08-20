@@ -15,11 +15,11 @@ view shelf =
         [ spacing 10 ]
         [ Toggle.view
             { name = "Story Mode"
-            , onClick = SetShelfWithRoute <| Shelf.toggleOptionMode shelf
+            , onClick = SetShelfWithRoute <| Shelf.toggleStoryMode shelf
             }
           <|
-            Shelf.isOptionMode shelf
-        , Shelf.options shelf
+            Shelf.isStoryMode shelf
+        , Shelf.stories shelf
             |> SelectList.mapBy_
                 (\pos options ->
                     let
@@ -27,16 +27,16 @@ view shelf =
                             SelectList.selected options
                     in
                     SelectBox.view
-                        { name = label
+                        { label = label
                         , onChange =
                             \new ->
                                 SetShelfWithRoute <|
-                                    Shelf.setOptions
+                                    Shelf.setStories
                                         (SelectList.toList <|
                                             SelectList.set ( label, new ) options
                                         )
                                         shelf
-                        , disabled = not <| Shelf.isOptionMode shelf
+                        , disabled = not <| Shelf.isStoryMode shelf
                         }
                         list
                 )

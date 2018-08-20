@@ -11,7 +11,7 @@ view : Model child childVar -> BibliopolaElement child childVar
 view { shelf } =
     column None [ spacing 5 ] <|
         List.map line <|
-            Shelf.openRecursively shelf
+            Shelf.openAllShelves shelf
 
 
 line : Shelf s v -> ( String, BibliopolaElement s v )

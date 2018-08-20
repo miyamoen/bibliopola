@@ -3,7 +3,7 @@ module Organism.Panel exposing (view)
 import Color.Pallet as Pallet exposing (Pallet(Blue))
 import Element exposing (..)
 import Element.Attributes exposing (..)
-import Model.ViewTree as ViewTree exposing (currentViewTree)
+import Model.Shelf as Shelf exposing (currentShelf)
 import Molecule.Tabs as Tabs
 import Organism.Logger as Logger
 import Organism.StorySelector as StorySelector
@@ -11,7 +11,7 @@ import SelectList exposing (SelectList)
 import Types exposing (..)
 
 
-view : Model s v -> MyElement s v
+view : Model s v -> BibliopolaElement s v
 view ({ panel, logs } as model) =
     column None
         [ height fill ]
@@ -29,7 +29,7 @@ view ({ panel, logs } as model) =
           <|
             case SelectList.selected panel of
                 StoryPanel ->
-                    currentViewTree model
+                    currentShelf model
                         |> Maybe.map StorySelector.view
                         |> Maybe.withDefault empty
 

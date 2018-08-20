@@ -1,58 +1,57 @@
 module Organism.Index exposing (..)
 
 import Bibliopola exposing (..)
-import Dict exposing (Dict)
+import Bibliopola.Story as Story
 import Dummy
-import Model.ViewTree exposing (toggleStoryMode)
+import Model.Shelf exposing (toggleStoryMode)
+import Organism.BookPage as BookPage
 import Organism.Logger as Logger
 import Organism.Panel as Panel
+import Organism.Shelf as Shelf
 import Organism.StorySelector as StorySelector
-import Organism.ViewItem as ViewItem
-import Organism.ViewTree as ViewTree
 import SelectList exposing (Direction(After))
 import Styles exposing (styles)
 import Types exposing ((=>), Styles, Variation)
 
 
-tree : ViewTree (Styles s) (Variation v)
-tree =
-    createEmptyViewTree "Organism"
-        |> insertViewItem viewItem
-        |> insertViewItem viewItemTree
-        |> insertViewItem panel
-        |> insertViewItem storySelector
-        |> insertViewItem logger
+shelf : Shelf (Styles s) (Variation v)
+shelf =
+    shelfWithoutBook "Organism"
+        |> addBook bookPage
+        |> addBook shelfBook
+        |> addBook panel
+        |> addBook storySelector
+        |> addBook logger
 
 
-viewItem : ViewItem (Styles s) (Variation v)
-viewItem =
-    createViewItem2 "ViewItem"
-        (\path query -> ViewItem.view path query Dummy.model)
-        ( "path", [ "empty" => [] ] )
-        ( "query", [ "empty" => Dict.empty ] )
-        |> withDefaultVariation (ViewItem.view [] Dict.empty Dummy.model)
+bookPage : Book (Styles s) (Variation v)
+bookPage =
+    bookWith "BookPage"
+        (\path -> BookPage.view path Dummy.model)
+        (Story "path" [ "empty" => [] ])
+        |> withFrontCover (BookPage.view [] Dummy.model)
 
 
-viewItemTree : ViewItem (Styles s) (Variation v)
-viewItemTree =
-    createEmptyViewItem "ViewTree"
-        |> withDefaultVariation (ViewTree.view Dummy.model)
+shelfBook : Book (Styles s) (Variation v)
+shelfBook =
+    bookWithoutStory "Shelf"
+        |> withFrontCover (Shelf.view Dummy.model)
 
 
-storySelector : ViewItem (Styles s) (Variation v)
+storySelector : Book (Styles s) (Variation v)
 storySelector =
-    createViewItem "StorySelector"
+    bookWith "StorySelector"
         (\on ->
             if on then
-                StorySelector.view <| toggleStoryMode Dummy.storyTree
+                StorySelector.view <| toggleStoryMode Dummy.storyShelf
             else
-                StorySelector.view Dummy.storyTree
+                StorySelector.view Dummy.storyShelf
         )
-        ( "on", [ "True" => True, "False" => False ] )
-        |> withDefaultVariation (StorySelector.view Dummy.storyTree)
+        (Story.bool "on")
+        |> withFrontCover (StorySelector.view Dummy.storyShelf)
 
 
-panel : ViewItem (Styles s) (Variation v)
+panel : Book (Styles s) (Variation v)
 panel =
     let
         model =
@@ -68,31 +67,27 @@ panel =
             }
                 |> Panel.view
     in
-    createViewItem "Panel"
+    bookWith "Panel"
         view
-        ( "index", List.range 0 5 |> List.map (\num -> toString num => num) )
-        |> withDefaultVariation (Panel.view Dummy.model)
+        (Story.fromList "index" <| List.range 0 5)
+        |> withFrontCover (Panel.view Dummy.model)
 
 
-logger : ViewItem (Styles s) (Variation v)
+logger : Book (Styles s) (Variation v)
 logger =
     let
         logs =
             List.range 0 100
                 |> List.map (\id -> { id = id, message = "dummy message" })
     in
-    createViewItem "Logger"
+    bookWith "Logger"
         Logger.view
-        ( "size"
-        , [ 0, 1, 5, 10, 20, 100 ]
-            |> List.map
-                (\size ->
-                    toString size => (List.reverse <| List.take size logs)
-                )
+        (Story.fromList "size" [ 0, 1, 5, 10, 20, 100 ]
+            |> Story.map (\size -> List.reverse <| List.take size logs)
         )
-        |> withDefaultVariation (Logger.view <| .logs Dummy.model)
+        |> withFrontCover (Logger.view <| .logs Dummy.model)
 
 
-main : BibliopolaProgram (Styles s) (Variation v)
+main : Bibliopola.Program (Styles s) (Variation v)
 main =
-    createProgramFromViewTree styles tree
+    fromShelf styles shelf

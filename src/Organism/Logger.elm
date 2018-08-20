@@ -9,7 +9,7 @@ import Element.Keyed as Keyed
 import Types exposing (..)
 
 
-view : List Log -> MyElement s v
+view : List Log -> BibliopolaElement s v
 view logs =
     row None
         [ spacing 5 ]

@@ -2,23 +2,26 @@ module Organism.BookPage exposing (view)
 
 import Element exposing (..)
 import Lazy
-import Maybe.Extra
 import Model.Book as Book
 import Model.Shelf as Shelf
 import Route exposing (Path, Query)
 import Types exposing (..)
 
 
-view : Path -> Query -> Model s v -> BibliopolaElement s v
-view paths queries model =
+view : Path -> Model s v -> BibliopolaElement s v
+view path model =
     let
         book =
             model.shelf
-                |> Shelf.takeBook paths
+                |> Shelf.takeBook path
+
+        page =
+            if Maybe.map Book.isStoryMode book |> Maybe.withDefault False then
+                Maybe.andThen Book.currentPage book
+            else
+                Maybe.andThen Book.frontCover book
     in
-    Maybe.Extra.or
-        (Maybe.andThen Book.currentPage book)
-        (Maybe.andThen Book.frontCover book)
+    page
         |> Maybe.map Lazy.force
         |> Maybe.map (Element.mapAll identity Child ChildVar)
         |> Maybe.withDefault
