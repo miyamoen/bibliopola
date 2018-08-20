@@ -11,33 +11,35 @@ import Atom.SelectBox as SelectBox
 import Atom.Tab as Tab
 import Atom.Toggle as Toggle
 import Bibliopola exposing (..)
+import Bibliopola.Story as Story
 import Color.Pallet as Pallet exposing (Pallet(..))
+import SelectList
 import Styles exposing (styles)
 import Types exposing ((=>), Styles, Variation)
 
 
-tree : ViewTree (Styles s) (Variation v)
+tree : Shelf (Styles s) (Variation v)
 tree =
-    createEmptyViewTree "Atom"
-        |> insertViewTree
-            (createEmptyViewTree "Icon"
-                |> insertViewItem caret
-                |> insertViewItem file
-                |> insertViewItem folder
-                |> insertViewItem ban
-                |> insertViewItem book
-                |> insertViewItem books
+    shelfWithoutBook "Atom"
+        |> addShelf
+            (shelfWithoutBook "Icon"
+                |> addBook caret
+                |> addBook file
+                |> addBook folder
+                |> addBook ban
+                |> addBook book
+                |> addBook books
             )
-        |> insertViewTree
-            (createEmptyViewTree "Form"
-                |> insertViewItem selectBox
-                |> insertViewItem toggle
+        |> addShelf
+            (shelfWithoutBook "Form"
+                |> addBook selectBox
+                |> addBook toggle
             )
-        |> insertViewItem tab
-        |> insertViewItem logLine
+        |> addBook tab
+        |> addBook logLine
 
 
-caret : ViewItem (Styles s) (Variation v)
+caret : Book (Styles s) (Variation v)
 caret =
     let
         config pallet =
@@ -46,18 +48,14 @@ caret =
             , size = 256
             }
     in
-    createViewItem2 "Caret"
+    bookWith2 "Caret"
         Caret.view
-        ( "pallet"
-        , List.map (\p -> toString p => config p) Pallet.pallets
-        )
-        ( "direction"
-        , List.map (\dir -> toString dir => dir) Caret.directions
-        )
-        |> withDefaultVariation (Caret.view (config Black) Caret.Up)
+        (Story.fromList "pallet" Pallet.pallets |> Story.map config)
+        (Story.fromList "direction" Caret.directions)
+        |> withFrontCover (Caret.view (config Black) Caret.Up)
 
 
-file : ViewItem (Styles s) (Variation v)
+file : Book (Styles s) (Variation v)
 file =
     let
         config pallet =
@@ -66,15 +64,13 @@ file =
             , size = 256
             }
     in
-    createViewItem "File"
+    bookWith "File"
         File.view
-        ( "pallet"
-        , List.map (\p -> toString p => config p) Pallet.pallets
-        )
-        |> withDefaultVariation (File.view <| config Black)
+        (Story.fromList "pallet" Pallet.pallets |> Story.map config)
+        |> withFrontCover (File.view <| config Black)
 
 
-folder : ViewItem (Styles s) (Variation v)
+folder : Book (Styles s) (Variation v)
 folder =
     let
         config pallet =
@@ -83,15 +79,13 @@ folder =
             , size = 256
             }
     in
-    createViewItem "Folder"
+    bookWith "Folder"
         Folder.view
-        ( "pallet"
-        , List.map (\p -> toString p => config p) Pallet.pallets
-        )
-        |> withDefaultVariation (Folder.view <| config Black)
+        (Story.fromList "pallet" Pallet.pallets |> Story.map config)
+        |> withFrontCover (Folder.view <| config Black)
 
 
-ban : ViewItem (Styles s) (Variation v)
+ban : Book (Styles s) (Variation v)
 ban =
     let
         config pallet =
@@ -100,15 +94,13 @@ ban =
             , size = 256
             }
     in
-    createViewItem "Ban"
+    bookWith "Ban"
         Ban.view
-        ( "pallet"
-        , List.map (\p -> toString p => config p) Pallet.pallets
-        )
-        |> withDefaultVariation (Ban.view <| config Black)
+        (Story.fromList "pallet" Pallet.pallets |> Story.map config)
+        |> withFrontCover (Ban.view <| config Black)
 
 
-book : ViewItem (Styles s) (Variation v)
+book : Book (Styles s) (Variation v)
 book =
     let
         config pallet =
@@ -117,15 +109,13 @@ book =
             , size = 256
             }
     in
-    createViewItem "Book"
+    bookWith "Book"
         Book.view
-        ( "pallet"
-        , List.map (\p -> toString p => config p) Pallet.pallets
-        )
-        |> withDefaultVariation (Book.view <| config Black)
+        (Story.fromList "pallet" Pallet.pallets |> Story.map config)
+        |> withFrontCover (Book.view <| config Black)
 
 
-books : ViewItem (Styles s) (Variation v)
+books : Book (Styles s) (Variation v)
 books =
     let
         config pallet =
@@ -134,84 +124,97 @@ books =
             , size = 256
             }
     in
-    createViewItem "Books"
+    bookWith "Books"
         Books.view
-        ( "pallet"
-        , List.map (\p -> toString p => config p) Pallet.pallets
-        )
-        |> withDefaultVariation (Books.view <| config Black)
+        (Story.fromList "pallet" Pallet.pallets |> Story.map config)
+        |> withFrontCover (Books.view <| config Black)
 
 
-selectBox : ViewItem (Styles s) (Variation v)
+selectBox : Book (Styles s) (Variation v)
 selectBox =
-    createViewItem3 "SelectBox"
-        SelectBox.view_
-        ( "options"
-        , [ "one" => [ "a", "b", "c", "d", "e", "f", "g" ]
-          , "long" => [ "hogehogehogehogehoge", "miyamiyamiyamiya" ]
-          ]
+    let
+        view label disabled selectList =
+            SelectBox.view
+                { label = label
+                , onChange = identity
+                , disabled = disabled
+                }
+                selectList
+
+        short =
+            SelectList.fromLists []
+                "aaa"
+                [ "bbb", "ccc", "ddd", "eee", "fff", "ggg" ]
+                |> SelectList.selectAll
+
+        long =
+            SelectList.fromLists []
+                "hogehogehogehogehoge"
+                [ "fugafugafugafuga", "hoga" ]
+                |> SelectList.selectAll
+
+        toString selectList =
+            SelectList.selected selectList
+    in
+    bookWith3 "SelectBox"
+        view
+        (Story.fromList "label"
+            [ "a"
+            , "middle label"
+            , "long long long long long label"
+            ]
         )
-        ("selected"
-            => [ "a" => "a"
-               , "c" => "c"
-               , "e" => "e"
-               , "g" => "g"
-               , "miyamiyamiyamiya" => "miyamiyamiyamiya"
-               ]
-        )
-        ( "disabled", [ "False" => False, "True" => True ] )
-        |> withDefaultVariation
-            (SelectBox.view_
-                [ "a", "b", "c", "d", "e", "f", "g" ]
-                "e"
-                False
+        (Story.bool "disabled")
+        (Story.fromListWith toString "option" (short ++ long))
+        |> withFrontCover
+            (view "Example Story" False <|
+                SelectList.fromLists [ "aa", "bb" ] "cc" [ "dd" ]
             )
 
 
-toggle : ViewItem (Styles s) (Variation v)
+toggle : Book (Styles s) (Variation v)
 toggle =
-    createViewItem "Toggle"
+    bookWith "Toggle"
         (Toggle.view { name = "On", onClick = "Clicked" })
-        ( "on", [ "True" => True, "False" => False ] )
-        |> withDefaultVariation (Toggle.view { name = "On", onClick = "Clicked" } True)
+        (Story.bool "on")
+        |> withFrontCover (Toggle.view { name = "On", onClick = "Clicked" } True)
 
 
-tab : ViewItem (Styles s) (Variation v)
+tab : Book (Styles s) (Variation v)
 tab =
-    createViewItem2 "Tab"
+    bookWith2 "Tab"
         (\selected label ->
             Tab.view { selected = selected, onClick = identity } label
         )
-        ( "selected"
-        , [ "True" => True, "False" => False ]
+        (Story.bool "selected")
+        (Story "label"
+            [ "short" => "s"
+            , "middle" => "Middle"
+            , "long" => "Hogehogehogehoge"
+            ]
         )
-        ( "label"
-        , [ "short" => "s", "middle" => "Middle", "long" => "Hogehogehogehoge" ]
-        )
-        |> withDefaultVariation
+        |> withFrontCover
             (Tab.view { selected = True, onClick = identity } "Tab Label")
 
 
-logLine : ViewItem (Styles s) (Variation v)
+logLine : Book (Styles s) (Variation v)
 logLine =
-    createViewItem2 "LogLine"
+    bookWith2 "LogLine"
         (\id message ->
             LogLine.view { id = id, message = message }
         )
-        ( "id"
-        , [ "1" => 1, "99" => 99, "999" => 999, "9999" => 9999 ]
+        (Story.fromList "id" [ 1, 99, 999, 9999 ])
+        (Story "message"
+            [ "empty" => ""
+            , "one" => "s"
+            , "middle" => "mmmmmmmmmmmmmmmmmmmmmmmm"
+            , "long" => "HogehogehogehogeHogehogehogehogeHogehogehogehogeHogeh ogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogeho geHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehoge HogehogehogehogeHogehogehogehogeHogehogehogehoge"
+            ]
         )
-        ( "message"
-        , [ "empty" => ""
-          , "one" => "s"
-          , "middle" => "mmmmmmmmmmmmmmmmmmmmmmmm"
-          , "long" => "HogehogehogehogeHogehogehogehogeHogehogehogehogeHogeh ogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogeho geHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehogeHogehogehogehoge HogehogehogehogeHogehogehogehogeHogehogehogehoge"
-          ]
-        )
-        |> withDefaultVariation
+        |> withFrontCover
             (LogLine.view { id = 0, message = "dummy message" })
 
 
-main : BibliopolaProgram (Styles s) (Variation v)
+main : Bibliopola.Program (Styles s) (Variation v)
 main =
-    createProgramFromViewTree styles tree
+    fromShelf styles tree

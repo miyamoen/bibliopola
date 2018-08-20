@@ -10,14 +10,14 @@ import Types exposing (..)
 
 type alias Config a msg =
     { a
-        | name : String
+        | label : String
         , onChange : SelectList String -> msg
         , disabled : Bool
     }
 
 
 view : Config a msg -> SelectList String -> Element (Styles s) v msg
-view { name, onChange, disabled } selectList =
+view { label, onChange, disabled } selectList =
     column None
         [ spacing 5 ]
         [ el None
@@ -31,7 +31,7 @@ view { name, onChange, disabled } selectList =
                 ]
             ]
           <|
-            text name
+            text label
         , el None [ paddingLeft 40, minWidth <| px 120 ] <|
             node "select" <|
                 column None
@@ -83,10 +83,10 @@ decoder f =
         |> Json.Decode.map f
 
 
-view_ : SelectList String -> Bool -> Element (Styles s) v (SelectList String)
-view_ selectList disabled =
+view_ : String -> Bool -> SelectList String -> Element (Styles s) v (SelectList String)
+view_ label disabled selectList =
     view
-        { name = "exampleName"
+        { label = label
         , onChange = identity
         , disabled = disabled
         }
