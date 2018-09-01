@@ -1,0 +1,24 @@
+{
+    "type": "package",
+    "name": "miyamoen/bibliopola",
+    "summary": "UI Catalog for Elm applications built by style-elements inspired by Storybook",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+        "Bibliopola"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+        "elm/browser": "1.0.0 <= v < 2.0.0",
+        "elm/core": "1.0.0 <= v < 2.0.0",
+        "elm/html": "1.0.0 <= v < 2.0.0",
+        "elm/json": "1.0.0 <= v < 2.0.0",
+        "elm/parser": "1.1.0 <= v < 2.0.0",
+        "elm/svg": "1.0.0 <= v < 2.0.0",
+        "elm/url": "1.0.0 <= v < 2.0.0",
+        "mdgriffith/elm-ui": "1.0.0 <= v < 2.0.0",
+        "miyamoen/select-list": "3.0.0 <= v < 4.0.0",
+        "miyamoen/tree-with-zipper": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+}

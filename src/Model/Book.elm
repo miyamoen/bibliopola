@@ -1,74 +1,52 @@
-module Model.Book
-    exposing
-        ( currentPage
-        , frontCover
-        , hasNoPage
-        , isStoryMode
-        , name
-        , pages
-        , selectedStory
-        , setPages
-        , setStories
-        , state
-        , stories
-        , toggle
-        , toggleStoryMode
-        , withFrontCover
-        )
+module Model.Book exposing
+    ( currentPage
+    , frontCover
+    , hasNoPage
+    , isOpen
+    , pages
+    , selectedStory
+    , setPages
+    , setStories
+    , shelfIsOpen
+    , stories
+    , title
+    , toggle
+    , toggleShelf
+    , withFrontCover
+    )
 
 import Dict exposing (Dict)
 import Element exposing (Element)
-import Lazy exposing (lazy)
 import SelectList exposing (SelectList)
 import Types exposing (..)
 
 
--- Query
+title : Book -> String
+title (Book book) =
+    book.title
 
 
-pages : Book s v -> Dict String (LazyElement s v)
+
+-- Pages
+
+
+pages : Book -> Dict String (Element Msg)
 pages (Book book) =
     book.pages
 
 
-stories : Book s v -> List ( String, SelectList String )
-stories (Book book) =
-    book.stories
-
-
-selectedStory : Book s v -> List ( String, String )
-selectedStory book =
-    stories book
-        |> List.map (Tuple.mapSecond SelectList.selected)
-
-
-state : Book s v -> State
-state (Book book) =
-    book.state
-
-
-name : Book s v -> String
-name (Book book) =
-    book.name
-
-
-hasNoPage : Book s v -> Bool
+hasNoPage : Book -> Bool
 hasNoPage book =
     pages book
         |> Dict.isEmpty
 
 
-isStoryMode : Book s v -> Bool
-isStoryMode (Book book) =
-    book.storyModeOn
+setPages : Dict String (Element Msg) -> Book -> Book
+setPages newPages (Book book) =
+    Book { book | pages = newPages }
 
 
-frontCover : Book s v -> Maybe (LazyElement s v)
-frontCover book =
-    Dict.get "frontCover" (pages book)
-
-
-currentPage : Book s v -> Maybe (LazyElement s v)
+currentPage : Book -> Maybe (Element Msg)
 currentPage book =
     Dict.get
         (selectedStory book
@@ -78,46 +56,62 @@ currentPage book =
         (pages book)
 
 
-
--- Operation
-
-
-setStories : List ( String, SelectList String ) -> Book s v -> Book s v
-setStories stories (Book book) =
-    Book { book | stories = stories }
+frontCover : Book -> Maybe (Element Msg)
+frontCover book =
+    Dict.get "frontCover" (pages book)
 
 
-setPages : Dict String (LazyElement s v) -> Book s v -> Book s v
-setPages pages (Book book) =
-    Book { book | pages = pages }
-
-
-withFrontCover : Element s v msg -> Book s v -> Book s v
+withFrontCover : Element msg -> Book -> Book
 withFrontCover view book =
     let
         pages_ =
             pages book
                 |> Dict.insert
                     "frontCover"
-                    (lazy <| \_ -> Element.map (toString >> LogMsg) view)
+                    (Element.map (Debug.toString >> LogMsg) view)
     in
     setPages pages_ book
 
 
-toggle : Book s v -> Book s v
+
+-- Stories
+
+
+stories : Book -> List ( String, SelectList String )
+stories (Book book) =
+    book.stories
+
+
+setStories : List ( String, SelectList String ) -> Book -> Book
+setStories newStories (Book book) =
+    Book { book | stories = newStories }
+
+
+selectedStory : Book -> List ( String, String )
+selectedStory book =
+    stories book
+        |> List.map (Tuple.mapSecond SelectList.selected)
+
+
+
+-- Others
+
+
+shelfIsOpen : Book -> Bool
+shelfIsOpen (Book book) =
+    book.shelfIsOpen
+
+
+toggleShelf : Book -> Book
+toggleShelf (Book book) =
+    Book { book | shelfIsOpen = not book.shelfIsOpen }
+
+
+isOpen : Book -> Bool
+isOpen (Book book) =
+    book.isOpen
+
+
+toggle : Book -> Book
 toggle (Book book) =
-    Book
-        { book
-            | state =
-                case book.state of
-                    Open ->
-                        Close
-
-                    Close ->
-                        Open
-        }
-
-
-toggleStoryMode : Book s v -> Book s v
-toggleStoryMode (Book book) =
-    Book { book | storyModeOn = not book.storyModeOn }
+    Book { book | isOpen = not book.isOpen }

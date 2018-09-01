@@ -1,56 +1,52 @@
-module Types exposing (..)
+module Types exposing
+    ( Book(..)
+    , Log
+    , Model
+    , Msg(..)
+    , Panel
+    , PanelItem(..)
+    , Shelf(..)
+    , ShelfPath
+    )
 
-import Color.Pallet exposing (Pallet)
 import Dict exposing (Dict)
 import Element exposing (Element)
-import Lazy exposing (Lazy)
-import Lazy.Tree.Zipper exposing (Zipper)
-import Route exposing (Route)
 import SelectList exposing (SelectList)
-import Style exposing (Style)
+import Tree.Zipper exposing (Zipper)
 
 
-type Msg style variation
+type Msg
     = NoOp
     | LogMsg String
     | ClearLogs
-    | SetRoute Route
-    | GoToRoute Route
-    | SetShelf (Shelf style variation)
-    | SetShelfWithRoute (Shelf style variation)
+    | SetShelf Shelf
+    | SetShelfWithRoute Shelf
     | SetPanel Panel
 
 
-type alias Model style variation =
-    { route : Route
-    , shelf : Shelf style variation
-    , styles : List (Style style variation)
+type alias Model =
+    { shelf : Shelf
     , panel : Panel
     , logs : List Log
     }
 
 
-type Shelf style variation
-    = Shelf (Zipper (Book style variation))
+type Shelf
+    = Shelf (Zipper Book)
 
 
-type Book style variation
+type Book
     = Book
-        { name : String
-        , pages : Dict String (LazyElement style variation)
+        { title : String
+        , pages : Dict String (Element Msg)
         , stories : List ( String, SelectList String )
-        , storyModeOn : Bool
-        , state : State
+        , isOpen : Bool
+        , shelfIsOpen : Bool
         }
 
 
-type alias LazyElement style variation =
-    Lazy (Element style variation (Msg style variation))
-
-
-type State
-    = Close
-    | Open
+type alias ShelfPath =
+    List String
 
 
 type alias Panel =
@@ -65,38 +61,3 @@ type PanelItem
 
 type alias Log =
     { message : String, id : Int }
-
-
-
--- alias
-
-
-type alias BibliopolaElement style variation =
-    Element (Styles style) (Variation variation) (Msg style variation)
-
-
-type alias Program style variation =
-    Platform.Program Never (Model style variation) (Msg style variation)
-
-
-
--- style
-
-
-type Styles style
-    = None
-    | Text
-    | Box
-    | Child style
-
-
-type Variation variation
-    = NoVar
-    | PalletVar Pallet
-    | ChildVar variation
-
-
-(=>) : a -> b -> ( a, b )
-(=>) =
-    (,)
-infixl 0 =>
