@@ -5,6 +5,7 @@ module Types exposing
     , Msg(..)
     , Panel
     , PanelItem(..)
+    , ParsedRoute
     , Shelf(..)
     , ShelfPath
     )
@@ -61,3 +62,9 @@ type PanelItem
 
 type alias Log =
     { message : String, id : Int }
+
+
+type alias ParsedRoute =
+    { path : List String
+    , query : List ( String, String )
+    }
