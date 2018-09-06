@@ -12,13 +12,43 @@ module Model.Book exposing
     , title
     , toggle
     , toggleShelf
+    , turn
     , withFrontCover
     )
 
 import Dict exposing (Dict)
 import Element exposing (Element)
+import Route
 import SelectList exposing (SelectList)
 import Types exposing (..)
+
+
+turn : List ( String, String ) -> Book -> Book
+turn query (Book book) =
+    let
+        queryDict =
+            Dict.fromList query
+    in
+    Book
+        { book
+            | isOpen =
+                Dict.get "isOpen" queryDict
+                    |> Maybe.andThen Route.toBool
+                    |> Maybe.withDefault False
+            , stories =
+                List.map
+                    (\( label, options ) ->
+                        Dict.get label queryDict
+                            |> Maybe.andThen (\selected -> SelectList.select ((==) selected) options)
+                            |> Maybe.map (Tuple.pair label)
+                            |> Maybe.withDefault ( label, options )
+                    )
+                    book.stories
+        }
+
+
+
+-- Basics
 
 
 title : Book -> String

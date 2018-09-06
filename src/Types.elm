@@ -10,6 +10,8 @@ module Types exposing
     , ShelfPath
     )
 
+import Browser exposing (UrlRequest)
+import Browser.Navigation exposing (Key)
 import Dict exposing (Dict)
 import Element exposing (Element)
 import SelectList exposing (SelectList)
@@ -18,10 +20,12 @@ import Tree.Zipper exposing (Zipper)
 
 type Msg
     = NoOp
+    | ClickLink UrlRequest
+    | ChangeRoute ParsedRoute
+    | RouteError
     | LogMsg String
     | ClearLogs
     | SetShelf Shelf
-    | SetShelfWithRoute Shelf
     | SetPanel Panel
 
 
@@ -29,6 +33,7 @@ type alias Model =
     { shelf : Shelf
     , panel : Panel
     , logs : List Log
+    , key : Key
     }
 
 

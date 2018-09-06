@@ -1,4 +1,4 @@
-module Route exposing (parse)
+module Route exposing (fromBool, parse, toBool)
 
 import Parser
 import Route.Parser as Parser
@@ -30,3 +30,26 @@ parse { query, fragment } =
                     Just []
     in
     Maybe.map2 ParsedRoute path queryList
+
+
+fromBool : Bool -> String
+fromBool bool =
+    case bool of
+        True ->
+            "true"
+
+        False ->
+            "false"
+
+
+toBool : String -> Maybe Bool
+toBool string =
+    case string of
+        "true" ->
+            Just True
+
+        "false" ->
+            Just False
+
+        _ ->
+            Nothing

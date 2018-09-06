@@ -1,6 +1,8 @@
 module Model.Shelf exposing
-    ( book
+    ( attempt
+    , book
     , depth
+    , findPage
     , hasShelves
     , mapCurrentBook
     , open
@@ -49,6 +51,18 @@ openAll ((Shelf zipper) as shelf) =
             :: (Zipper.openAll zipper
                     |> List.concatMap (Shelf >> openAll)
                )
+
+
+findPage : ParsedRoute -> Shelf -> Maybe Shelf
+findPage route shelf =
+    root shelf
+        |> open route.path
+        |> Maybe.map (updateBook (Book.turn route.query))
+
+
+attempt : (Shelf -> Maybe Shelf) -> Shelf -> Shelf
+attempt f shelf =
+    f shelf |> Maybe.withDefault shelf
 
 
 mapCurrentBook : (Book -> a) -> Shelf -> a
