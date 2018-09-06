@@ -1,5 +1,6 @@
 module Model.Book exposing
     ( currentPage
+    , empty
     , frontCover
     , hasNoPage
     , isOpen
@@ -49,6 +50,17 @@ turn query (Book book) =
 
 
 -- Basics
+
+
+empty : String -> Book
+empty title_ =
+    Book
+        { title = title_
+        , pages = Dict.empty
+        , stories = []
+        , isOpen = False
+        , shelfIsOpen = False
+        }
 
 
 title : Book -> String

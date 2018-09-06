@@ -48,7 +48,7 @@ update msg model =
             Tuple.pair { model | logs = [] } Cmd.none
 
         SetShelf shelf ->
-            Tuple.pair { model | shelf = Shelf.root shelf } Cmd.none
+            Tuple.pair { model | shelf = shelf } Cmd.none
 
         SetPanel panel ->
             Tuple.pair { model | panel = panel } Cmd.none

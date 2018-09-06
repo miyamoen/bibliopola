@@ -1,22 +1,13 @@
-module Bibliopola
-    exposing
-        ( Book
-        , Program
-        , Shelf
-        , Story
-        , addBook
-        , addShelf
-        , bookWith
-        , bookWith2
-        , bookWith3
-        , bookWith4
-        , bookWithoutStory
-        , fromBook
-        , fromShelf
-        , shelfWith
-        , shelfWithoutBook
-        , withFrontCover
-        )
+module Bibliopola exposing
+    ( Program, Book, Shelf
+    , fromBook, fromShelf
+    , Story
+    , emptyBook
+    , withFrontCover
+    , shelfWithoutBook, shelfWith
+    , addBook, addShelf
+    , addStory1
+    )
 
 {-| UI Catalog for Elm applications built by style-elements inspired by Storybook
 
@@ -37,7 +28,7 @@ module Bibliopola
 
 @docs Story
 
-@docs bookWithoutStory, bookWith, bookWith2, bookWith3, bookWith4
+@docs emptyBook, bookWith, bookWith2, bookWith3, bookWith4
 
 @docs withFrontCover
 
@@ -49,36 +40,38 @@ module Bibliopola
 
 -}
 
+import Browser
 import Dict exposing (Dict)
 import Element exposing (Element)
-import Lazy exposing (lazy)
-import Lazy.Tree as Tree
-import Lazy.Tree.Zipper as Zipper exposing (Zipper(Zipper))
-import List.Extra as List
+import Html
+import List.Extra as List exposing (lift2)
 import Maybe.Extra as Maybe
 import Model.Book as Book
-import Navigation
 import Route
 import SelectList exposing (SelectList)
-import Style exposing (Style)
+import Tree
+import Tree.Zipper as Zipper exposing (Zipper(..))
 import Types exposing (..)
-import Update exposing (update)
-import View exposing (view)
+import Update exposing (..)
+
+
+
+-- import Update exposing (update)
 
 
 {-| -}
-type alias Program style variation =
-    Types.Program style variation
+type alias Program =
+    Platform.Program () Model Msg
 
 
 {-| -}
-type alias Book style variation =
-    Types.Book style variation
+type alias Book =
+    Types.Book
 
 
 {-| -}
-type alias Shelf style variation =
-    Types.Shelf style variation
+type alias Shelf =
+    Types.Shelf
 
 
 {-| -}
@@ -89,42 +82,21 @@ type alias Story a =
 
 
 {-| -}
-fromModel : Model style variation -> Program style variation
-fromModel model =
-    Navigation.program (Route.route >> SetRoute)
-        { view = view
-        , init =
-            \location ->
-                ( { model | route = Route.route location }, Cmd.none )
+fromBook : Book -> Program
+fromBook book =
+    fromShelf <| shelfWith book
+
+
+{-| -}
+fromShelf : Shelf -> Program
+fromShelf shelf =
+    Browser.application
+        { view = \_ -> { title = "Bibliopola", body = [ Html.text "Compiled!" ] }
+        , init = init shelf
         , update = update
         , subscriptions = always Sub.none
-        }
-
-
-{-| -}
-fromBook :
-    List (Style style variation)
-    -> Book style variation
-    -> Program style variation
-fromBook styles book =
-    fromShelf styles <| shelfWith book
-
-
-{-| -}
-fromShelf :
-    List (Style style variation)
-    -> Shelf style variation
-    -> Program style variation
-fromShelf styles shelf =
-    fromModel
-        { route = Route.View [] <| Dict.fromList []
-        , shelf = shelf
-        , styles = styles
-        , panel =
-            SelectList.fromLists []
-                StoryPanel
-                [ MsgLoggerPanel, AuthorPanel ]
-        , logs = []
+        , onUrlRequest = onUrlRequest
+        , onUrlChange = onUrlChange
         }
 
 
@@ -133,20 +105,14 @@ fromShelf styles shelf =
 
 
 {-| -}
-bookWithoutStory : String -> Book style variation
-bookWithoutStory name =
-    Book
-        { name = name
-        , state = Close
-        , pages = Dict.empty
-        , stories = []
-        , storyModeOn = False
-        }
+emptyBook : String -> Book
+emptyBook title =
+    Book.empty title
 
 
 convertStory : Story a -> ( String, List String )
 convertStory story =
-    story.label => List.map Tuple.first story.options
+    Tuple.pair story.label <| List.map Tuple.first story.options
 
 
 convertToSelectList :
@@ -156,152 +122,109 @@ convertToSelectList list =
     List.map
         (\( label, options ) ->
             SelectList.fromList options
-                |> Maybe.map (\options -> label => options)
+                |> Maybe.map (Tuple.pair label)
         )
         list
         |> Maybe.combine
         |> Maybe.withDefault []
 
 
-{-| -}
-bookWith :
-    String
-    -> (a -> Element style variation msg)
-    -> Story a
-    -> Book style variation
-bookWith name view story =
-    let
-        stories =
-            convertToSelectList [ convertStory story ]
-
-        lazyView a =
-            lazy (\() -> view a)
-                |> Lazy.map (Element.map (toString >> LogMsg))
-
-        pages =
-            List.map (Tuple.mapSecond lazyView) story.options
-                |> Dict.fromList
-    in
-    bookWithoutStory name
-        |> Book.setStories stories
-        |> Book.setPages pages
+type alias ToString msg =
+    msg -> String
 
 
 {-| -}
-bookWith2 :
+type alias IntoBook1 msg a1 =
+    { title : String
+    , views : List ( List String, a1 -> Element msg )
+    , toString : ToString msg
+    }
+
+
+type alias IntoBook msg view =
+    { title : String
+    , views : List ( List String, view )
+    , toString : ToString msg
+    }
+
+
+intoBook : String -> ToString msg -> view -> IntoBook msg view
+intoBook title toString view =
+    { title = title
+    , toString = toString
+    , views = [ Tuple.pair [] view ]
+    }
+
+
+intoBook1 : String -> ToString msg -> (a1 -> Element msg) -> IntoBook1 msg a1
+intoBook1 title toString view =
+    { title = title
+    , toString = toString
+    , views = [ Tuple.pair [] view ]
+    }
+
+
+intoBook2 :
     String
-    -> (a -> b -> Element style variation msg)
-    -> Story a
-    -> Story b
-    -> Book style variation
-bookWith2 name view storyA storyB =
-    let
-        stories =
-            convertToSelectList
-                [ convertStory storyA
-                , convertStory storyB
-                ]
+    -> ToString msg
+    -> (a1 -> a2 -> Element msg)
+    -> IntoBook2 msg a1 a2
+intoBook2 title toString view =
+    { title = title
+    , toString = toString
+    , views = [ Tuple.pair [] view ]
+    }
 
-        lazyView a b =
-            lazy (\() -> view a b)
-                |> Lazy.map (Element.map (toString >> LogMsg))
 
-        pages =
-            List.lift2
-                (\( nameA, a ) ( nameB, b ) ->
-                    String.join "/" [ nameA, nameB ] => lazyView a b
+{-| -}
+addStory1 : Story a1 -> IntoBook1 msg a1 -> Book
+addStory1 { label, options } { title, views, toString } =
+    Book.empty title
+        |> Book.setPages
+            (List.lift2
+                (\( optionLabels, view ) ( optionLabel, option ) ->
+                    ( optionLabel
+                        :: optionLabels
+                        |> List.reverse
+                        |> String.join "/"
+                    , view option
+                        |> Element.map (toString >> LogMsg)
+                    )
                 )
-                storyA.options
-                storyB.options
+                views
+                options
                 |> Dict.fromList
-    in
-    bookWithoutStory name
-        |> Book.setStories stories
-        |> Book.setPages pages
+            )
 
 
 {-| -}
-bookWith3 :
-    String
-    -> (a -> b -> c -> Element style variation msg)
-    -> Story a
-    -> Story b
-    -> Story c
-    -> Book style variation
-bookWith3 name view storyA storyB storyC =
-    let
-        stories =
-            convertToSelectList
-                [ convertStory storyA
-                , convertStory storyB
-                , convertStory storyC
-                ]
-
-        lazyView a b c =
-            lazy (\() -> view a b c)
-                |> Lazy.map (Element.map (toString >> LogMsg))
-
-        pages =
-            List.lift3
-                (\( nameA, a ) ( nameB, b ) ( nameC, c ) ->
-                    String.join "/" [ nameA, nameB, nameC ]
-                        => lazyView a b c
-                )
-                storyA.options
-                storyB.options
-                storyC.options
-                |> Dict.fromList
-    in
-    bookWithoutStory name
-        |> Book.setStories stories
-        |> Book.setPages pages
+type alias IntoBook2 msg a1 a2 =
+    { title : String
+    , views : List ( List String, a1 -> a2 -> Element msg )
+    , toString : msg -> String
+    }
 
 
 {-| -}
-bookWith4 :
-    String
-    -> (a -> b -> c -> d -> Element style variation msg)
-    -> Story a
-    -> Story b
-    -> Story c
-    -> Story d
-    -> Book style variation
-bookWith4 name view storyA storyB storyC storyD =
-    let
-        stories =
-            convertToSelectList
-                [ convertStory storyA
-                , convertStory storyB
-                , convertStory storyC
-                , convertStory storyD
-                ]
-
-        lazyView a b c d =
-            lazy (\() -> view a b c d)
-                |> Lazy.map (Element.map (toString >> LogMsg))
-
-        pages =
-            List.lift4
-                (\( nameA, a ) ( nameB, b ) ( nameC, c ) ( nameD, d ) ->
-                    String.join "/" [ nameA, nameB, nameC, nameD ]
-                        => lazyView a b c d
-                )
-                storyA.options
-                storyB.options
-                storyC.options
-                storyD.options
-                |> Dict.fromList
-    in
-    bookWithoutStory name
-        |> Book.setStories stories
-        |> Book.setPages pages
+addStory2 : Story a1 -> IntoBook2 msg a1 a2 -> IntoBook1 msg a2
+addStory2 { label, options } { title, views, toString } =
+    { title = title
+    , toString = toString
+    , views =
+        List.lift2
+            (\( optionLabels, view ) ( optionLabel, option ) ->
+                ( optionLabel :: optionLabels, view option )
+            )
+            views
+            options
+    }
 
 
 {-| -}
 withFrontCover :
-    Element style variation msg
-    -> Book style variation
-    -> Book style variation
+    Element msg
+    -> Book
+    -> Book
 withFrontCover view book =
     Book.withFrontCover view book
 
@@ -311,25 +234,25 @@ withFrontCover view book =
 
 
 {-| -}
-shelfWith : Book style variation -> Shelf style variation
+shelfWith : Book -> Shelf
 shelfWith book =
     Shelf <| Zipper.fromTree <| Tree.singleton book
 
 
 {-| -}
-shelfWithoutBook : String -> Shelf style variation
+shelfWithoutBook : String -> Shelf
 shelfWithoutBook name =
-    bookWithoutStory name
+    emptyBook name
         |> shelfWith
 
 
 {-| -}
-addBook : Book s v -> Shelf s v -> Shelf s v
+addBook : Book -> Shelf -> Shelf
 addBook book (Shelf zipper) =
     Shelf <| Zipper.insert (Tree.singleton book) zipper
 
 
 {-| -}
-addShelf : Shelf s v -> Shelf s v -> Shelf s v
+addShelf : Shelf -> Shelf -> Shelf
 addShelf (Shelf (Zipper childTree _)) (Shelf zipper) =
     Shelf <| Zipper.insert childTree zipper
