@@ -2,11 +2,10 @@ module Bibliopola exposing
     ( Program, Book, Shelf
     , fromBook, fromShelf
     , Story
-    , emptyBook
     , withFrontCover
-    , shelfWithoutBook, shelfWith
+    , emptyShelf, shelfWith
     , addBook, addShelf
-    , addStory1
+    , IntoBook, addStory, buildBook, intoBook
     )
 
 {-| UI Catalog for Elm applications built by style-elements inspired by Storybook
@@ -35,7 +34,7 @@ module Bibliopola exposing
 
 # Shelf
 
-@docs shelfWithoutBook, shelfWith
+@docs emptyShelf, shelfWith
 @docs addBook, addShelf
 
 -}
@@ -74,11 +73,8 @@ type alias Shelf =
     Types.Shelf
 
 
-{-| -}
-type alias Story a =
-    { label : String
-    , options : List ( String, a )
-    }
+
+-- main Program
 
 
 {-| -}
@@ -101,135 +97,6 @@ fromShelf shelf =
 
 
 
--- Book
-
-
-{-| -}
-emptyBook : String -> Book
-emptyBook title =
-    Book.empty title
-
-
-convertStory : Story a -> ( String, List String )
-convertStory story =
-    Tuple.pair story.label <| List.map Tuple.first story.options
-
-
-convertToSelectList :
-    List ( String, List String )
-    -> List ( String, SelectList String )
-convertToSelectList list =
-    List.map
-        (\( label, options ) ->
-            SelectList.fromList options
-                |> Maybe.map (Tuple.pair label)
-        )
-        list
-        |> Maybe.combine
-        |> Maybe.withDefault []
-
-
-type alias ToString msg =
-    msg -> String
-
-
-{-| -}
-type alias IntoBook1 msg a1 =
-    { title : String
-    , views : List ( List String, a1 -> Element msg )
-    , toString : ToString msg
-    }
-
-
-type alias IntoBook msg view =
-    { title : String
-    , views : List ( List String, view )
-    , toString : ToString msg
-    }
-
-
-intoBook : String -> ToString msg -> view -> IntoBook msg view
-intoBook title toString view =
-    { title = title
-    , toString = toString
-    , views = [ Tuple.pair [] view ]
-    }
-
-
-intoBook1 : String -> ToString msg -> (a1 -> Element msg) -> IntoBook1 msg a1
-intoBook1 title toString view =
-    { title = title
-    , toString = toString
-    , views = [ Tuple.pair [] view ]
-    }
-
-
-intoBook2 :
-    String
-    -> ToString msg
-    -> (a1 -> a2 -> Element msg)
-    -> IntoBook2 msg a1 a2
-intoBook2 title toString view =
-    { title = title
-    , toString = toString
-    , views = [ Tuple.pair [] view ]
-    }
-
-
-{-| -}
-addStory1 : Story a1 -> IntoBook1 msg a1 -> Book
-addStory1 { label, options } { title, views, toString } =
-    Book.empty title
-        |> Book.setPages
-            (List.lift2
-                (\( optionLabels, view ) ( optionLabel, option ) ->
-                    ( optionLabel
-                        :: optionLabels
-                        |> List.reverse
-                        |> String.join "/"
-                    , view option
-                        |> Element.map (toString >> LogMsg)
-                    )
-                )
-                views
-                options
-                |> Dict.fromList
-            )
-
-
-{-| -}
-type alias IntoBook2 msg a1 a2 =
-    { title : String
-    , views : List ( List String, a1 -> a2 -> Element msg )
-    , toString : msg -> String
-    }
-
-
-{-| -}
-addStory2 : Story a1 -> IntoBook2 msg a1 a2 -> IntoBook1 msg a2
-addStory2 { label, options } { title, views, toString } =
-    { title = title
-    , toString = toString
-    , views =
-        List.lift2
-            (\( optionLabels, view ) ( optionLabel, option ) ->
-                ( optionLabel :: optionLabels, view option )
-            )
-            views
-            options
-    }
-
-
-{-| -}
-withFrontCover :
-    Element msg
-    -> Book
-    -> Book
-withFrontCover view book =
-    Book.withFrontCover view book
-
-
-
 -- Shelf
 
 
@@ -240,9 +107,9 @@ shelfWith book =
 
 
 {-| -}
-shelfWithoutBook : String -> Shelf
-shelfWithoutBook name =
-    emptyBook name
+emptyShelf : String -> Shelf
+emptyShelf name =
+    Book.empty name
         |> shelfWith
 
 
@@ -256,3 +123,82 @@ addBook book (Shelf zipper) =
 addShelf : Shelf -> Shelf -> Shelf
 addShelf (Shelf (Zipper childTree _)) (Shelf zipper) =
     Shelf <| Zipper.insert childTree zipper
+
+
+
+-- Book
+
+
+{-| -}
+withFrontCover : Element msg -> Book -> Book
+withFrontCover view book =
+    Book.withFrontCover view book
+
+
+
+-- Build Book
+
+
+{-| -}
+type alias Story a =
+    { label : String
+    , options : List ( String, a )
+    }
+
+
+{-| -}
+type alias IntoBook msg view =
+    { title : String
+    , views : List ( List String, view )
+    , stories : List ( String, List String )
+    , toString : msg -> String
+    }
+
+
+{-| -}
+intoBook : String -> (msg -> String) -> view -> IntoBook msg view
+intoBook title toString view =
+    { title = title
+    , toString = toString
+    , stories = []
+    , views = [ Tuple.pair [] view ]
+    }
+
+
+{-| -}
+buildBook : IntoBook msg (Element msg) -> Book
+buildBook { title, views, toString, stories } =
+    Book.empty title
+        |> Book.setPages
+            (List.map
+                (\( optionLabels, view ) ->
+                    ( List.reverse optionLabels |> String.join "/"
+                    , Element.map (toString >> LogMsg) view
+                    )
+                )
+                views
+                |> Dict.fromList
+            )
+        |> Book.setStories (List.reverse stories |> List.filterMap storyHelp)
+
+
+storyHelp : ( String, List String ) -> Maybe ( String, SelectList String )
+storyHelp ( label, options ) =
+    SelectList.fromList options
+        |> Maybe.map (Tuple.pair label)
+
+
+{-| -}
+addStory : Story a -> IntoBook msg (a -> view) -> IntoBook msg view
+addStory { label, options } { title, views, stories, toString } =
+    { title = title
+    , toString = toString
+    , views =
+        List.lift2
+            (\( optionLabels, view ) ( optionLabel, option ) ->
+                ( optionLabel :: optionLabels, view option )
+            )
+            views
+            options
+    , stories = ( label, List.map Tuple.first options ) :: stories
+    }
