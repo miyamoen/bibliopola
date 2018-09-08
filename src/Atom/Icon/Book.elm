@@ -1,40 +1,18 @@
 module Atom.Icon.Book exposing (Config, view)
 
-import Color.Pallet as Pallet exposing (Pallet(..))
+import Atom.Icon as Icon
 import Element exposing (..)
-import Element.Attributes exposing (..)
-import Element.Util exposing (maybeOnClick)
-import Svg exposing (..)
-import Svg.Attributes exposing (d, viewBox)
-import Types exposing (..)
+import Svg exposing (path)
+import Svg.Attributes exposing (d)
 
 
 type alias Config a msg =
-    { a
-        | pallet : Pallet
-        , onClick : Maybe msg
-        , size : Float
-    }
+    Icon.Config a msg
 
 
-view : Config a msg -> Element (Styles s) (Variation v) msg
-view { pallet, onClick, size } =
-    el None
-        [ inlineStyle
-            [ "fill" => Pallet.css pallet
-            , "cursor"
-                => (Maybe.map (always "pointer") onClick
-                        |> Maybe.withDefault ""
-                   )
-            ]
-        , width <| px size
-        , height <| px size
-        , maybeOnClick onClick
-        ]
-    <|
-        Element.html <|
-            svg [ viewBox "0 0 512 512" ]
-                [ g [] [ path [ d pathString ] [] ] ]
+view : Icon.Config a msg -> Element msg
+view config =
+    Icon.view [ path [ d pathString ] [] ] config
 
 
 pathString : String
