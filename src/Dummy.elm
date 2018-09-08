@@ -1,4 +1,4 @@
-module Dummy exposing (..)
+module Dummy exposing (model, shelf, storyShelf)
 
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
@@ -11,11 +11,9 @@ import SelectList
 import Types exposing (..)
 
 
-model : Model s v
+model : Model
 model =
-    { styles = []
-    , shelf = shelf
-    , route = Route.View [] Dict.empty
+    { shelf = shelf
     , panel =
         SelectList.fromLists []
             StoryPanel
@@ -25,60 +23,69 @@ model =
         , { id = 1, message = "dummy msg" }
         , { id = 0, message = "dummy msg" }
         ]
+    , key = Debug.todo "Key"
     }
 
 
-shelf : Types.Shelf s v
+shelf : Types.Shelf
 shelf =
-    shelfWithoutBook "root"
-        |> Shelf.toggleShelf
-        |> addBook (bookWithoutStory "ham" |> Book.toggle)
+    emptyShelf "root"
+        |> Shelf.updateBook Book.toggleShelf
+        |> addBook (Book.empty "ham" |> Book.toggle)
         |> addShelf
-            (shelfWithoutBook "egg"
+            (emptyShelf "egg"
                 |> addBook
-                    (bookWithoutStory "boiled"
+                    (Book.empty "boiled"
                         |> withFrontCover (text "boiled")
                     )
                 |> addBook
-                    (bookWithoutStory "fried"
+                    (Book.empty "fried"
                         |> withFrontCover (text "fried")
                     )
                 |> addBook
-                    (bookWithoutStory "scrambled"
+                    (Book.empty "scrambled"
                         |> withFrontCover (text "scrambled")
                     )
             )
         |> addShelf
             (shelfWith
-                (bookWithoutStory "spam"
+                (Book.empty "spam"
                     |> withFrontCover (text "spam")
                     |> Book.toggle
                 )
                 |> addShelf
                     (shelfWith
-                        (bookWithoutStory "spamspam"
+                        (Book.empty "spamspam"
                             |> withFrontCover (text "spamspam")
                             |> Book.toggle
                         )
-                        |> addBook (bookWithoutStory "spamspamspam")
+                        |> addBook (Book.empty "spamspamspam")
                     )
             )
 
 
-storyShelf : Types.Shelf s v
+storyShelf : Types.Shelf
 storyShelf =
-    bookWith4 "4Stories"
-        (\a b c d -> text <| String.join ", " [ a, b, c, d ])
-        (Story.fromList "aStory"
-            [ "aStory1", "aStory2", "aStory3", "aStory4", "aStory5" ]
-        )
-        (Story.fromList "bStory"
-            [ "bStory1", "bStory2", "bStory3", "bStory4", "bStory5" ]
-        )
-        (Story.fromList "cStory"
-            [ "cStory1", "cStory2", "cStory3", "cStory4", "cStory5" ]
-        )
-        (Story.fromList "dStory"
-            [ "dStory1", "dStory2", "dStory3", "dStory4", "dStory5" ]
-        )
+    intoBook "4Stories" identity (\a b c d -> text <| String.join ", " [ a, b, c, d ])
+        |> addStory
+            (Story.build identity
+                "aStory"
+                [ "aStory1", "aStory2", "aStory3", "aStory4", "aStory5" ]
+            )
+        |> addStory
+            (Story.build identity
+                "bStory"
+                [ "bStory1", "bStory2", "bStory3", "bStory4", "bStory5" ]
+            )
+        |> addStory
+            (Story.build identity
+                "cStory"
+                [ "cStory1", "cStory2", "cStory3", "cStory4", "cStory5" ]
+            )
+        |> addStory
+            (Story.build identity
+                "dStory"
+                [ "dStory1", "dStory2", "dStory3", "dStory4", "dStory5" ]
+            )
+        |> buildBook
         |> shelfWith

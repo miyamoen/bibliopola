@@ -1,24 +1,24 @@
-module Page.Index exposing (..)
+module Page.Index exposing (shelf)
 
 import Bibliopola exposing (..)
 import Dummy
+import Element
 import Page.Main as Main
-import Styles exposing (styles)
-import Types exposing ((=>), Styles, Variation)
 
 
-shelf : Shelf (Styles s) (Variation v)
+main : Bibliopola.Program
+main =
+    fromShelf shelf
+
+
+shelf : Shelf
 shelf =
-    shelfWithoutBook "Page"
+    emptyShelf "Page"
         |> addBook mainPage
 
 
-mainPage : Book (Styles s) (Variation v)
+mainPage : Book
 mainPage =
-    bookWithoutStory "Main"
-        |> withFrontCover (Main.view Dummy.model)
-
-
-main : Bibliopola.Program (Styles s) (Variation v)
-main =
-    fromShelf styles shelf
+    bookWithFrontCover "Main" <|
+        Element.map (\_ -> "Some event happened.") <|
+            Main.view Dummy.model

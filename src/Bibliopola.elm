@@ -5,7 +5,7 @@ module Bibliopola exposing
     , withFrontCover
     , emptyShelf, shelfWith
     , addBook, addShelf
-    , IntoBook, addStory, buildBook, intoBook
+    , IntoBook, addStory, bookWithFrontCover, buildBook, intoBook
     )
 
 {-| UI Catalog for Elm applications built by style-elements inspired by Storybook
@@ -127,13 +127,19 @@ addShelf (Shelf (Zipper childTree _)) (Shelf zipper) =
 
 
 {-| -}
-withFrontCover : Element msg -> Book -> Book
+withFrontCover : Element String -> Book -> Book
 withFrontCover view book =
     Book.withFrontCover view book
 
 
 
 -- Build Book
+
+
+bookWithFrontCover : String -> Element String -> Book
+bookWithFrontCover title view =
+    Book.empty title
+        |> Book.withFrontCover view
 
 
 {-| -}

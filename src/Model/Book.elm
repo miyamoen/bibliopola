@@ -113,14 +113,12 @@ frontCover book =
     Dict.get "frontCover" (pages book)
 
 
-withFrontCover : Element msg -> Book -> Book
+withFrontCover : Element String -> Book -> Book
 withFrontCover view book =
     let
         pages_ =
             pages book
-                |> Dict.insert
-                    "frontCover"
-                    (Element.map (Debug.toString >> LogMsg) view)
+                |> Dict.insert "frontCover" (Element.map LogMsg view)
     in
     setPages pages_ book
 
