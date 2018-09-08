@@ -1,12 +1,9 @@
 module Atom.Icon exposing (Config, view)
 
-import Color
 import Element exposing (..)
 import Element.Util exposing (..)
-import Html.Attributes as Attrs
 import Svg exposing (..)
 import Svg.Attributes exposing (d, viewBox)
-import Types exposing (..)
 
 
 type alias Config a msg =

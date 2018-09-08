@@ -1,61 +1,60 @@
 module Atom.Toggle exposing (Config, view)
 
+import Atom.Constant exposing (..)
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
+import Element.Background as Background
+import Element.Border as Border
 import Element.Events as Events
-import Types exposing (..)
+import Element.Font as Font
+import Element.Util exposing (style)
 
 
 type alias Config a msg =
-    { a | name : String, onClick : msg }
+    { a | label : String, onClick : Bool -> msg }
 
 
-view : Config a msg -> Bool -> Element (Styles s) v msg
-view { name, onClick } on =
-    row None
-        [ spacing 5
-        , verticalCenter
-        , Events.onClick onClick
-        , inlineStyle [ "cursor" => "pointer" ]
+view : Config a msg -> Bool -> Element msg
+view { label, onClick } on =
+    row
+        [ spacing <| space 1
+        , centerY
+        , Events.onClick <| onClick <| not on
+        , pointer
         ]
-        [ el Text [] <| text name
-        , el None
-            [ padding 2
-            , inlineStyle
-                [ "border" => "2px solid rgba(138, 142, 180, 0.22)"
-                , "border-radius" => "20px"
-                ]
+        [ el [ Font.size <| fontSize 2 ] <| text label
+        , el
+            [ padding <| space -1
+            , Border.width <| borderWidth 1
+            , Border.color Color.alphaGrey
+            , Border.rounded 20
             ]
           <|
-            el None
+            el
                 [ width <| px 40
                 , height <| px 16
-                , inlineStyle
-                    [ "border-radius" => "20px"
-                    , "transition" => "background-color .5s"
-                    , "background-color"
-                        => (if on then
-                                "rgb(139, 190, 236)"
-                            else
-                                "rgb(255,255,255)"
-                           )
-                    ]
+                , Border.rounded 20
+                , Background.color <|
+                    if on then
+                        Color.greyBlue
+
+                    else
+                        Color.white
+                , style "transition" "background-color .5s"
                 ]
             <|
-                el None
+                el
                     [ width <| px 16
                     , height <| px 16
-                    , inlineStyle
-                        [ "border-radius" => "8px"
-                        , "background-color" => "rgb(45, 129, 204)"
-                        , "transition" => "transform .2s"
-                        , "transform"
-                            => (if on then
-                                    "translateX(24px)"
-                                else
-                                    "translateX(0px)"
-                               )
-                        ]
+                    , Border.rounded 8
+                    , Background.color Color.blue
+                    , style "transition" "transform .2s"
+                    , style "transform" <|
+                        if on then
+                            "translateX(24px)"
+
+                        else
+                            "translateX(0px)"
                     ]
-                    empty
+                    none
         ]
