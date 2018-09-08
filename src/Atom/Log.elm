@@ -1,4 +1,4 @@
-module Atom.LogLine exposing (view)
+module Atom.Log exposing (view)
 
 import Atom.Constant exposing (..)
 import Color
