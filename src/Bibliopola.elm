@@ -52,10 +52,7 @@ import Tree
 import Tree.Zipper as Zipper exposing (Zipper(..))
 import Types exposing (..)
 import Update exposing (..)
-
-
-
--- import Update exposing (update)
+import View exposing (view)
 
 
 {-| -}
@@ -87,7 +84,7 @@ fromBook book =
 fromShelf : Shelf -> Program
 fromShelf shelf =
     Browser.application
-        { view = \_ -> { title = "Bibliopola", body = [ Html.text "Compiled!" ] }
+        { view = \model -> { title = "Bibliopola", body = [ view model ] }
         , init = init shelf
         , update = update
         , subscriptions = always Sub.none

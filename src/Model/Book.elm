@@ -10,6 +10,7 @@ module Model.Book exposing
     , setStories
     , shelfIsOpen
     , stories
+    , storiesPage
     , title
     , toggle
     , toggleShelf
@@ -90,6 +91,15 @@ setPages newPages (Book book) =
 
 currentPage : Book -> Maybe (Element Msg)
 currentPage book =
+    if isOpen book then
+        storiesPage book
+
+    else
+        frontCover book
+
+
+storiesPage : Book -> Maybe (Element Msg)
+storiesPage book =
     Dict.get
         (selectedStory book
             |> List.map Tuple.second

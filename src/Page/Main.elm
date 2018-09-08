@@ -1,40 +1,31 @@
-module Page.Main exposing (..)
+module Page.Main exposing (view)
 
+-- import Organism.Panel as Panel
+-- import Organism.Shelf as Shelf
+
+import Atom.Constant exposing (..)
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
+import Element.Background as Background
+import Element.Border as Border
+import Element.Events as Events
+import Element.Font as Font
 import Model.Shelf as Shelf
 import Organism.BookPage as BookPage
-import Organism.Panel as Panel
-import Organism.Shelf as Shelf
-import Route exposing (Route(..))
 import Types exposing (..)
 
 
-view : Model s v -> BibliopolaElement s v
+view : Model -> Element Msg
 view model =
-    namedGrid None
-        [ padding 5, spacing 5, height <| percent 100 ]
-        { columns = [ px 200, fill ]
-        , rows =
-            [ fill => [ span 1 "Shelf", span 1 "BookPage" ]
-            , px 210 => [ spanAll "Panel" ]
+    column
+        [ padding <| space 1, spacing <| space 1 ]
+        [ row []
+            [ el [ scrollbars, width <| px 200 ] <|
+                --Shelf.view model
+                text "Shelf tree todo"
+            , BookPage.view model
             ]
-        , cells =
-            [ named "Shelf" <|
-                el None [ scrollbars ] <|
-                    Shelf.view model
-            , named "BookPage" <|
-                case model.route of
-                    BadUrl bad ->
-                        text <| "BadUrl : " ++ bad
-
-                    View paths _ ->
-                        if List.isEmpty paths && Shelf.hasNoPage model.shelf then
-                            text "Start Page"
-                        else
-                            BookPage.view paths model
-            , named "Panel" <|
-                el None [ yScrollbar, clipX, height <| percent 100 ] <|
-                    Panel.view model
-            ]
-        }
+        , el [ scrollbarY, clipX, height <| px 210 ] <|
+            -- Panel.view model
+            text "Panel Todo"
+        ]

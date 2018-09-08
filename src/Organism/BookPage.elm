@@ -1,28 +1,16 @@
 module Organism.BookPage exposing (view)
 
+import Atom.Constant exposing (fontSize)
 import Element exposing (..)
-import Lazy
+import Element.Font as Font
 import Model.Book as Book
 import Model.Shelf as Shelf
-import Route exposing (Path, Query)
-import Types exposing (..)
+import Types exposing (Model, Msg)
 
 
-view : Path -> Model s v -> BibliopolaElement s v
-view path model =
-    let
-        book =
-            model.shelf
-                |> Shelf.takeBook path
-
-        page =
-            if Maybe.map Book.isStoryMode book |> Maybe.withDefault False then
-                Maybe.andThen Book.currentPage book
-            else
-                Maybe.andThen Book.frontCover book
-    in
-    page
-        |> Maybe.map Lazy.force
-        |> Maybe.map (Element.mapAll identity Child ChildVar)
+view : Model -> Element Msg
+view { shelf } =
+    Shelf.book shelf
+        |> Book.currentPage
         |> Maybe.withDefault
-            (textLayout Text [] [ text "PAGE NOT FOUND" ])
+            (paragraph [ Font.size <| fontSize 2 ] [ text "PAGE NOT FOUND" ])

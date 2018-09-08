@@ -1,13 +1,11 @@
-module View exposing (..)
+module View exposing (view)
 
-import Element exposing (..)
+import Element exposing (layout)
 import Html exposing (Html)
 import Page.Main
-import Styles exposing (styleSheet)
-import Types exposing (..)
+import Types exposing (Model, Msg)
 
 
-view : Model child childVar -> Html (Msg child childVar)
+view : Model -> Html Msg
 view model =
-    viewport (styleSheet model.styles) <|
-        Page.Main.view model
+    layout [] <| Page.Main.view model
