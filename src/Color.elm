@@ -1,4 +1,4 @@
-module Color exposing (alphaGrey, black, blue, colors, grey, toCss, white)
+module Color exposing (alphaGrey, black, blue, colors, grey, greyBlue, toCss, white)
 
 import Element exposing (Color, rgb, rgba, toRgb)
 
@@ -44,6 +44,11 @@ white =
 blue : Color
 blue =
     rgb 45 129 204
+
+
+greyBlue : Color
+greyBlue =
+    rgb 139 190 236
 
 
 grey : Color

@@ -1,35 +1,49 @@
 module Atom.LogLine exposing (view)
 
+import Atom.Constant exposing (..)
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
-import Types exposing (..)
+import Element.Border as Border
+import Element.Font as Font
+import Types exposing (Log)
 
 
-view : Log -> Element (Styles s) v msg
+view : Log -> Element msg
 view { id, message } =
-    row None
-        [ spacing 5
-        , paddingBottom 5
-        , inlineStyle
-            [ "border-bottom" => borderCss ]
+    row
+        [ spacing <| space 1
+        , paddingEach
+            { top = 0
+            , right = 0
+            , bottom = space 1
+            , left = 0
+            }
+        , Border.color Color.alphaGrey
+        , Border.widthEach
+            { bottom = borderWidth 1
+            , left = 0
+            , right = 0
+            , top = 0
+            }
         ]
-        [ el None
+        [ el
             [ width <| px 50
-            , paddingRight 5
-            , inlineStyle
-                [ "text-align" => "right"
-                , "border-right" => borderCss
-                ]
+            , paddingEach
+                { top = 0
+                , right = space 1
+                , bottom = 0
+                , left = 0
+                }
+            , Font.alignRight
+            , Border.widthEach
+                { bottom = 0
+                , left = 0
+                , right = borderWidth 1
+                , top = 0
+                }
             ]
           <|
             text <|
-                toString id
-        , paragraph None
-            []
-            [ text message ]
+                String.fromInt id
+        , paragraph [] [ text message ]
         ]
-
-
-borderCss : String
-borderCss =
-    "2px solid rgba(138, 142, 180, 0.22)"
