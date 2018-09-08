@@ -48,7 +48,7 @@ blue =
 
 grey : Color
 grey =
-    rgb 100 100 100
+    rgb 97 99 116
 
 
 alphaGrey : Color

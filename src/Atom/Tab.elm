@@ -1,37 +1,44 @@
 module Atom.Tab exposing (Config, view)
 
+import Atom.Constant exposing (borderWidth, fontSize, roundLength)
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
+import Element.Background as Background
+import Element.Border as Border
 import Element.Events as Events
-import Types exposing (..)
+import Element.Font as Font
 
 
 type alias Config a msg =
     { a | selected : Bool, onClick : msg }
 
 
-view : Config a msg -> String -> Element (Styles s) v msg
+view : Config a msg -> String -> Element msg
 view { selected, onClick } label =
-    column Text
-        [ paddingXY 8 5
-        , width <| fillPortion 1
-        , center
-        , scrollbars
-        , if selected then
-            classList []
-          else
-            Events.onClick <| onClick
-        , inlineStyle
-            [ "cursor" => "pointer"
-            , "border-radius" => "5px 5px 0px 0px"
-            , "border-color" => "rgb(135, 135, 150)"
-            , "border-width" => "2px 2px 0px 2px"
-            , "background-color"
-                => (if selected then
-                        "rgb(240, 240, 240)"
-                    else
-                        "rgb(97, 99, 116)"
-                   )
-            ]
+    el
+        [ pointer
+        , Font.center
+        , Font.size <| fontSize 2
+        , Events.onClick <| onClick
+        , Background.color <|
+            if selected then
+                Color.white
+
+            else
+                Color.grey
+        , Border.color Color.alphaGrey
+        , Border.widthEach
+            { bottom = 0
+            , left = borderWidth 1
+            , right = borderWidth 1
+            , top = borderWidth 1
+            }
+        , Border.roundEach
+            { topLeft = roundLength 1
+            , topRight = roundLength 1
+            , bottomLeft = 0
+            , bottomRight = 0
+            }
         ]
-        [ text label ]
+    <|
+        text label
