@@ -8,6 +8,7 @@ module Types exposing
     , ParsedRoute
     , Shelf(..)
     , ShelfPath
+    , SubModel
     )
 
 import Browser exposing (UrlRequest)
@@ -30,10 +31,14 @@ type Msg
 
 
 type alias Model =
-    { shelf : Shelf
-    , panel : Panel
-    , logs : List Log
-    , key : Key
+    SubModel { key : Key }
+
+
+type alias SubModel a =
+    { a
+        | shelf : Shelf
+        , panel : Panel
+        , logs : List Log
     }
 
 

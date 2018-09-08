@@ -11,7 +11,7 @@ import SelectList
 import Types exposing (..)
 
 
-model : Model
+model : SubModel {}
 model =
     { shelf = shelf
     , panel =
@@ -23,7 +23,6 @@ model =
         , { id = 1, message = "dummy msg" }
         , { id = 0, message = "dummy msg" }
         ]
-    , key = Debug.todo "Key"
     }
 
 

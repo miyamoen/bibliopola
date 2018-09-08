@@ -15,7 +15,7 @@ import Organism.BookPage as BookPage
 import Types exposing (..)
 
 
-view : Model -> Element Msg
+view : SubModel a -> Element Msg
 view model =
     column
         [ padding <| space 1, spacing <| space 1 ]
