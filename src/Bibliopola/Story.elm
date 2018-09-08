@@ -1,30 +1,18 @@
-module Bibliopola.Story
-    exposing
-        ( addOption
-        , bool
-        , fromList
-        , fromListWith
-        , map
-        )
+module Bibliopola.Story exposing (addOption, bool, build, map)
 
 import Bibliopola exposing (Story)
 
 
-fromList : String -> List a -> Story a
-fromList label options =
-    fromListWith Basics.toString label options
-
-
-fromListWith : (a -> String) -> String -> List a -> Story a
-fromListWith toString label options =
-    { label = label
-    , options = List.map (\option -> ( toString option, option )) options
+build : (a -> String) -> String -> List a -> Story a
+build toOptionLabel storyLabel options =
+    { label = storyLabel
+    , options = List.map (\option -> ( toOptionLabel option, option )) options
     }
 
 
 addOption : String -> a -> Story a -> Story a
-addOption label a story =
-    { story | options = ( label, a ) :: story.options }
+addOption optionLabel a story =
+    { story | options = ( optionLabel, a ) :: story.options }
 
 
 map : (a -> b) -> Story a -> Story b
@@ -36,4 +24,6 @@ map tagger { label, options } =
 
 bool : String -> Story Bool
 bool label =
-    fromList label [ True, False ]
+    { label = label
+    , options = [ Tuple.pair "true" True, Tuple.pair "false" False ]
+    }

@@ -12,6 +12,7 @@ find predicate list =
         first :: rest ->
             if predicate first then
                 Just first
+
             else
                 find predicate rest
 

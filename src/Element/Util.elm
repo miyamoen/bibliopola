@@ -1,15 +1,31 @@
-module Element.Util exposing (..)
+module Element.Util exposing (attributeWhenJust, onClickWhenJust, style, svgColor)
 
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
 import Element.Events exposing (..)
+import Html.Attributes as Attrs exposing (classList)
 
 
-maybeOnClick : Maybe msg -> Attribute v msg
-maybeOnClick maybe =
+style : String -> String -> Attribute msg
+style key value =
+    htmlAttribute <| Attrs.style key value
+
+
+svgColor : Color -> Attribute msg
+svgColor color =
+    style "fill" <| Color.toCss color
+
+
+attributeWhenJust : Maybe a -> (a -> Attribute msg) -> Attribute msg
+attributeWhenJust maybe toAttr =
     case maybe of
-        Just msg ->
-            onClick msg
+        Just a ->
+            toAttr a
 
         Nothing ->
-            classList []
+            htmlAttribute <| classList []
+
+
+onClickWhenJust : Maybe msg -> Attribute msg
+onClickWhenJust maybe =
+    attributeWhenJust maybe onClick
