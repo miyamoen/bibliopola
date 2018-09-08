@@ -5,11 +5,11 @@ import Element exposing (..)
 import Element.Font as Font
 import Model.Book as Book
 import Model.Shelf as Shelf
-import Types exposing (Msg, SubModel)
+import Types exposing (Msg, Shelf)
 
 
-view : SubModel a -> Element Msg
-view { shelf } =
+view : Shelf -> Element Msg
+view shelf =
     Shelf.book shelf
         |> Book.currentPage
         |> Maybe.withDefault

@@ -1,7 +1,6 @@
 module Page.Main exposing (view)
 
 -- import Organism.Panel as Panel
--- import Organism.Shelf as Shelf
 
 import Atom.Constant exposing (..)
 import Color
@@ -12,6 +11,7 @@ import Element.Events as Events
 import Element.Font as Font
 import Model.Shelf as Shelf
 import Organism.BookPage as BookPage
+import Organism.ShelfTree as ShelfTree
 import Types exposing (..)
 
 
@@ -19,11 +19,10 @@ view : SubModel a -> Element Msg
 view model =
     column
         [ padding <| space 1, spacing <| space 1 ]
-        [ row []
+        [ row [ height <| px 400 ]
             [ el [ scrollbars, width <| px 200 ] <|
-                --Shelf.view model
-                text "Shelf tree todo"
-            , BookPage.view model
+                ShelfTree.view model.shelf
+            , BookPage.view model.shelf
             ]
         , el [ scrollbarY, clipX, height <| px 210 ] <|
             -- Panel.view model
