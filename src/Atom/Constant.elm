@@ -1,4 +1,10 @@
-module Atom.Constant exposing (borderWidth, fontSize, roundLength, space)
+module Atom.Constant exposing
+    ( borderWidth
+    , fontSize
+    , iconSize
+    , roundLength
+    , space
+    )
 
 import Element exposing (modular)
 
@@ -21,3 +27,8 @@ roundLength rescale =
 space : Int -> Int
 space rescale =
     round <| modular 5 1.25 rescale
+
+
+iconSize : Int -> Int
+iconSize rescale =
+    round <| modular 16 1.75 rescale

@@ -6,6 +6,7 @@ module Atom.Icon.Caret exposing
     , view
     )
 
+import Atom.Constant exposing (iconSize)
 import Color
 import Element exposing (..)
 import Element.Util exposing (..)
@@ -58,8 +59,8 @@ type alias Config a msg =
 view : Config a msg -> Direction -> Element msg
 view { color, onClick, size } direction =
     el
-        [ width <| px size
-        , height <| px size
+        [ width <| px <| iconSize size
+        , height <| px <| iconSize size
         , svgColor color
         , style "transition-property" "transform"
         , style "transition-duration" "0.2s"

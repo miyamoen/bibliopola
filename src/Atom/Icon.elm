@@ -1,5 +1,6 @@
 module Atom.Icon exposing (Config, view)
 
+import Atom.Constant exposing (iconSize)
 import Element exposing (..)
 import Element.Util exposing (..)
 import Svg exposing (..)
@@ -17,8 +18,8 @@ type alias Config a msg =
 view : List (Svg msg) -> Config a msg -> Element msg
 view svgDoms { onClick, size, color } =
     el
-        [ width <| px size
-        , height <| px size
+        [ width <| px <| iconSize size
+        , height <| px <| iconSize size
         , svgColor color
         , attributeWhenJust onClick (always pointer)
         , onClickWhenJust onClick

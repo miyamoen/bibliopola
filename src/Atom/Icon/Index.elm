@@ -5,6 +5,7 @@ import Atom.Icon.Ban as Ban
 import Atom.Icon.Book as Book
 import Atom.Icon.Books as Books
 import Atom.Icon.Caret as Caret exposing (directionToString)
+import Atom.Icon.RuledLine as RuledLine exposing (RuledLine(..), ruledLines)
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Color
@@ -23,6 +24,7 @@ shelf =
         |> addBook ban
         |> addBook book
         |> addBook books
+        |> addBook ruledLine
 
 
 caret : Book
@@ -61,7 +63,7 @@ defaultConfig : Icon.Config {} String
 defaultConfig =
     { color = Color.grey
     , onClick = Just "clicked"
-    , size = 256
+    , size = 12
     }
 
 
@@ -80,7 +82,8 @@ clickStory =
 
 sizeStory : Story Int
 sizeStory =
-    Story.build String.fromInt "size" [ 256, 0, 20, 50, 100, 512, 1024, -256 ]
+    Story.build String.fromInt "size" <|
+        List.range -5 10
 
 
 ban : Book
@@ -111,3 +114,16 @@ books =
         |> addStory clickStory
         |> buildBook
         |> withFrontCover (Books.view defaultConfig)
+
+
+ruledLine : Book
+ruledLine =
+    let
+        view size ruled =
+            RuledLine.view { size = size } ruled
+    in
+    intoBook "RuledLine" identity view
+        |> addStory sizeStory
+        |> addStory (Story "RuledLine" ruledLines)
+        |> buildBook
+        |> withFrontCover (RuledLine.view defaultConfig Vertical)
