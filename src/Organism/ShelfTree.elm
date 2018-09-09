@@ -12,7 +12,8 @@ view : Shelf -> Element Msg
 view shelf =
     column [ spacing <| space 1 ] <|
         List.map item <|
-            Shelf.openAll shelf
+            Shelf.openAll <|
+                Shelf.root shelf
 
 
 item : Shelf -> ( String, Element Msg )

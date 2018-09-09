@@ -5,26 +5,31 @@ import Parser exposing (..)
 
 path : Parser (List String)
 path =
-    sequence
-        { start = "#/"
-        , separator = "/"
-        , end = ""
-        , spaces = succeed ()
-        , item = string
-        , trailing = Optional
-        }
+    oneOf
+        [ succeed [] |. chompIf ((==) '/')
+        , sequence
+            { start = ""
+            , separator = "/"
+            , end = ""
+            , spaces = succeed ()
+            , item = string
+            , trailing = Optional
+            }
+        ]
+        |. end
 
 
 query : Parser (List ( String, String ))
 query =
     sequence
-        { start = "?"
+        { start = ""
         , separator = "&"
         , end = ""
         , spaces = succeed ()
         , item = pair
         , trailing = Forbidden
         }
+        |. end
 
 
 pair : Parser ( String, String )
@@ -39,5 +44,10 @@ string : Parser String
 string =
     getChompedString <|
         succeed ()
-            |. chompIf Char.isAlpha
-            |. chompWhile (\c -> Char.isAlphaNum c || c == '_' || c == '-')
+            |. chompIf validChar
+            |. chompWhile validChar
+
+
+validChar : Char -> Bool
+validChar c =
+    Char.isAlphaNum c || c == '_' || c == '-'

@@ -5,6 +5,7 @@ module Model.Book exposing
     , hasNoPage
     , isOpen
     , pages
+    , routeQuery
     , selectedStory
     , setPages
     , setStories
@@ -47,6 +48,12 @@ turn query (Book book) =
                     )
                     book.stories
         }
+
+
+routeQuery : Book -> List ( String, String )
+routeQuery (Book book) =
+    ( "isOpen", Route.fromBool book.isOpen )
+        :: List.map (Tuple.mapSecond SelectList.selected) book.stories
 
 
 

@@ -1,9 +1,10 @@
-module Route exposing (fromBool, parse, toBool)
+module Route exposing (fromBool, parse, toBool, url)
 
 import Parser
 import Route.Parser as Parser
 import Types exposing (ParsedRoute)
 import Url exposing (Url)
+import Url.Builder as Builder exposing (Root(..))
 
 
 parse : Url -> Maybe ParsedRoute
@@ -30,6 +31,14 @@ parse { query, fragment } =
                     Just []
     in
     Maybe.map2 ParsedRoute path queryList
+
+
+url : ParsedRoute -> String
+url { path, query } =
+    Builder.custom Relative
+        []
+        (List.map (\( k, v ) -> Builder.string k v) query)
+        (String.join "/" path |> Just)
 
 
 fromBool : Bool -> String

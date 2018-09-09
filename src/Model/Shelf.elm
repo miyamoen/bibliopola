@@ -10,6 +10,7 @@ module Model.Shelf exposing
     , path
     , pathString
     , root
+    , route
     , updateBook
     )
 
@@ -54,10 +55,10 @@ openAll ((Shelf zipper) as shelf) =
 
 
 findPage : ParsedRoute -> Shelf -> Maybe Shelf
-findPage route shelf =
+findPage current shelf =
     root shelf
-        |> open route.path
-        |> Maybe.map (updateBook (Book.turn route.query))
+        |> open current.path
+        |> Maybe.map (updateBook (Book.turn current.query))
 
 
 attempt : (Shelf -> Maybe Shelf) -> Shelf -> Shelf
@@ -84,6 +85,11 @@ depth : Shelf -> Int
 depth (Shelf zipper) =
     Zipper.breadcrumbs zipper
         |> List.length
+
+
+route : Shelf -> ParsedRoute
+route shelf =
+    { path = path shelf, query = mapBook Book.routeQuery shelf }
 
 
 path : Shelf -> ShelfPath
