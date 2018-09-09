@@ -75,20 +75,21 @@ view { color, onClick, size } direction =
                 [ polygon [ points pointsString ] [] ]
 
 
-directionAngle : Direction -> number
+directionAngle : Direction -> Float
 directionAngle direction =
-    case direction of
-        Up ->
-            0
+    degrees <|
+        case direction of
+            Up ->
+                0
 
-        Down ->
-            180
+            Down ->
+                180
 
-        Right ->
-            90
+            Right ->
+                90
 
-        Left ->
-            -90
+            Left ->
+                -90
 
 
 pointsString : String
