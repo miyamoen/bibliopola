@@ -4,7 +4,7 @@ module Model.Shelf exposing
     , depth
     , findPage
     , hasShelves
-    , mapCurrentBook
+    , mapBook
     , open
     , openAll
     , path
@@ -43,7 +43,7 @@ open shelfPath (Shelf zipper) =
 
 openAll : Shelf -> List Shelf
 openAll ((Shelf zipper) as shelf) =
-    if not <| mapCurrentBook Book.shelfIsOpen shelf then
+    if not <| mapBook Book.shelfIsOpen shelf then
         [ shelf ]
 
     else
@@ -65,14 +65,14 @@ attempt f shelf =
     f shelf |> Maybe.withDefault shelf
 
 
-mapCurrentBook : (Book -> a) -> Shelf -> a
-mapCurrentBook f shelf =
+mapBook : (Book -> a) -> Shelf -> a
+mapBook f shelf =
     book shelf |> f
 
 
 updateBook : (Book -> Book) -> Shelf -> Shelf
 updateBook f (Shelf zipper) =
-    Shelf <| Zipper.map f zipper
+    Shelf <| Zipper.updateItem f zipper
 
 
 hasShelves : Shelf -> Bool
