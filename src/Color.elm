@@ -1,6 +1,6 @@
 module Color exposing (alphaGrey, black, blue, colors, grey, greyBlue, toCss, white)
 
-import Element exposing (Color, rgb, rgba, toRgb)
+import Element exposing (Color, rgb255, rgba255, toRgb)
 
 
 toCss : Color -> String
@@ -33,29 +33,29 @@ colors =
 
 black : Color
 black =
-    rgb 30 30 30
+    rgb255 30 30 30
 
 
 white : Color
 white =
-    rgb 230 230 230
+    rgb255 230 230 230
 
 
 blue : Color
 blue =
-    rgb 45 129 204
+    rgb255 45 129 204
 
 
 greyBlue : Color
 greyBlue =
-    rgb 139 190 236
+    rgb255 139 190 236
 
 
 grey : Color
 grey =
-    rgb 97 99 116
+    rgb255 97 99 116
 
 
 alphaGrey : Color
 alphaGrey =
-    rgba 138 142 180 0.22
+    rgba255 138 142 180 0.22
