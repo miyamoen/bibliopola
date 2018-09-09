@@ -74,4 +74,4 @@ icon shelf =
         Book.view
     )
     <|
-        { size = iconSize 1, color = Color.black, onClick = Nothing }
+        { size = 1, color = Color.black, onClick = Nothing }
