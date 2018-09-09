@@ -40,7 +40,7 @@ caret =
                 ]
 
         config =
-            { size = 256
+            { size = 5
             , color = Color.grey
             , onClick = Just (\dir -> directionToString dir ++ " clicked")
             }
@@ -63,7 +63,7 @@ defaultConfig : Icon.Config {} String
 defaultConfig =
     { color = Color.grey
     , onClick = Just "clicked"
-    , size = 12
+    , size = 5
     }
 
 

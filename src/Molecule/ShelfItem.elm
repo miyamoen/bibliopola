@@ -19,13 +19,16 @@ view shelf =
     row
         [ spacing <| space 1
         , onClick <| SetShelf <| Shelf.updateBook Book.toggleShelf shelf
+        , pointer
         ]
-        [ row [] <| ruledLine shelf
-        , icon shelf
-        , el [ Font.size <| fontSize 2 ] <|
-            text <|
-                Shelf.mapCurrentBook Book.title shelf
-        ]
+    <|
+        ruledLine shelf
+            ++ [ caret shelf
+               , icon shelf
+               , el [ Font.size <| fontSize 2 ] <|
+                    text <|
+                        Shelf.mapBook Book.title shelf
+               ]
 
 
 ruledLine : Shelf -> List (Element msg)
@@ -36,19 +39,15 @@ ruledLine shelf =
     in
     case depth of
         0 ->
-            [ caret shelf ]
+            []
 
         1 ->
-            [ RuledLine.view { size = 1 } RuledLine.VerticalRight
-            , caret shelf
-            ]
+            [ RuledLine.view { size = 1 } RuledLine.VerticalRight ]
 
         _ ->
             List.repeat (depth - 1)
                 (RuledLine.view { size = 1 } RuledLine.Vertical)
-                ++ [ RuledLine.view { size = 1 } RuledLine.VerticalRight
-                   , caret shelf
-                   ]
+                ++ [ RuledLine.view { size = 1 } RuledLine.VerticalRight ]
 
 
 caret : Shelf -> Element msg
@@ -58,7 +57,7 @@ caret shelf =
 
     else
         Caret.view { size = 1, color = Color.grey, onClick = Nothing } <|
-            if Shelf.mapCurrentBook Book.shelfIsOpen shelf then
+            if Shelf.mapBook Book.shelfIsOpen shelf then
                 Caret.Down
 
             else
@@ -74,4 +73,4 @@ icon shelf =
         Book.view
     )
     <|
-        { size = 1, color = Color.black, onClick = Nothing }
+        { size = 1, color = Color.grey, onClick = Nothing }
