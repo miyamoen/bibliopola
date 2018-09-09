@@ -30,35 +30,43 @@ view { size } ruledLine =
         unit =
             iconSize size
     in
-    el [ width <| px unit, height <| px unit, Border.color alphaGrey ] <|
+    el [ width <| px unit, height <| px unit ] <|
         case ruledLine of
             Vertical ->
                 el
-                    [ width <| px <| unit // 2
+                    [ width <| px <| unit // 2 + borderWidth // 2
+                    , height fill
                     , alignLeft
                     , Border.widthEach { zero | right = borderWidth }
+                    , Border.color alphaGrey
                     ]
                     none
 
             Horizontal ->
                 el
-                    [ height <| px <| unit // 2
+                    [ height <| px <| unit // 2 + borderWidth // 2
+                    , width fill
                     , alignTop
                     , Border.widthEach { zero | bottom = borderWidth }
+                    , Border.color alphaGrey
                     ]
                     none
 
             VerticalRight ->
-                row []
+                row [ width fill, height fill ]
                     [ el
-                        [ width <| px <| unit // 2
+                        [ width <| px <| unit // 2 + borderWidth // 2
+                        , height fill
                         , Border.widthEach { zero | right = borderWidth }
+                        , Border.color alphaGrey
                         ]
                         none
                     , el
-                        [ height <| px <| unit // 2
+                        [ height <| px <| unit // 2 + borderWidth // 2
+                        , width fill
                         , alignTop
                         , Border.widthEach { zero | bottom = borderWidth }
+                        , Border.color alphaGrey
                         ]
                         none
                     ]
