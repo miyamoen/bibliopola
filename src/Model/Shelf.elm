@@ -43,7 +43,7 @@ open shelfPath (Shelf zipper) =
 
 openAll : Shelf -> List Shelf
 openAll ((Shelf zipper) as shelf) =
-    if not <| mapCurrentBook Book.isOpen shelf then
+    if not <| mapCurrentBook Book.shelfIsOpen shelf then
         [ shelf ]
 
     else
