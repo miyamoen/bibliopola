@@ -12,35 +12,15 @@ view : Log -> Element msg
 view { id, message } =
     row
         [ spacing <| space 1
-        , paddingEach
-            { top = 0
-            , right = 0
-            , bottom = space 1
-            , left = 0
-            }
+        , paddingEach { zero | bottom = space 1 }
         , Border.color Color.alphaGrey
-        , Border.widthEach
-            { bottom = borderWidth 1
-            , left = 0
-            , right = 0
-            , top = 0
-            }
+        , Border.widthEach { zero | bottom = borderWidth 1 }
         ]
         [ el
             [ width <| px 50
-            , paddingEach
-                { top = 0
-                , right = space 1
-                , bottom = 0
-                , left = 0
-                }
+            , paddingEach { zero | right = space 1 }
             , Font.alignRight
-            , Border.widthEach
-                { bottom = 0
-                , left = 0
-                , right = borderWidth 1
-                , top = 0
-                }
+            , Border.widthEach { zero | right = borderWidth 1 }
             ]
           <|
             text <|
