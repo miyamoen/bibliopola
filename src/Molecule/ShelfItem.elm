@@ -11,24 +11,24 @@ import Element.Events exposing (onClick)
 import Element.Font as Font
 import Model.Book as Book
 import Model.Shelf as Shelf
+import Route
 import Types exposing (Msg(..), Shelf)
 
 
 view : Shelf -> Element Msg
 view shelf =
-    row
-        [ spacing <| space 1
-        , onClick <| SetShelf <| Shelf.updateBook Book.toggleShelf shelf
-        , pointer
-        ]
-    <|
-        ruledLine shelf
-            ++ [ caret shelf
-               , icon shelf
-               , el [ Font.size <| fontSize 2 ] <|
-                    text <|
-                        Shelf.mapBook Book.title shelf
-               ]
+    link [ onClick <| SetShelf <| Shelf.updateBook Book.toggleShelf shelf ]
+        { url = Shelf.route shelf |> Route.url
+        , label =
+            row [ spacing <| space 1, pointer ] <|
+                ruledLine shelf
+                    ++ [ caret shelf
+                       , icon shelf
+                       , el [ Font.size <| fontSize 2 ] <|
+                            text <|
+                                Shelf.mapBook Book.title shelf
+                       ]
+        }
 
 
 ruledLine : Shelf -> List (Element msg)
