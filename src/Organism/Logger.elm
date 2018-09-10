@@ -1,23 +1,23 @@
-module Organism.Logger exposing (..)
+module Organism.Logger exposing (view)
 
-import Atom.Ban as Ban
-import Atom.LogLine as LogLine
-import Color.Pallet as Pallet exposing (Pallet(..))
+import Atom.Constant exposing (space)
+import Atom.Icon.Ban as Ban
+import Atom.Log as Log
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
 import Element.Keyed as Keyed
 import Types exposing (..)
 
 
-view : List Log -> BibliopolaElement s v
+view : List Log -> Element Msg
 view logs =
-    row None
-        [ spacing 5 ]
+    row
+        [ spacing <| space 1 ]
         [ Ban.view
             { onClick = Just ClearLogs
-            , pallet = Black
-            , size = 20
+            , color = Color.black
+            , size = 2
             }
-        , Keyed.column None [ spacing 5, width fill ] <|
-            List.map (\log -> toString log.id => LogLine.view log) logs
+        , Keyed.column [ spacing <| space 1, width fill ] <|
+            List.map (\log -> ( String.fromInt log.id, Log.view log )) logs
         ]
