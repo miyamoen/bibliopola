@@ -17,7 +17,7 @@ model =
     , panel =
         SelectList.fromLists []
             StoryPanel
-            [ MsgLoggerPanel, AuthorPanel, StoryPanel, StoryPanel, StoryPanel ]
+            [ MsgLoggerPanel, CreditPanel, StoryPanel, StoryPanel, StoryPanel ]
     , logs =
         [ { id = 2, message = "dummy msg" }
         , { id = 1, message = "dummy msg" }

@@ -61,7 +61,7 @@ init shelf _ url key =
         , panel =
             SelectList.fromLists []
                 StoryPanel
-                [ MsgLoggerPanel, AuthorPanel ]
+                [ MsgLoggerPanel, CreditPanel ]
         , logs = []
         , key = key
         }

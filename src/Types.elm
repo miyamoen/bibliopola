@@ -67,7 +67,7 @@ type alias Panel =
 type PanelItem
     = StoryPanel
     | MsgLoggerPanel
-    | AuthorPanel
+    | CreditPanel
 
 
 type alias Log =
