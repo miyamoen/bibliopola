@@ -1,30 +1,22 @@
-module Molecule.Tabs exposing (..)
+module Molecule.Tabs exposing (view)
 
+import Atom.Constant exposing (space)
 import Atom.Tab as Tab
 import Element exposing (..)
-import Element.Attributes exposing (..)
 import SelectList as SelectList exposing (Position(..), SelectList)
-import Types exposing (..)
 
 
-view : Panel -> BibliopolaElement s v
-view panel =
-    row None [ spacing 3, spread ] <|
+view : (a -> String) -> SelectList a -> Element (SelectList a)
+view toString list =
+    row [ spacing <| space -1 ] <|
         SelectList.mapBy
             (\position item ->
                 Tab.view
                     { selected = position == Selected
-                    , onClick = SetPanel item
+                    , onClick = item
                     }
                 <|
-                    case SelectList.selected item of
-                        StoryPanel ->
-                            "Story Mode"
-
-                        MsgLoggerPanel ->
-                            "Msg Logger"
-
-                        AuthorPanel ->
-                            "Author"
+                    toString <|
+                        SelectList.selected item
             )
-            panel
+            list
