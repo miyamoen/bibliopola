@@ -1,13 +1,13 @@
 module Atom.Index exposing (shelf)
 
--- import Atom.SelectBox as SelectBox
-
 import Atom.Icon.Index as Icon
 import Atom.Log as Log
+import Atom.SelectBox as SelectBox
 import Atom.Tab as Tab
 import Atom.Toggle as Toggle
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
+import SelectList
 
 
 main : Bibliopola.Program
@@ -22,6 +22,7 @@ shelf =
         |> addShelf
             (emptyShelf "Form"
                 |> addBook toggle
+                |> addBook selectBox
             )
         |> addBook tab
         |> addBook log
@@ -45,6 +46,47 @@ toggle =
         |> addStory (Story.bool "on")
         |> buildBook
         |> withFrontCover (view "On" True)
+
+
+selectBox : Book
+selectBox =
+    let
+        view label disabled options =
+            SelectBox.view
+                { label = label
+                , onChange = SelectList.selected
+                , disabled = disabled
+                }
+                options
+
+        short =
+            SelectList.fromLists []
+                "aaa"
+                [ "bbb", "ccc", "ddd", "eee", "fff", "ggg" ]
+                |> SelectList.selectAll
+
+        long =
+            SelectList.fromLists []
+                "hogehogehogehogehoge"
+                [ "fugafugafugafuga", "hoga" ]
+                |> SelectList.selectAll
+    in
+    intoBook "SelectBox" identity view
+        |> addStory
+            (Story.build identity
+                "label"
+                [ "a"
+                , "middle label"
+                , "long long long long long label"
+                ]
+            )
+        |> addStory (Story.bool "disabled")
+        |> addStory (Story.build SelectList.selected "option" (short ++ long))
+        |> buildBook
+        |> withFrontCover
+            (view "Example Story" False <|
+                SelectList.fromLists [ "aa", "bb" ] "cc" [ "dd" ]
+            )
 
 
 tab : Book

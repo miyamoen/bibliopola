@@ -1,8 +1,12 @@
-module Atom.SelectBox exposing (Config, view, view_)
+module Atom.SelectBox exposing (Config, view)
 
+import Atom.Constant exposing (fontSize, space, zero)
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
-import Element.Events exposing (on, targetValue)
+import Element.Font as Font
+import Html exposing (Html)
+import Html.Attributes as Attrs exposing (selected, size, value)
+import Html.Events exposing (on, targetValue)
 import Json.Decode exposing (Decoder)
 import SelectList exposing (Position(..), SelectList)
 import Types exposing (..)
@@ -16,78 +20,65 @@ type alias Config a msg =
     }
 
 
-view : Config a msg -> SelectList String -> Element (Styles s) v msg
+view : Config a msg -> SelectList String -> Element msg
 view { label, onChange, disabled } selectList =
-    column None
-        [ spacing 5 ]
-        [ el None
-            [ inlineStyle
-                [ "text-decoration" => "underline"
-                , "font-style" => "italic"
-                , if disabled then
-                    "color" => "rgb(150, 150, 150)"
-                  else
-                    "" => ""
-                ]
-            ]
-          <|
-            text label
-        , el None [ paddingLeft 40, minWidth <| px 120 ] <|
-            node "select" <|
-                column None
-                    [ attribute "size" "5"
-                    , width fill
-                    , paddingXY 5 2
-                    , inlineStyle
-                        [ "border" => "1px solid rgba(138, 142, 180, 0.22)"
-                        , "border-radius" => "4px"
-                        ]
-                    , on "change" <|
-                        decoder <|
-                            \selected ->
-                                SelectList.attempt
-                                    (SelectList.select ((==) selected))
-                                    selectList
-                                    |> onChange
-                    , if disabled then
-                        attribute "disabled" ""
-                      else
-                        classList []
+    column
+        [ spacing <| space 1 ]
+        [ labelEl disabled label
+        , el [ width <| minimum 120 shrink ] <|
+            html <|
+                Html.select
+                    [ size 5
+                    , Attrs.disabled disabled
+                    , htmlOnChange onChange selectList
                     ]
                 <|
-                    SelectList.mapBy option selectList
+                    SelectList.mapBy optionNode selectList
         ]
 
 
-option : Position -> SelectList String -> Element (Styles s) v msg
-option position selectList =
+labelEl : Bool -> String -> Element msg
+labelEl disabled label =
+    el
+        [ Font.size <| fontSize 1
+        , Font.underline
+        , Font.italic
+        , Font.color <|
+            if disabled then
+                Color.grey
+
+            else
+                Color.black
+        ]
+    <|
+        text label
+
+
+optionNode : Position -> SelectList String -> Html msg
+optionNode position selectList =
     let
         option =
             SelectList.selected selectList
     in
-    node "option" <|
-        el None
-            [ attribute "value" option
-            , if position == Selected then
-                attribute "selected" ""
-              else
-                classList []
-            ]
-        <|
-            text option
+    Html.option
+        [ value option
+        , selected <| position == Selected
+        ]
+        [ Html.text option ]
+
+
+htmlOnChange : (SelectList String -> msg) -> SelectList String -> Html.Attribute msg
+htmlOnChange toMsg selectList =
+    on "change" <|
+        decoder <|
+            \selected ->
+                SelectList.attempt
+                    (SelectList.select ((==) selected))
+                    selectList
+                    |> toMsg
 
 
 decoder : (String -> msg) -> Decoder msg
 decoder f =
     targetValue
         |> Json.Decode.map f
-
-
-view_ : String -> Bool -> SelectList String -> Element (Styles s) v (SelectList String)
-view_ label disabled selectList =
-    view
-        { label = label
-        , onChange = identity
-        , disabled = disabled
-        }
-        selectList
