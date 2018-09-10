@@ -1,51 +1,52 @@
-module Molecule.Index exposing (..)
+module Molecule.Index exposing (shelf)
 
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Dummy
+import Element
 import Model.Shelf as Shelf
-import Molecule.ShelfLine as ShelfLine
+import Molecule.ShelfItem as ShelfItem
 import Molecule.Tabs as Tabs
-import SelectList exposing (SelectList)
-import Styles exposing (styles)
-import Types exposing ((=>), PanelItem(StoryPanel), Styles, Variation)
+import SelectList
 
 
-shelf : Shelf (Styles s) (Variation v)
+main : Bibliopola.Program
+main =
+    fromShelf shelf
+
+
+shelf : Shelf
 shelf =
-    shelfWithoutBook "Molecule"
-        |> addBook shelfLine
+    emptyShelf "Molecule"
+        |> addBook shelfItem
         |> addBook tabs
 
 
-tabs : Book (Styles s) (Variation v)
+tabs : Book
 tabs =
     let
         view size =
-            Tabs.view <|
-                SelectList.fromLists [] StoryPanel <|
-                    List.repeat size StoryPanel
+            Tabs.view identity <|
+                SelectList.fromLists [] "StoryPanel" <|
+                    List.repeat size "StoryPanel"
     in
-    bookWith "Tabs"
-        view
-        (Story.fromList "size" <| List.range 0 10)
-        |> withFrontCover (view 4)
+    intoBook "Tabs" SelectList.selected view
+        |> addStory (Story.build String.fromInt "size" <| List.range 0 10)
+        |> buildBook
+        |> withFrontCover (view 4 |> Element.map SelectList.selected)
 
 
-shelfLine : Book (Styles s) (Variation v)
-shelfLine =
+shelfItem : Book
+shelfItem =
     let
-        toString shelf =
-            "#" ++ Shelf.pathString shelf
+        toString item =
+            "#" ++ Shelf.pathString item
+
+        mapMsg _ =
+            "Some event happened!"
     in
-    bookWith "ShelfLine"
-        ShelfLine.view
-        (Story.fromListWith toString "shelf" <|
-            Shelf.openAllShelves Dummy.shelf
-        )
-        |> withFrontCover (ShelfLine.view Dummy.shelf)
-
-
-main : Bibliopola.Program (Styles s) (Variation v)
-main =
-    fromShelf styles shelf
+    intoBook "ShelfItem" mapMsg ShelfItem.view
+        |> addStory
+            (Story.build toString "shelf" <| Shelf.openAll Dummy.shelf)
+        |> buildBook
+        |> withFrontCover (ShelfItem.view Dummy.shelf |> Element.map mapMsg)
