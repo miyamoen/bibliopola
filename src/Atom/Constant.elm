@@ -5,6 +5,7 @@ module Atom.Constant exposing
     , roundLength
     , space
     , zero
+    , zeroCorner
     )
 
 import Element exposing (modular)
@@ -13,6 +14,11 @@ import Element exposing (modular)
 zero : { bottom : Int, left : Int, right : Int, top : Int }
 zero =
     { bottom = 0, left = 0, right = 0, top = 0 }
+
+
+zeroCorner : { topLeft : Int, topRight : Int, bottomRight : Int, bottomLeft : Int }
+zeroCorner =
+    { topLeft = 0, topRight = 0, bottomRight = 0, bottomLeft = 0 }
 
 
 fontSize : Int -> Int

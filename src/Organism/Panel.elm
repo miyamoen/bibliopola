@@ -1,68 +1,63 @@
 module Organism.Panel exposing (view)
 
-import Color.Pallet as Pallet exposing (Pallet(Blue))
+import Atom.Constant exposing (borderWidth, roundLength, zero, zeroCorner)
+import Color
 import Element exposing (..)
-import Element.Attributes exposing (..)
-import Model.Shelf as Shelf exposing (currentShelf)
+import Element.Background as Background
+import Element.Border as Border
+import Model.Shelf as Shelf
 import Molecule.Tabs as Tabs
+import Organism.Credit as Credit
 import Organism.Logger as Logger
-import Organism.StorySelector as StorySelector
+import Organism.Stories as Stories
 import SelectList exposing (SelectList)
 import Types exposing (..)
 
 
-view : Model s v -> BibliopolaElement s v
-view ({ panel, logs } as model) =
-    column None
+view : SubModel a -> Element Msg
+view ({ panel, logs, shelf } as model) =
+    column
         [ height fill ]
-        [ Tabs.view panel
-        , el None
+        [ Tabs.view panelToString panel
+            |> Element.map SetPanel
+        , el
             [ padding 10
             , height fill
-            , inlineStyle
-                [ "border-radius" => "0px 0px 5px 5px"
-                , "border-color" => "rgb(135, 135, 150)"
-                , "border-width" => "0px 2px 2px 2px"
-                , "background-color" => "rgb(240, 240, 240)"
-                ]
+            , Border.roundEach
+                { zeroCorner
+                    | bottomLeft = roundLength 1
+                    , bottomRight = roundLength 1
+                }
+            , Border.color Color.greyBlue
+            , Border.widthEach
+                { zero
+                    | right = borderWidth 1
+                    , left = borderWidth 1
+                    , bottom = borderWidth 1
+                }
+            , Background.color Color.white
             ]
           <|
             case SelectList.selected panel of
                 StoryPanel ->
-                    currentShelf model
-                        |> Maybe.map StorySelector.view
-                        |> Maybe.withDefault empty
+                    Stories.view shelf
 
                 MsgLoggerPanel ->
                     Logger.view logs
 
-                Types.AuthorPanel ->
-                    column None
-                        [ spacing 10
-                        , inlineStyle
-                            [ "font-size" => "18px"
-                            , "font-style" => "italic"
-                            , "text-decoration" => "underline"
-                            , "color" => Pallet.css Blue
-                            ]
-                        ]
-                        [ newTab packageLink <| text "package site"
-                        , newTab gitHubLink <| text "GitHub"
-                        , newTab twitterLink <| text "author twitter"
-                        ]
+                CreditPanel ->
+                    Credit.view
         ]
 
 
-gitHubLink : String
-gitHubLink =
-    "https://github.com/miyamoen/bibliopola"
+panelToString : PanelItem -> String
+panelToString panelItem =
+    case panelItem of
+        StoryPanel ->
+            "Stories"
 
+        MsgLoggerPanel ->
+            "Logger"
 
-packageLink : String
-packageLink =
-    "http://package.elm-lang.org/packages/miyamoen/bibliopola/latest"
-
-
-twitterLink : String
-twitterLink =
-    "https://twitter.com/miyamo_madoka"
+        CreditPanel ->
+            "Credit"
