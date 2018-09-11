@@ -1,93 +1,110 @@
-module Organism.Index exposing (..)
+module Organism.Index exposing (shelf)
 
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Dummy
-import Model.Shelf exposing (toggleStoryMode)
+import Element exposing (Element)
+import Model.Book as Book
+import Model.Shelf as Shelf
 import Organism.BookPage as BookPage
+import Organism.Credit as Credit
 import Organism.Logger as Logger
 import Organism.Panel as Panel
-import Organism.Shelf as Shelf
-import Organism.StorySelector as StorySelector
-import SelectList exposing (Direction(After))
-import Styles exposing (styles)
-import Types exposing ((=>), Styles, Variation)
+import Organism.ShelfTree as ShelfTree
+import Organism.Stories as Stories
+import SelectList exposing (Direction(..))
 
 
-shelf : Shelf (Styles s) (Variation v)
+main : Bibliopola.Program
+main =
+    fromShelf shelf
+
+
+shelf : Shelf
 shelf =
-    shelfWithoutBook "Organism"
+    emptyShelf "Organism"
         |> addBook bookPage
-        |> addBook shelfBook
+        |> addBook shelfTree
         |> addBook panel
-        |> addBook storySelector
+        |> addBook stories
         |> addBook logger
 
 
-bookPage : Book (Styles s) (Variation v)
+bookPage : Book
 bookPage =
-    bookWith "BookPage"
-        (\path -> BookPage.view path Dummy.model)
-        (Story "path" [ "empty" => [] ])
-        |> withFrontCover (BookPage.view [] Dummy.model)
+    bookWithFrontCover "BookPage"
+        (BookPage.view Dummy.model.shelf |> mapMsg)
 
 
-shelfBook : Book (Styles s) (Variation v)
-shelfBook =
-    bookWithoutStory "Shelf"
-        |> withFrontCover (Shelf.view Dummy.model)
+shelfTree : Book
+shelfTree =
+    bookWithFrontCover "Shelf"
+        (ShelfTree.view Dummy.model.shelf |> mapMsg)
 
 
-storySelector : Book (Styles s) (Variation v)
-storySelector =
-    bookWith "StorySelector"
+stories : Book
+stories =
+    intoBook "Stories"
+        toString
         (\on ->
             if on then
-                StorySelector.view <| toggleStoryMode Dummy.storyShelf
+                Shelf.updateBook Book.toggle Dummy.storyShelf
+                    |> Stories.view
+
             else
-                StorySelector.view Dummy.storyShelf
+                Stories.view Dummy.storyShelf
         )
-        (Story.bool "on")
-        |> withFrontCover (StorySelector.view Dummy.storyShelf)
+        |> addStory (Story.bool "bookIsOpen")
+        |> buildBook
+        |> withFrontCover (Stories.view Dummy.storyShelf |> mapMsg)
 
 
-panel : Book (Styles s) (Variation v)
+panel : Book
 panel =
     let
         model =
             Dummy.model
 
-        panel =
+        panel_ =
             .panel Dummy.model
 
         view index =
             { model
                 | panel =
-                    SelectList.attempt (SelectList.steps After index) panel
+                    SelectList.attempt (SelectList.changePosition After index) panel_
             }
                 |> Panel.view
+                |> mapMsg
     in
-    bookWith "Panel"
+    intoBook "Panel"
+        identity
         view
-        (Story.fromList "index" <| List.range 0 5)
-        |> withFrontCover (Panel.view Dummy.model)
+        |> addStory (Story.build String.fromInt "index" <| List.range 0 5)
+        |> buildBook
+        |> withFrontCover (Panel.view Dummy.model |> mapMsg)
 
 
-logger : Book (Styles s) (Variation v)
+logger : Book
 logger =
     let
         logs =
             List.range 0 100
                 |> List.map (\id -> { id = id, message = "dummy message" })
     in
-    bookWith "Logger"
-        Logger.view
-        (Story.fromList "size" [ 0, 1, 5, 10, 20, 100 ]
-            |> Story.map (\size -> List.reverse <| List.take size logs)
-        )
-        |> withFrontCover (Logger.view <| .logs Dummy.model)
+    intoBook "Logger" toString Logger.view
+        |> addStory
+            (Story.build String.fromInt "size" [ 0, 1, 5, 10, 20, 100 ]
+                |> Story.map (\size -> List.reverse <| List.take size logs)
+            )
+        |> buildBook
+        |> withFrontCover (mapMsg <| Logger.view <| .logs Dummy.model)
 
 
-main : Bibliopola.Program (Styles s) (Variation v)
-main =
-    fromShelf styles shelf
+mapMsg : Element a -> Element String
+mapMsg elm =
+    Element.map toString elm
+
+
+toString : a -> String
+toString _ =
+    "Some event happened!"
