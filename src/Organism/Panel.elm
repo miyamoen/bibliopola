@@ -17,18 +17,19 @@ import Types exposing (..)
 view : SubModel a -> Element Msg
 view ({ panel, logs, shelf } as model) =
     column
-        [ height fill ]
+        [ width fill, height fill ]
         [ Tabs.view panelToString panel
             |> Element.map SetPanel
         , el
             [ padding 10
+            , width fill
             , height fill
             , Border.roundEach
                 { zeroCorner
                     | bottomLeft = roundLength 1
                     , bottomRight = roundLength 1
                 }
-            , Border.color Color.greyBlue
+            , Border.color Color.alphaGrey
             , Border.widthEach
                 { zero
                     | right = borderWidth 1

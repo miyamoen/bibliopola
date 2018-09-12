@@ -8,7 +8,7 @@ import SelectList as SelectList exposing (Position(..), SelectList)
 
 view : (a -> String) -> SelectList a -> Element (SelectList a)
 view toString list =
-    row [ spacing <| space -1 ] <|
+    row [ spacing <| space -1, width fill ] <|
         SelectList.mapBy
             (\position item ->
                 Tab.view

@@ -1,6 +1,6 @@
 module Atom.Tab exposing (Config, view)
 
-import Atom.Constant exposing (borderWidth, fontSize, roundLength)
+import Atom.Constant exposing (borderWidth, fontSize, roundLength, space)
 import Color
 import Element exposing (..)
 import Element.Background as Background
@@ -17,6 +17,8 @@ view : Config a msg -> String -> Element msg
 view { selected, onClick } label =
     el
         [ pointer
+        , width fill
+        , padding <| space -1
         , Font.center
         , Font.size <| fontSize 2
         , Events.onClick <| onClick
