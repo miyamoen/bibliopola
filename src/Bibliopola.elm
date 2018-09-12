@@ -87,7 +87,7 @@ fromShelf shelf =
         { view = \model -> { title = "Bibliopola", body = [ view model ] }
         , init = init shelf
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         , onUrlRequest = onUrlRequest
         , onUrlChange = onUrlChange
         }

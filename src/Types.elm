@@ -12,6 +12,7 @@ module Types exposing
     )
 
 import Browser exposing (UrlRequest)
+import Browser.Dom exposing (Viewport)
 import Browser.Navigation exposing (Key)
 import Dict exposing (Dict)
 import Element exposing (Element)
@@ -24,6 +25,7 @@ type Msg
     | ClickLink UrlRequest
     | ChangeRoute ParsedRoute
     | RouteError
+    | SetWindowSize { width : Int, height : Int }
     | LogMsg String
     | ClearLogs
     | SetShelf Shelf
@@ -39,6 +41,8 @@ type alias SubModel a =
         | shelf : Shelf
         , panel : Panel
         , logs : List Log
+        , width : Int
+        , height : Int
     }
 
 
