@@ -1,6 +1,6 @@
 module Page.Main exposing (view)
 
-import Atom.Constant exposing (space)
+import Atom.Constant as Constant
 import Element exposing (..)
 import Element.Font as Font
 import Organism.BookPage as BookPage
@@ -14,8 +14,9 @@ view model =
     column
         [ width fill
         , height fill
-        , padding <| space 1
-        , spacing <| space 1
+        , clip
+        , padding space
+        , spacing space
         , Font.family
             [ Font.external
                 { url = "https://fonts.googleapis.com/css?family=Expletus+Sans"
@@ -23,12 +24,47 @@ view model =
                 }
             ]
         ]
-        [ row [ height fill ]
-            [ el [ scrollbars, width <| px 200, height fill ] <|
+        [ row [ height <| px <| restHeight model.height, spacing space ]
+            [ el
+                [ scrollbars
+                , width <| px treeWidth
+                , height fill
+                ]
+              <|
                 ShelfTree.view model.shelf
-            , el [ scrollbars, width fill, height fill ] <|
+            , el
+                [ scrollbars
+                , width <| px <| restWidth model.width
+                , height fill
+                ]
+              <|
                 BookPage.view model.shelf
             ]
-        , el [ scrollbarY, clipX, height <| px 210, width fill ] <|
+        , el [ scrollbarY, clipX, height <| px panelHeight, width fill ] <|
             Panel.view model
         ]
+
+
+restHeight : Int -> Int
+restHeight full =
+    full - panelHeight - space * 3
+
+
+panelHeight : Int
+panelHeight =
+    210
+
+
+treeWidth : Int
+treeWidth =
+    200
+
+
+restWidth : Int -> Int
+restWidth full =
+    full - treeWidth - space * 3
+
+
+space : Int
+space =
+    Constant.space 1

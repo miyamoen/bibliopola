@@ -23,6 +23,8 @@ model =
         , { id = 1, message = "dummy msg" }
         , { id = 0, message = "dummy msg" }
         ]
+    , width = 600
+    , height = 500
     }
 
 
