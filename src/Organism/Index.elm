@@ -79,7 +79,7 @@ panel =
     intoBook "Panel"
         identity
         view
-        |> addStory (Story.build String.fromInt "index" <| List.range 0 5)
+        |> addStory (Story.build "index" String.fromInt <| List.range 0 5)
         |> buildBook
         |> withFrontCover (Panel.view Dummy.model |> mapMsg)
 
@@ -93,7 +93,7 @@ logger =
     in
     intoBook "Logger" toString Logger.view
         |> addStory
-            (Story.build String.fromInt "size" [ 0, 1, 5, 10, 20, 100 ]
+            (Story.build "size" String.fromInt [ 0, 1, 5, 10, 20, 100 ]
                 |> Story.map (\size -> List.reverse <| List.take size logs)
             )
         |> buildBook

@@ -69,23 +69,23 @@ storyShelf : Types.Shelf
 storyShelf =
     intoBook "4Stories" identity (\a b c d -> text <| String.join ", " [ a, b, c, d ])
         |> addStory
-            (Story.build identity
-                "aStory"
+            (Story.build "aStory"
+                identity
                 [ "aStory1", "aStory2", "aStory3", "aStory4", "aStory5" ]
             )
         |> addStory
-            (Story.build identity
-                "bStory"
+            (Story.build "bStory"
+                identity
                 [ "bStory1", "bStory2", "bStory3", "bStory4", "bStory5" ]
             )
         |> addStory
-            (Story.build identity
-                "cStory"
+            (Story.build "cStory"
+                identity
                 [ "cStory1", "cStory2", "cStory3", "cStory4", "cStory5" ]
             )
         |> addStory
-            (Story.build identity
-                "dStory"
+            (Story.build "dStory"
+                identity
                 [ "dStory1", "dStory2", "dStory3", "dStory4", "dStory5" ]
             )
         |> buildBook

@@ -31,7 +31,7 @@ tabs =
                     List.repeat size "StoryPanel"
     in
     intoBook "Tabs" SelectList.selected view
-        |> addStory (Story.build String.fromInt "size" <| List.range 0 10)
+        |> addStory (Story.build "size" String.fromInt <| List.range 0 10)
         |> buildBook
         |> withFrontCover (view 4 |> Element.map SelectList.selected)
 
@@ -47,6 +47,6 @@ shelfItem =
     in
     intoBook "ShelfItem" mapMsg ShelfItem.view
         |> addStory
-            (Story.build toString "shelf" <| Shelf.openAll Dummy.shelf)
+            (Story.build "shelf" toString <| Shelf.openAll Dummy.shelf)
         |> buildBook
         |> withFrontCover (ShelfItem.view Dummy.shelf |> Element.map mapMsg)

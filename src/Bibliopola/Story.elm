@@ -3,8 +3,8 @@ module Bibliopola.Story exposing (addOption, bool, build, map)
 import Bibliopola exposing (Story)
 
 
-build : (a -> String) -> String -> List a -> Story a
-build toOptionLabel storyLabel options =
+build : String -> (a -> String) -> List a -> Story a
+build storyLabel toOptionLabel options =
     { label = storyLabel
     , options = List.map (\option -> ( toOptionLabel option, option )) options
     }

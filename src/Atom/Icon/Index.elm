@@ -82,7 +82,7 @@ clickStory =
 
 sizeStory : Story Int
 sizeStory =
-    Story.build String.fromInt "size" <|
+    Story.build "size" String.fromInt <|
         List.range -5 10
 
 

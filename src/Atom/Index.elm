@@ -73,15 +73,15 @@ selectBox =
     in
     intoBook "SelectBox" identity view
         |> addStory
-            (Story.build identity
-                "label"
+            (Story.build "label"
+                identity
                 [ "a"
                 , "middle label"
                 , "long long long long long label"
                 ]
             )
         |> addStory (Story.bool "disabled")
-        |> addStory (Story.build SelectList.selected "option" (short ++ long))
+        |> addStory (Story.build "option" SelectList.selected (short ++ long))
         |> buildBook
         |> withFrontCover
             (view "Example Story" False <|
@@ -109,7 +109,7 @@ log =
             Log.view { id = id, message = message }
     in
     intoBook "Log" identity view
-        |> addStory (Story.build String.fromInt "id" [ 1, 99, 999, 9999 ])
+        |> addStory (Story.build "id" String.fromInt [ 1, 99, 999, 9999 ])
         |> addStory (Story "message" labels)
         |> buildBook
         |> withFrontCover (view 0 "dummy message")
