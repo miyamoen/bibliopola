@@ -14,18 +14,19 @@ import Types exposing (..)
 view : Shelf -> Element Msg
 view shelf =
     row
-        [ spacing <| space 3 ]
+        [ spacing <| space 3, width fill ]
         [ Toggle.view
             { label = "Book Open"
             , onClick = \_ -> SetShelf <| Shelf.updateBook Book.toggle shelf
             }
           <|
             Shelf.mapBook Book.isOpen shelf
-        , Keyed.el [] <|
+        , Keyed.el [ width fill ] <|
             ( Shelf.pathString shelf
             , wrappedRow
                 [ paddingEach { zero | left = space 3 }
                 , spacing <| space 3
+                , width fill
                 ]
                 (Shelf.mapBook Book.stories shelf
                     |> SelectList.mapBy_ (selectBoxEl shelf)
