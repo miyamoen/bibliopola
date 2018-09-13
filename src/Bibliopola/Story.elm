@@ -1,8 +1,20 @@
-module Bibliopola.Story exposing (addOption, bool, build, map)
+module Bibliopola.Story exposing
+    ( build, addOption, map
+    , bool
+    )
+
+{-|
+
+@docs build, addOption, map
+
+@docs bool
+
+-}
 
 import Bibliopola exposing (Story)
 
 
+{-| -}
 build : String -> (a -> String) -> List a -> Story a
 build storyLabel toOptionLabel options =
     { label = storyLabel
@@ -10,11 +22,13 @@ build storyLabel toOptionLabel options =
     }
 
 
+{-| -}
 addOption : String -> a -> Story a -> Story a
 addOption optionLabel a story =
     { story | options = ( optionLabel, a ) :: story.options }
 
 
+{-| -}
 map : (a -> b) -> Story a -> Story b
 map tagger { label, options } =
     { label = label
@@ -22,6 +36,7 @@ map tagger { label, options } =
     }
 
 
+{-| -}
 bool : String -> Story Bool
 bool label =
     { label = label

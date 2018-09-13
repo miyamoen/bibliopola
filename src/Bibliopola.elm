@@ -1,11 +1,11 @@
 module Bibliopola exposing
     ( Program, Book, Shelf
     , fromBook, fromShelf
-    , Story
     , withFrontCover
+    , IntoBook, Story, intoBook, addStory, buildBook, buildHtmlBook
+    , bookWithFrontCover
     , emptyShelf, shelfWith
     , addBook, addShelf
-    , IntoBook, addStory, bookWithFrontCover, buildBook, buildHtmlBook, intoBook
     )
 
 {-| UI Catalog for Elm applications built by style-elements inspired by Storybook
@@ -25,11 +25,13 @@ module Bibliopola exposing
 
 # Book
 
-@docs Story
-
-@docs emptyBook, bookWith, bookWith2, bookWith3, bookWith4
-
 @docs withFrontCover
+
+
+## Build Book
+
+@docs IntoBook, Story, intoBook, addStory, buildBook, buildHtmlBook
+@docs bookWithFrontCover
 
 
 # Shelf
@@ -136,6 +138,7 @@ withFrontCover view book =
 -- Build Book
 
 
+{-| -}
 bookWithFrontCover : String -> Element String -> Book
 bookWithFrontCover title view =
     Book.empty title
@@ -185,6 +188,7 @@ buildBook { title, views, toString, stories } =
         |> Book.setStories (List.reverse stories |> List.filterMap storyHelp)
 
 
+{-| -}
 buildHtmlBook : IntoBook msg (Html msg) -> Book
 buildHtmlBook { title, views, toString, stories } =
     buildBook
