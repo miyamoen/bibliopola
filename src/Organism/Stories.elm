@@ -17,7 +17,7 @@ view shelf =
         [ spacing <| space 3 ]
         [ Toggle.view
             { label = "Book Open"
-            , onClick = \_ -> SetShelf <| Shelf.updateBook Book.toggleShelf shelf
+            , onClick = \_ -> SetShelf <| Shelf.updateBook Book.toggle shelf
             }
           <|
             Shelf.mapBook Book.isOpen shelf
