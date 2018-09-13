@@ -17,18 +17,19 @@ import Types exposing (Msg(..), Shelf)
 
 view : Shelf -> Element Msg
 view shelf =
-    link [ onClick <| SetShelf <| Shelf.updateBook Book.toggleShelf shelf ]
-        { url = Shelf.route shelf |> Route.url
-        , label =
-            row [ spacing <| space 1, pointer ] <|
-                ruledLine shelf
-                    ++ [ caret shelf
-                       , icon shelf
-                       , el [ Font.size <| fontSize 2 ] <|
-                            text <|
-                                Shelf.mapBook Book.title shelf
-                       ]
-        }
+    row
+        [ spacing <| space 1
+        , pointer
+        , onClick <| SetShelf <| Shelf.updateBook Book.toggleShelf shelf
+        ]
+    <|
+        ruledLine shelf
+            ++ [ caret shelf
+               , icon shelf
+               , el [ Font.size <| fontSize 2 ] <|
+                    text <|
+                        Shelf.mapBook Book.title shelf
+               ]
 
 
 ruledLine : Shelf -> List (Element msg)

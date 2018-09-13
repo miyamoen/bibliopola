@@ -21,7 +21,6 @@ update msg model =
 
         ClickLink (Internal url) ->
             Tuple.pair model
-                -- TODO replaceも使う
                 (Nav.pushUrl model.key <| Url.toString url)
 
         ClickLink (External url) ->
@@ -55,7 +54,11 @@ update msg model =
             Tuple.pair { model | logs = [] } Cmd.none
 
         SetShelf shelf ->
-            Tuple.pair { model | shelf = shelf } Cmd.none
+            Tuple.pair { model | shelf = shelf }
+                (Shelf.route shelf
+                    |> Route.url
+                    |> Nav.pushUrl model.key
+                )
 
         SetPanel panel ->
             Tuple.pair { model | panel = panel } Cmd.none
