@@ -5,7 +5,7 @@ module Bibliopola exposing
     , withFrontCover
     , emptyShelf, shelfWith
     , addBook, addShelf
-    , IntoBook, addStory, bookWithFrontCover, buildBook, intoBook
+    , IntoBook, addStory, bookWithFrontCover, buildBook, buildHtmlBook, intoBook
     )
 
 {-| UI Catalog for Elm applications built by style-elements inspired by Storybook
@@ -42,7 +42,7 @@ module Bibliopola exposing
 import Browser
 import Dict exposing (Dict)
 import Element exposing (Element)
-import Html
+import Html exposing (Html)
 import List.Extra as List exposing (lift2)
 import Maybe.Extra as Maybe
 import Model.Book as Book
@@ -183,6 +183,16 @@ buildBook { title, views, toString, stories } =
                 |> Dict.fromList
             )
         |> Book.setStories (List.reverse stories |> List.filterMap storyHelp)
+
+
+buildHtmlBook : IntoBook msg (Html msg) -> Book
+buildHtmlBook { title, views, toString, stories } =
+    buildBook
+        { title = title
+        , toString = toString
+        , stories = stories
+        , views = List.map (Tuple.mapSecond Element.html) views
+        }
 
 
 storyHelp : ( String, List String ) -> Maybe ( String, SelectList String )
