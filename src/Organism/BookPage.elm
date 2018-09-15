@@ -20,7 +20,9 @@ view shelf =
     column [ width fill, height fill, spacing <| space 3 ]
         [ row [ width fill, spacing <| space 4 ]
             [ BookToggle.view shelf
-            , el [ Font.size <| fontSize 3 ] <| text <| "/" ++ Shelf.pathString shelf
+            , el [ Font.size <| fontSize 3 ] <|
+                text <|
+                    String.join "/" [ Book.title book, Shelf.pathString shelf ]
             ]
         , if Book.hasNoPage book then
             Shelf.openChirdren shelf
