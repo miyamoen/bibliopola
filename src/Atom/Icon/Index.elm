@@ -85,7 +85,8 @@ clickStory =
 sizeStory : Story Int
 sizeStory =
     Story.build "size" String.fromInt <|
-        List.range -5 10
+        List.range 1 10
+            ++ [ 0, -1, -2, -3, -4, -5 ]
 
 
 ban : Book
