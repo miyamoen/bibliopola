@@ -2,11 +2,11 @@ module Organism.Stories exposing (view)
 
 import Atom.Constant exposing (space, zero)
 import Atom.SelectBox as SelectBox
-import Atom.Toggle as Toggle
 import Element exposing (..)
 import Element.Keyed as Keyed
 import Model.Book as Book
 import Model.Shelf as Shelf
+import Molecule.BookToggle as BookToggle
 import SelectList exposing (SelectList)
 import Types exposing (..)
 
@@ -14,13 +14,8 @@ import Types exposing (..)
 view : Shelf -> Element Msg
 view shelf =
     row
-        [ spacing <| space 3, width fill ]
-        [ Toggle.view
-            { label = "Book Open"
-            , onClick = \_ -> SetShelf <| Shelf.updateBook Book.toggle shelf
-            }
-          <|
-            Shelf.mapBook Book.isOpen shelf
+        [ spacing <| space 3, width fill, height fill ]
+        [ BookToggle.view shelf
         , Keyed.el [ width fill ] <|
             ( Shelf.pathString shelf
             , wrappedRow

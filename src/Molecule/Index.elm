@@ -3,8 +3,9 @@ module Molecule.Index exposing (shelf)
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Dummy
-import Element
+import Element exposing (Element)
 import Model.Shelf as Shelf
+import Molecule.BookToggle as BookToggle
 import Molecule.ShelfItem as ShelfItem
 import Molecule.Tabs as Tabs
 import SelectList
@@ -20,6 +21,7 @@ shelf =
     emptyShelf "Molecule"
         |> addBook shelfItem
         |> addBook tabs
+        |> addBook bookToggle
 
 
 tabs : Book
@@ -50,3 +52,13 @@ shelfItem =
             (Story.build "shelf" toString <| Shelf.openAll Dummy.shelf)
         |> buildBook
         |> withFrontCover (ShelfItem.view Dummy.shelf |> Element.map mapMsg)
+
+
+bookToggle : Book
+bookToggle =
+    let
+        mapMsg _ =
+            "Toggled"
+    in
+    bookWithFrontCover "BookToggle"
+        (BookToggle.view Dummy.model.shelf |> Element.map mapMsg)
