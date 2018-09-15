@@ -8,6 +8,7 @@ import Model.Book as Book
 import Model.Shelf as Shelf
 import Organism.BookPage as BookPage
 import Organism.Credit as Credit
+import Organism.FrontCover as FrontCover
 import Organism.Logger as Logger
 import Organism.Panel as Panel
 import Organism.ShelfTree as ShelfTree
@@ -24,6 +25,7 @@ shelf : Shelf
 shelf =
     emptyShelf "Organism"
         |> addBook bookPage
+        |> addBook frontCover
         |> addBook shelfTree
         |> addBook panel
         |> addBook stories
@@ -34,6 +36,12 @@ bookPage : Book
 bookPage =
     bookWithFrontCover "BookPage"
         (BookPage.view Dummy.model.shelf |> mapMsg)
+
+
+frontCover : Book
+frontCover =
+    bookWithFrontCover "FrontCover"
+        (FrontCover.view Dummy.model.shelf |> mapMsg)
 
 
 shelfTree : Book
