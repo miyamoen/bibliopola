@@ -5,6 +5,7 @@ import Atom.Icon.Ban as Ban
 import Atom.Icon.Book as Book
 import Atom.Icon.Books as Books
 import Atom.Icon.Caret as Caret exposing (directionToString)
+import Atom.Icon.OpenBook as OpenBook
 import Atom.Icon.RuledLine as RuledLine exposing (RuledLine(..), ruledLines)
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
@@ -23,6 +24,7 @@ shelf =
         |> addBook caret
         |> addBook ban
         |> addBook book
+        |> addBook openBook
         |> addBook books
         |> addBook ruledLine
 
@@ -104,6 +106,16 @@ book =
         |> addStory clickStory
         |> buildBook
         |> withFrontCover (Book.view defaultConfig)
+
+
+openBook : Book
+openBook =
+    intoBook "OpenBook" identity (viewHelper OpenBook.view)
+        |> addStory colorStory
+        |> addStory sizeStory
+        |> addStory clickStory
+        |> buildBook
+        |> withFrontCover (OpenBook.view defaultConfig)
 
 
 books : Book
