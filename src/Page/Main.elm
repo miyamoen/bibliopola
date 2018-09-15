@@ -3,6 +3,7 @@ module Page.Main exposing (view)
 import Atom.Constant as Constant
 import Element exposing (..)
 import Element.Font as Font
+import Model.Shelf as Shelf
 import Organism.BookPage as BookPage
 import Organism.Panel as Panel
 import Organism.ShelfTree as ShelfTree
@@ -25,16 +26,20 @@ view model =
             ]
         ]
         [ row [ height <| px <| restHeight model.height, spacing space ]
-            [ el
-                [ scrollbars
-                , width <| px treeWidth
-                , height fill
-                ]
-              <|
-                ShelfTree.view model.shelf
+            [ if Shelf.hasShelves <| Shelf.root model.shelf then
+                el
+                    [ scrollbars
+                    , width <| px <| treeWidth model.shelf
+                    , height fill
+                    ]
+                <|
+                    ShelfTree.view model.shelf
+
+              else
+                none
             , el
                 [ scrollbars
-                , width <| px <| restWidth model.width
+                , width <| px <| restWidth model.width model.shelf
                 , height fill
                 ]
               <|
@@ -55,14 +60,18 @@ panelHeight =
     210
 
 
-treeWidth : Int
-treeWidth =
-    200
+treeWidth : Shelf -> Int
+treeWidth shelf =
+    if Shelf.hasShelves <| Shelf.root shelf then
+        200
+
+    else
+        0
 
 
-restWidth : Int -> Int
-restWidth full =
-    full - treeWidth - space * 3
+restWidth : Int -> Shelf -> Int
+restWidth full shelf =
+    full - treeWidth shelf - space * 3
 
 
 space : Int
