@@ -12,12 +12,21 @@ import Types exposing (Msg(..), Shelf)
 
 view : Shelf -> Element Msg
 view shelf =
+    let
+        book =
+            Shelf.book shelf
+    in
     column [ width fill, height fill, spacing <| space 3 ]
         [ row [ width fill, spacing <| space 4 ]
             [ BookToggle.view shelf
             , el [ Font.size <| fontSize 3 ] <| text <| "/" ++ Shelf.pathString shelf
             ]
-        , Shelf.book shelf
-            |> Book.currentPage
-            |> Maybe.withDefault (FrontCover.view shelf)
+        , if Book.isOpen book then
+            Book.storiesPage book
+                |> Maybe.withDefault
+                    (el [ centerX, centerY ] <| text "PAGE NOT FOUND")
+
+          else
+            Book.frontCover book
+                |> Maybe.withDefault (FrontCover.view shelf)
         ]
