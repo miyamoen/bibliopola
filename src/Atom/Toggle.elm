@@ -5,13 +5,12 @@ import Color
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
-import Element.Events as Events
 import Element.Font as Font
-import Element.Util exposing (style)
+import Element.Util exposing (onClickWhenJust, style)
 
 
 type alias Config a msg =
-    { a | label : String, onClick : Bool -> msg }
+    { a | label : Maybe String, onClick : Maybe (Bool -> msg) }
 
 
 view : Config a msg -> Bool -> Element msg
@@ -19,10 +18,15 @@ view { label, onClick } on =
     row
         [ spacing <| space 1
         , centerY
-        , Events.onClick <| onClick <| not on
+        , onClickWhenJust <| Maybe.map (\f -> f <| not on) onClick
         , pointer
         ]
-        [ el [ Font.size <| fontSize 2 ] <| text label
+        [ case label of
+            Just label_ ->
+                el [ Font.size <| fontSize 2 ] <| text label_
+
+            Nothing ->
+                none
         , el
             [ padding <| space -1
             , Border.width <| borderWidth 1

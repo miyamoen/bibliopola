@@ -4,6 +4,7 @@ import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Dummy
 import Element exposing (Element)
+import Model.Book as Book
 import Model.Shelf as Shelf
 import Molecule.BookToggle as BookToggle
 import Molecule.ShelfItem as ShelfItem
@@ -59,6 +60,17 @@ bookToggle =
     let
         mapMsg _ =
             "Toggled"
+
+        view isOpen =
+            BookToggle.view <|
+                if isOpen then
+                    Shelf.updateBook Book.toggle Dummy.model.shelf
+
+                else
+                    Dummy.model.shelf
     in
-    bookWithFrontCover "BookToggle"
-        (BookToggle.view Dummy.model.shelf |> Element.map mapMsg)
+    intoBook "BookToggle" mapMsg view
+        |> addStory (Story.bool "open")
+        |> buildBook
+        |> withFrontCover
+            (BookToggle.view Dummy.model.shelf |> Element.map mapMsg)

@@ -38,14 +38,20 @@ toggle =
             else
                 "Clicked on"
 
-        view label on =
-            Toggle.view { label = label, onClick = msg } on
+        view label onClick on =
+            Toggle.view { label = label, onClick = onClick } on
     in
     intoBook "Toggle" identity view
-        |> addStory (Story "label" labels)
+        |> addStory
+            (Story "label" labels
+                |> Story.map Just
+                |> Story.addOption "nothing" Nothing
+            )
+        |> addStory
+            (Story "msg" [ ( "nothing", Nothing ), ( "click", Just msg ) ])
         |> addStory (Story.bool "on")
         |> buildBook
-        |> withFrontCover (view "On" True)
+        |> withFrontCover (view (Just "On") (Just msg) True)
 
 
 selectBox : Book
