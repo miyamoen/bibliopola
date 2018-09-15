@@ -6,7 +6,8 @@ module Model.Shelf exposing
     , hasShelves
     , mapBook
     , open
-    , openAll
+    , openChirdren
+    , openDesc
     , path
     , pathString
     , root
@@ -42,15 +43,21 @@ open shelfPath (Shelf zipper) =
         |> Maybe.map Shelf
 
 
-openAll : Shelf -> List Shelf
-openAll ((Shelf zipper) as shelf) =
+openChirdren : Shelf -> List Shelf
+openChirdren ((Shelf zipper) as shelf) =
+    Zipper.openAll zipper
+        |> List.map Shelf
+
+
+openDesc : Shelf -> List Shelf
+openDesc ((Shelf zipper) as shelf) =
     if not <| mapBook Book.shelfIsOpen shelf then
         [ shelf ]
 
     else
         shelf
             :: (Zipper.openAll zipper
-                    |> List.concatMap (Shelf >> openAll)
+                    |> List.concatMap (Shelf >> openDesc)
                )
 
 

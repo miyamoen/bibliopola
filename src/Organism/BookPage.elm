@@ -6,6 +6,7 @@ import Element.Font as Font
 import Model.Book as Book
 import Model.Shelf as Shelf
 import Molecule.BookToggle as BookToggle
+import Molecule.ShelfItem as ShelfItem
 import Organism.FrontCover as FrontCover
 import Types exposing (Msg(..), Shelf)
 
@@ -21,7 +22,12 @@ view shelf =
             [ BookToggle.view shelf
             , el [ Font.size <| fontSize 3 ] <| text <| "/" ++ Shelf.pathString shelf
             ]
-        , if Book.isOpen book then
+        , if Book.hasNoPage book then
+            Shelf.openChirdren shelf
+                |> List.map ShelfItem.view
+                |> column [ spacing <| space 3 ]
+
+          else if Book.isOpen book then
             Book.storiesPage book
                 |> Maybe.withDefault
                     (el [ centerX, centerY ] <| text "PAGE NOT FOUND")

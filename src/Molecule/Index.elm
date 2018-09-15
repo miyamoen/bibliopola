@@ -50,7 +50,7 @@ shelfItem =
     in
     intoBook "ShelfItem" mapMsg ShelfItem.view
         |> addStory
-            (Story.build "shelf" toString <| Shelf.openAll Dummy.shelf)
+            (Story.build "shelf" toString <| Shelf.openDesc Dummy.shelf)
         |> buildBook
         |> withFrontCover (ShelfItem.view Dummy.shelf |> Element.map mapMsg)
 
