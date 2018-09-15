@@ -22,7 +22,10 @@ view shelf =
             [ BookToggle.view shelf
             , el [ Font.size <| fontSize 3 ] <|
                 text <|
-                    String.join "/" [ Book.title book, Shelf.pathString shelf ]
+                    String.join "/"
+                        [ Shelf.root shelf |> Shelf.mapBook Book.title
+                        , Shelf.pathString shelf
+                        ]
             ]
         , if Book.hasNoPage book then
             Shelf.openChirdren shelf
