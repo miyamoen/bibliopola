@@ -12170,6 +12170,8 @@ var mdgriffith$elm_ui$Internal$Model$Fill = function (a) {
 	return {$: 2, a: a};
 };
 var mdgriffith$elm_ui$Element$fill = mdgriffith$elm_ui$Internal$Model$Fill(1);
+var mdgriffith$elm_ui$Internal$Model$Empty = {$: 3};
+var mdgriffith$elm_ui$Element$none = mdgriffith$elm_ui$Internal$Model$Empty;
 var mdgriffith$elm_ui$Internal$Flag$padding = mdgriffith$elm_ui$Internal$Flag$flag(2);
 var mdgriffith$elm_ui$Internal$Model$PaddingStyle = F5(
 	function (a, b, c, d, e) {
@@ -12250,28 +12252,29 @@ var mdgriffith$elm_ui$Element$Font$family = function (families) {
 			A3(elm$core$List$foldl, mdgriffith$elm_ui$Internal$Model$renderFontClassName, 'ff-', families),
 			families));
 };
-var mdgriffith$elm_ui$Internal$Model$Describe = function (a) {
-	return {$: 2, a: a};
+var miyamoen$tree_with_zipper$Tree$children = A2(
+	elm$core$Basics$composeL,
+	elm$core$List$map(miyamoen$tree_with_zipper$Tree$item),
+	miyamoen$tree_with_zipper$Tree$descendants);
+var miyamoen$tree_with_zipper$Tree$isEmpty = A2(elm$core$Basics$composeL, elm$core$List$isEmpty, miyamoen$tree_with_zipper$Tree$children);
+var miyamoen$tree_with_zipper$Tree$Zipper$isEmpty = function (_n0) {
+	var tree = _n0.a;
+	return miyamoen$tree_with_zipper$Tree$isEmpty(tree);
 };
-var mdgriffith$elm_ui$Internal$Model$Paragraph = {$: 9};
-var mdgriffith$elm_ui$Element$paragraph = F2(
-	function (attrs, children) {
-		return A4(
-			mdgriffith$elm_ui$Internal$Model$element,
-			mdgriffith$elm_ui$Internal$Model$asParagraph,
-			mdgriffith$elm_ui$Internal$Model$div,
-			A2(
-				elm$core$List$cons,
-				mdgriffith$elm_ui$Internal$Model$Describe(mdgriffith$elm_ui$Internal$Model$Paragraph),
-				A2(
-					elm$core$List$cons,
-					mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
-					A2(
-						elm$core$List$cons,
-						mdgriffith$elm_ui$Element$spacing(5),
-						attrs))),
-			mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
-	});
+var miyamoen$bibliopola$Model$Shelf$hasShelves = function (_n0) {
+	var zipper = _n0;
+	return !miyamoen$tree_with_zipper$Tree$Zipper$isEmpty(zipper);
+};
+var mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
+	return {$: 6, a: a};
+};
+var mdgriffith$elm_ui$Internal$Model$CenterX = 1;
+var mdgriffith$elm_ui$Element$centerX = mdgriffith$elm_ui$Internal$Model$AlignX(1);
+var mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
+	return {$: 5, a: a};
+};
+var mdgriffith$elm_ui$Internal$Model$CenterY = 1;
+var mdgriffith$elm_ui$Element$centerY = mdgriffith$elm_ui$Internal$Model$AlignY(1);
 var mdgriffith$elm_ui$Internal$Model$Text = function (a) {
 	return {$: 2, a: a};
 };
@@ -12293,6 +12296,10 @@ var miyamoen$bibliopola$Atom$Constant$fontSize = function (rescale) {
 	return elm$core$Basics$round(
 		A3(mdgriffith$elm_ui$Element$modular, 16, 1.25, rescale));
 };
+var miyamoen$bibliopola$Atom$Constant$space = function (rescale) {
+	return elm$core$Basics$round(
+		A3(mdgriffith$elm_ui$Element$modular, 5, 1.25, rescale));
+};
 var miyamoen$bibliopola$Model$Book$pages = function (_n0) {
 	var book = _n0;
 	return book.aS;
@@ -12301,6 +12308,17 @@ var miyamoen$bibliopola$Model$Book$frontCover = function (book) {
 	return A2(
 		elm$core$Dict$get,
 		'frontCover',
+		miyamoen$bibliopola$Model$Book$pages(book));
+};
+var elm$core$Dict$isEmpty = function (dict) {
+	if (dict.$ === -2) {
+		return true;
+	} else {
+		return false;
+	}
+};
+var miyamoen$bibliopola$Model$Book$hasNoPage = function (book) {
+	return elm$core$Dict$isEmpty(
 		miyamoen$bibliopola$Model$Book$pages(book));
 };
 var miyamoen$bibliopola$Model$Book$isOpen = function (_n0) {
@@ -12329,28 +12347,868 @@ var miyamoen$bibliopola$Model$Book$storiesPage = function (book) {
 				miyamoen$bibliopola$Model$Book$selectedStory(book))),
 		miyamoen$bibliopola$Model$Book$pages(book));
 };
-var miyamoen$bibliopola$Model$Book$currentPage = function (book) {
-	return miyamoen$bibliopola$Model$Book$isOpen(book) ? miyamoen$bibliopola$Model$Book$storiesPage(book) : miyamoen$bibliopola$Model$Book$frontCover(book);
-};
-var miyamoen$bibliopola$Organism$BookPage$view = function (shelf) {
+var miyamoen$tree_with_zipper$Tree$Zipper$sliceForest_ = F3(
+	function (acc, left, right) {
+		sliceForest_:
+		while (true) {
+			if (!right.b) {
+				return elm$core$List$reverse(acc);
+			} else {
+				var head = right.a;
+				var tail = right.b;
+				var newItem = _Utils_Tuple3(left, head, tail);
+				var $temp$acc = A2(elm$core$List$cons, newItem, acc),
+					$temp$left = A2(elm$core$List$cons, head, left),
+					$temp$right = tail;
+				acc = $temp$acc;
+				left = $temp$left;
+				right = $temp$right;
+				continue sliceForest_;
+			}
+		}
+	});
+var miyamoen$tree_with_zipper$Tree$Zipper$sliceForest = A2(miyamoen$tree_with_zipper$Tree$Zipper$sliceForest_, _List_Nil, _List_Nil);
+var miyamoen$tree_with_zipper$Tree$Zipper$openAll = function (_n0) {
+	var tree = _n0.a;
+	var bs = _n0.b;
 	return A2(
-		elm$core$Maybe$withDefault,
+		elm$core$List$map,
+		function (_n1) {
+			var left = _n1.a;
+			var parent = _n1.b;
+			var right = _n1.c;
+			return A2(
+				miyamoen$tree_with_zipper$Tree$Zipper$Zipper,
+				parent,
+				A2(
+					elm$core$List$cons,
+					{
+						cP: left,
+						z: miyamoen$tree_with_zipper$Tree$item(tree),
+						c7: right
+					},
+					bs));
+		},
+		miyamoen$tree_with_zipper$Tree$Zipper$sliceForest(
+			miyamoen$tree_with_zipper$Tree$descendants(tree)));
+};
+var miyamoen$bibliopola$Model$Shelf$openChirdren = function (shelf) {
+	var zipper = shelf;
+	return A2(
+		elm$core$List$map,
+		elm$core$Basics$identity,
+		miyamoen$tree_with_zipper$Tree$Zipper$openAll(zipper));
+};
+var miyamoen$bibliopola$Model$Shelf$pathString = function (shelf) {
+	return A2(
+		elm$core$String$join,
+		'/',
+		miyamoen$bibliopola$Model$Shelf$path(shelf));
+};
+var elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 0, a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		elm$html$Html$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
+var mdgriffith$elm_ui$Element$Events$onClick = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Attr, elm$html$Html$Events$onClick);
+var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var elm$svg$Svg$path = elm$svg$Svg$trustedNode('path');
+var elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
+var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
+var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var mdgriffith$elm_ui$Internal$Model$unstyled = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Unstyled, elm$core$Basics$always);
+var mdgriffith$elm_ui$Element$html = mdgriffith$elm_ui$Internal$Model$unstyled;
+var mdgriffith$elm_ui$Internal$Flag$cursor = mdgriffith$elm_ui$Internal$Flag$flag(21);
+var mdgriffith$elm_ui$Element$pointer = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$cursor, mdgriffith$elm_ui$Internal$Style$classes.co);
+var miyamoen$bibliopola$Atom$Constant$iconSize = function (rescale) {
+	return elm$core$Basics$round(
+		A3(mdgriffith$elm_ui$Element$modular, 16, 1.75, rescale));
+};
+var elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2(elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var elm$html$Html$Attributes$classList = function (classes) {
+	return elm$html$Html$Attributes$class(
 		A2(
-			mdgriffith$elm_ui$Element$paragraph,
+			elm$core$String$join,
+			' ',
+			A2(
+				elm$core$List$map,
+				elm$core$Tuple$first,
+				A2(elm$core$List$filter, elm$core$Tuple$second, classes))));
+};
+var mdgriffith$elm_ui$Element$htmlAttribute = mdgriffith$elm_ui$Internal$Model$Attr;
+var miyamoen$bibliopola$Element$Util$attributeWhenJust = F2(
+	function (maybe, toAttr) {
+		if (!maybe.$) {
+			var a = maybe.a;
+			return toAttr(a);
+		} else {
+			return mdgriffith$elm_ui$Element$htmlAttribute(
+				elm$html$Html$Attributes$classList(_List_Nil));
+		}
+	});
+var miyamoen$bibliopola$Element$Util$onClickWhenJust = function (maybe) {
+	return A2(miyamoen$bibliopola$Element$Util$attributeWhenJust, maybe, mdgriffith$elm_ui$Element$Events$onClick);
+};
+var mdgriffith$elm_ui$Element$toRgb = function (_n0) {
+	var r = _n0.a;
+	var g = _n0.b;
+	var b = _n0.c;
+	var a = _n0.d;
+	return {b0: a, b7: b, cz: g, c5: r};
+};
+var miyamoen$bibliopola$Color$toCss = function (color) {
+	var record = mdgriffith$elm_ui$Element$toRgb(color);
+	return elm$core$String$concat(
+		_List_fromArray(
+			[
+				'rgba(',
+				A2(
+				elm$core$String$join,
+				',',
+				_List_fromArray(
+					[
+						elm$core$String$fromInt(
+						elm$core$Basics$round(record.c5 * 255)),
+						elm$core$String$fromInt(
+						elm$core$Basics$round(record.cz * 255)),
+						elm$core$String$fromInt(
+						elm$core$Basics$round(record.b7 * 255)),
+						elm$core$String$fromFloat(record.b0)
+					])),
+				')'
+			]));
+};
+var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
+var miyamoen$bibliopola$Element$Util$style = F2(
+	function (key, value) {
+		return mdgriffith$elm_ui$Element$htmlAttribute(
+			A2(elm$html$Html$Attributes$style, key, value));
+	});
+var miyamoen$bibliopola$Element$Util$svgColor = function (color) {
+	return A2(
+		miyamoen$bibliopola$Element$Util$style,
+		'fill',
+		miyamoen$bibliopola$Color$toCss(color));
+};
+var miyamoen$bibliopola$Atom$Icon$view = F2(
+	function (svgDoms, _n0) {
+		var onClick = _n0.cX;
+		var size = _n0.di;
+		var color = _n0.cl;
+		return A2(
+			mdgriffith$elm_ui$Element$el,
 			_List_fromArray(
 				[
-					mdgriffith$elm_ui$Element$Font$size(
-					miyamoen$bibliopola$Atom$Constant$fontSize(2))
+					mdgriffith$elm_ui$Element$width(
+					mdgriffith$elm_ui$Element$px(
+						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
+					mdgriffith$elm_ui$Element$height(
+					mdgriffith$elm_ui$Element$px(
+						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
+					miyamoen$bibliopola$Element$Util$svgColor(color),
+					A2(
+					miyamoen$bibliopola$Element$Util$attributeWhenJust,
+					onClick,
+					elm$core$Basics$always(mdgriffith$elm_ui$Element$pointer)),
+					miyamoen$bibliopola$Element$Util$onClickWhenJust(onClick)
+				]),
+			mdgriffith$elm_ui$Element$html(
+				A2(
+					elm$svg$Svg$svg,
+					_List_fromArray(
+						[
+							elm$svg$Svg$Attributes$viewBox('0 0 512 512')
+						]),
+					svgDoms)));
+	});
+var miyamoen$bibliopola$Atom$Icon$Book$pathString = 'M415.594,93.344l-18.906-62.563c4.625-2.969,7.75-8.156,7.75-14.078C404.438,7.469,396.969,0,387.719,0\n H129.891C112.5,0,96.609,7.094,85.25,18.5c-11.406,11.359-18.516,27.25-18.5,44.625V470.75C66.75,493.531,85.219,512,108,512h302.5\n c19.188,0,34.75-15.547,34.75-34.734V127.578C445.25,110.125,432.344,95.844,415.594,93.344z M129.891,92.844\n c-8.266,0-15.594-3.313-21.016-8.703c-5.406-5.453-8.719-12.766-8.719-21.016s3.313-15.578,8.719-21.016\n c5.422-5.391,12.75-8.703,21.016-8.703h241.984l17.969,59.438H129.891z';
+var miyamoen$bibliopola$Atom$Icon$Book$view = function (config) {
+	return A2(
+		miyamoen$bibliopola$Atom$Icon$view,
+		_List_fromArray(
+			[
+				A2(
+				elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Book$pathString)
+					]),
+				_List_Nil)
+			]),
+		config);
+};
+var miyamoen$bibliopola$Atom$Icon$OpenBook$pathString = 'M488.875,101.766c-1.391-3.016-3.844-5.547-6.969-6.984c-6.484-3-13.891-5.531-22.156-7.781\n c-12.406-3.328-26.766-5.938-42.578-7.766c-15.813-1.797-33.078-2.797-51.188-2.797c-24.156,0-46.797,1.75-66.516,4.875\n c-9.875,1.563-18.984,3.469-27.266,5.688c-5.844,1.594-11.234,3.328-16.203,5.281c-4.969-1.953-10.359-3.688-16.219-5.281\n c-12.391-3.328-26.75-5.938-42.563-7.766c-15.828-1.797-33.094-2.797-51.203-2.797c-24.156,0-46.797,1.75-66.516,4.875\n C69.656,82.875,60.516,84.781,52.25,87c-8.266,2.25-15.672,4.781-22.172,7.781c-3.125,1.438-5.563,3.969-6.953,6.984\n C12.313,104.469,0,109.531,0,118.516c0,5.609,0,260.422,0,260.422c0,25.047,20.313,45.359,45.359,45.359h182.797v2.359\n c0,4.922,3.969,8.906,8.875,8.906h37.938c4.906,0,8.875-3.984,8.875-8.906v-2.359h182.797c25.047,0,45.359-20.313,45.359-45.359\n c0,0,0-254.813,0-260.422C512,109.531,499.688,104.469,488.875,101.766z M241.781,372.781c-0.672-0.188-1.313-0.391-2-0.594\n c-12.391-3.344-26.75-5.938-42.563-7.766c-15.828-1.797-33.094-2.797-51.203-2.797c-24.156,0-46.797,1.766-66.516,4.875\n c-9.844,1.563-18.984,3.469-27.25,5.688c-0.688,0.203-1.328,0.406-2,0.594V117.344c2.875-1,6.016-1.953,9.406-2.875\n c10.656-2.875,23.75-5.297,38.391-6.969c14.672-1.688,30.891-2.609,47.969-2.609c22.766,0,44.047,1.672,62.063,4.516\n c9.016,1.422,17.203,3.156,24.297,5.063c3.406,0.922,6.547,1.875,9.406,2.875V372.781z M461.734,372.781\n c-0.672-0.188-1.297-0.391-1.984-0.594c-12.406-3.344-26.766-5.938-42.578-7.766c-15.813-1.797-33.078-2.797-51.188-2.797\n c-24.156,0-46.797,1.766-66.516,4.875c-9.875,1.563-18.984,3.469-27.266,5.688c-0.672,0.203-1.313,0.406-1.984,0.594V117.344\n c2.859-1,6-1.953,9.406-2.875c10.641-2.875,23.719-5.297,38.375-6.969c14.672-1.688,30.906-2.609,47.984-2.609\n c22.75,0,44.031,1.672,62.063,4.516c9.016,1.422,17.188,3.156,24.297,5.063c3.391,0.922,6.531,1.875,9.391,2.875V372.781z';
+var miyamoen$bibliopola$Atom$Icon$OpenBook$view = function (config) {
+	return A2(
+		miyamoen$bibliopola$Atom$Icon$view,
+		_List_fromArray(
+			[
+				A2(
+				elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$OpenBook$pathString)
+					]),
+				_List_Nil)
+			]),
+		config);
+};
+var mdgriffith$elm_ui$Element$Background$color = function (clr) {
+	return A2(
+		mdgriffith$elm_ui$Internal$Model$StyleClass,
+		mdgriffith$elm_ui$Internal$Flag$bgColor,
+		A3(
+			mdgriffith$elm_ui$Internal$Model$Colored,
+			'bg-' + mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
+			'background-color',
+			clr));
+};
+var mdgriffith$elm_ui$Internal$Flag$borderColor = mdgriffith$elm_ui$Internal$Flag$flag(28);
+var mdgriffith$elm_ui$Element$Border$color = function (clr) {
+	return A2(
+		mdgriffith$elm_ui$Internal$Model$StyleClass,
+		mdgriffith$elm_ui$Internal$Flag$borderColor,
+		A3(
+			mdgriffith$elm_ui$Internal$Model$Colored,
+			'border-color-' + mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
+			'border-color',
+			clr));
+};
+var mdgriffith$elm_ui$Internal$Flag$borderRound = mdgriffith$elm_ui$Internal$Flag$flag(17);
+var mdgriffith$elm_ui$Element$Border$rounded = function (radius) {
+	return A2(
+		mdgriffith$elm_ui$Internal$Model$StyleClass,
+		mdgriffith$elm_ui$Internal$Flag$borderRound,
+		A3(
+			mdgriffith$elm_ui$Internal$Model$Single,
+			'border-radius-' + elm$core$String$fromInt(radius),
+			'border-radius',
+			elm$core$String$fromInt(radius) + 'px'));
+};
+var mdgriffith$elm_ui$Element$Border$width = function (v) {
+	return A2(
+		mdgriffith$elm_ui$Internal$Model$StyleClass,
+		mdgriffith$elm_ui$Internal$Flag$borderWidth,
+		A3(
+			mdgriffith$elm_ui$Internal$Model$Single,
+			'border-' + elm$core$String$fromInt(v),
+			'border-width',
+			elm$core$String$fromInt(v) + 'px'));
+};
+var miyamoen$bibliopola$Atom$Constant$borderWidth = function (rescale) {
+	return elm$core$Basics$round(
+		A3(mdgriffith$elm_ui$Element$modular, 2, 1.25, rescale));
+};
+var mdgriffith$elm_ui$Element$rgba255 = F4(
+	function (red, green, blue, a) {
+		return A4(mdgriffith$elm_ui$Internal$Model$Rgba, red / 255, green / 255, blue / 255, a);
+	});
+var miyamoen$bibliopola$Color$alphaGrey = A4(mdgriffith$elm_ui$Element$rgba255, 138, 142, 180, 0.22);
+var mdgriffith$elm_ui$Element$rgb255 = F3(
+	function (red, green, blue) {
+		return A4(mdgriffith$elm_ui$Internal$Model$Rgba, red / 255, green / 255, blue / 255, 1);
+	});
+var miyamoen$bibliopola$Color$blue = A3(mdgriffith$elm_ui$Element$rgb255, 45, 129, 204);
+var miyamoen$bibliopola$Color$greyBlue = A3(mdgriffith$elm_ui$Element$rgb255, 139, 190, 236);
+var miyamoen$bibliopola$Color$white = A3(mdgriffith$elm_ui$Element$rgb255, 230, 230, 230);
+var miyamoen$bibliopola$Atom$Toggle$view = F2(
+	function (_n0, on) {
+		var label = _n0.bk;
+		var onClick = _n0.cX;
+		return A2(
+			mdgriffith$elm_ui$Element$row,
+			_List_fromArray(
+				[
+					mdgriffith$elm_ui$Element$spacing(
+					miyamoen$bibliopola$Atom$Constant$space(1)),
+					mdgriffith$elm_ui$Element$centerY,
+					miyamoen$bibliopola$Element$Util$onClickWhenJust(
+					A2(
+						elm$core$Maybe$map,
+						function (f) {
+							return f(!on);
+						},
+						onClick)),
+					mdgriffith$elm_ui$Element$pointer
 				]),
 			_List_fromArray(
 				[
-					mdgriffith$elm_ui$Element$text('PAGE NOT FOUND')
-				])),
-		miyamoen$bibliopola$Model$Book$currentPage(
-			miyamoen$bibliopola$Model$Shelf$book(shelf)));
+					function () {
+					if (!label.$) {
+						var label_ = label.a;
+						return A2(
+							mdgriffith$elm_ui$Element$el,
+							_List_fromArray(
+								[
+									mdgriffith$elm_ui$Element$Font$size(
+									miyamoen$bibliopola$Atom$Constant$fontSize(2))
+								]),
+							mdgriffith$elm_ui$Element$text(label_));
+					} else {
+						return mdgriffith$elm_ui$Element$none;
+					}
+				}(),
+					A2(
+					mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							mdgriffith$elm_ui$Element$padding(
+							miyamoen$bibliopola$Atom$Constant$space(-1)),
+							mdgriffith$elm_ui$Element$Border$width(
+							miyamoen$bibliopola$Atom$Constant$borderWidth(1)),
+							mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey),
+							mdgriffith$elm_ui$Element$Border$rounded(20)
+						]),
+					A2(
+						mdgriffith$elm_ui$Element$el,
+						_List_fromArray(
+							[
+								mdgriffith$elm_ui$Element$width(
+								mdgriffith$elm_ui$Element$px(40)),
+								mdgriffith$elm_ui$Element$height(
+								mdgriffith$elm_ui$Element$px(16)),
+								mdgriffith$elm_ui$Element$Border$rounded(20),
+								mdgriffith$elm_ui$Element$Background$color(
+								on ? miyamoen$bibliopola$Color$greyBlue : miyamoen$bibliopola$Color$white),
+								A2(miyamoen$bibliopola$Element$Util$style, 'transition', 'background-color .5s')
+							]),
+						A2(
+							mdgriffith$elm_ui$Element$el,
+							_List_fromArray(
+								[
+									mdgriffith$elm_ui$Element$width(
+									mdgriffith$elm_ui$Element$px(16)),
+									mdgriffith$elm_ui$Element$height(
+									mdgriffith$elm_ui$Element$px(16)),
+									mdgriffith$elm_ui$Element$Border$rounded(8),
+									mdgriffith$elm_ui$Element$Background$color(miyamoen$bibliopola$Color$blue),
+									A2(miyamoen$bibliopola$Element$Util$style, 'transition', 'transform .2s'),
+									A2(
+									miyamoen$bibliopola$Element$Util$style,
+									'transform',
+									on ? 'translateX(24px)' : 'translateX(0px)')
+								]),
+							mdgriffith$elm_ui$Element$none)))
+				]));
+	});
+var miyamoen$bibliopola$Color$grey = A3(mdgriffith$elm_ui$Element$rgb255, 97, 99, 116);
+var miyamoen$bibliopola$Model$Book$toggle = function (_n0) {
+	var book = _n0;
+	return _Utils_update(
+		book,
+		{aa: !book.aa});
+};
+var miyamoen$bibliopola$Molecule$BookToggle$iconConfig = function (color) {
+	return {cl: color, cX: elm$core$Maybe$Nothing, di: 2};
+};
+var miyamoen$bibliopola$Types$SetShelf = function (a) {
+	return {$: 7, a: a};
+};
+var miyamoen$bibliopola$Molecule$BookToggle$view = function (shelf) {
+	var isOpen = A2(miyamoen$bibliopola$Model$Shelf$mapBook, miyamoen$bibliopola$Model$Book$isOpen, shelf);
+	return A2(
+		mdgriffith$elm_ui$Element$row,
+		_List_fromArray(
+			[
+				mdgriffith$elm_ui$Element$spacing(
+				miyamoen$bibliopola$Atom$Constant$space(1)),
+				mdgriffith$elm_ui$Element$Events$onClick(
+				miyamoen$bibliopola$Types$SetShelf(
+					A2(miyamoen$bibliopola$Model$Shelf$updateBook, miyamoen$bibliopola$Model$Book$toggle, shelf)))
+			]),
+		_List_fromArray(
+			[
+				miyamoen$bibliopola$Atom$Icon$Book$view(
+				miyamoen$bibliopola$Molecule$BookToggle$iconConfig(
+					isOpen ? miyamoen$bibliopola$Color$alphaGrey : miyamoen$bibliopola$Color$grey)),
+				A2(
+				miyamoen$bibliopola$Atom$Toggle$view,
+				{bk: elm$core$Maybe$Nothing, cX: elm$core$Maybe$Nothing},
+				isOpen),
+				miyamoen$bibliopola$Atom$Icon$OpenBook$view(
+				miyamoen$bibliopola$Molecule$BookToggle$iconConfig(
+					isOpen ? miyamoen$bibliopola$Color$blue : miyamoen$bibliopola$Color$alphaGrey))
+			]));
+};
+var miyamoen$bibliopola$Model$Book$toggleShelf = function (_n0) {
+	var book = _n0;
+	return _Utils_update(
+		book,
+		{aG: !book.aG});
+};
+var miyamoen$bibliopola$Atom$Icon$Caret$Down = 1;
+var miyamoen$bibliopola$Atom$Icon$Caret$Right = 2;
+var elm$svg$Svg$polygon = elm$svg$Svg$trustedNode('polygon');
+var elm$svg$Svg$Attributes$points = _VirtualDom_attribute('points');
+var mdgriffith$elm_ui$Internal$Flag$rotate = mdgriffith$elm_ui$Internal$Flag$flag(24);
+var mdgriffith$elm_ui$Internal$Model$Rotate = F2(
+	function (a, b) {
+		return {$: 4, a: a, b: b};
+	});
+var mdgriffith$elm_ui$Internal$Model$TransformComponent = F2(
+	function (a, b) {
+		return {$: 10, a: a, b: b};
+	});
+var mdgriffith$elm_ui$Element$rotate = function (angle) {
+	return A2(
+		mdgriffith$elm_ui$Internal$Model$TransformComponent,
+		mdgriffith$elm_ui$Internal$Flag$rotate,
+		A2(
+			mdgriffith$elm_ui$Internal$Model$Rotate,
+			_Utils_Tuple3(0, 0, 1),
+			angle));
+};
+var elm$core$Basics$pi = _Basics_pi;
+var elm$core$Basics$degrees = function (angleInDegrees) {
+	return (angleInDegrees * elm$core$Basics$pi) / 180;
+};
+var miyamoen$bibliopola$Atom$Icon$Caret$directionAngle = function (direction) {
+	return elm$core$Basics$degrees(
+		function () {
+			switch (direction) {
+				case 0:
+					return 0;
+				case 1:
+					return 180;
+				case 2:
+					return 90;
+				default:
+					return -90;
+			}
+		}());
+};
+var miyamoen$bibliopola$Atom$Icon$Caret$pointsString = '255.992,92.089 0,348.081 71.821,419.911 255.992,235.74 440.18,419.911 512,348.081';
+var miyamoen$bibliopola$Atom$Icon$Caret$view = F2(
+	function (_n0, direction) {
+		var color = _n0.cl;
+		var onClick = _n0.cX;
+		var size = _n0.di;
+		return A2(
+			mdgriffith$elm_ui$Element$el,
+			_List_fromArray(
+				[
+					mdgriffith$elm_ui$Element$width(
+					mdgriffith$elm_ui$Element$px(
+						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
+					mdgriffith$elm_ui$Element$height(
+					mdgriffith$elm_ui$Element$px(
+						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
+					miyamoen$bibliopola$Element$Util$svgColor(color),
+					A2(miyamoen$bibliopola$Element$Util$style, 'transition-property', 'transform'),
+					A2(miyamoen$bibliopola$Element$Util$style, 'transition-duration', '0.2s'),
+					mdgriffith$elm_ui$Element$rotate(
+					miyamoen$bibliopola$Atom$Icon$Caret$directionAngle(direction)),
+					A2(
+					miyamoen$bibliopola$Element$Util$attributeWhenJust,
+					onClick,
+					elm$core$Basics$always(mdgriffith$elm_ui$Element$pointer)),
+					A2(
+					miyamoen$bibliopola$Element$Util$attributeWhenJust,
+					onClick,
+					elm$core$Basics$always(mdgriffith$elm_ui$Element$pointer)),
+					miyamoen$bibliopola$Element$Util$onClickWhenJust(
+					A2(
+						elm$core$Maybe$map,
+						function (f) {
+							return f(direction);
+						},
+						onClick))
+				]),
+			mdgriffith$elm_ui$Element$html(
+				A2(
+					elm$svg$Svg$svg,
+					_List_fromArray(
+						[
+							elm$svg$Svg$Attributes$viewBox('0 0 512 512')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							elm$svg$Svg$polygon,
+							_List_fromArray(
+								[
+									elm$svg$Svg$Attributes$points(miyamoen$bibliopola$Atom$Icon$Caret$pointsString)
+								]),
+							_List_Nil)
+						]))));
+	});
+var miyamoen$bibliopola$Atom$Icon$RuledLine$Horizontal = 1;
+var mdgriffith$elm_ui$Internal$Model$Left = 0;
+var mdgriffith$elm_ui$Element$alignLeft = mdgriffith$elm_ui$Internal$Model$AlignX(0);
+var mdgriffith$elm_ui$Internal$Model$Top = 0;
+var mdgriffith$elm_ui$Element$alignTop = mdgriffith$elm_ui$Internal$Model$AlignY(0);
+var mdgriffith$elm_ui$Element$Border$widthEach = function (_n0) {
+	var bottom = _n0.ce;
+	var top = _n0.dF;
+	var left = _n0.cP;
+	var right = _n0.c7;
+	return A2(
+		mdgriffith$elm_ui$Internal$Model$StyleClass,
+		mdgriffith$elm_ui$Internal$Flag$borderWidth,
+		A3(
+			mdgriffith$elm_ui$Internal$Model$Single,
+			'border-' + (elm$core$String$fromInt(top) + ('-' + (elm$core$String$fromInt(right) + (elm$core$String$fromInt(bottom) + ('-' + elm$core$String$fromInt(left)))))),
+			'border-width',
+			elm$core$String$fromInt(top) + ('px ' + (elm$core$String$fromInt(right) + ('px ' + (elm$core$String$fromInt(bottom) + ('px ' + (elm$core$String$fromInt(left) + 'px'))))))));
+};
+var miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth = miyamoen$bibliopola$Atom$Constant$borderWidth(1);
+var miyamoen$bibliopola$Atom$Icon$RuledLine$zero = {ce: 0, cP: 0, c7: 0, dF: 0};
+var miyamoen$bibliopola$Atom$Icon$RuledLine$view = F2(
+	function (_n0, ruledLine) {
+		var size = _n0.di;
+		var unit = miyamoen$bibliopola$Atom$Constant$iconSize(size);
+		return A2(
+			mdgriffith$elm_ui$Element$el,
+			_List_fromArray(
+				[
+					mdgriffith$elm_ui$Element$width(
+					mdgriffith$elm_ui$Element$px(unit)),
+					mdgriffith$elm_ui$Element$height(
+					mdgriffith$elm_ui$Element$px(unit))
+				]),
+			function () {
+				switch (ruledLine) {
+					case 0:
+						return A2(
+							mdgriffith$elm_ui$Element$el,
+							_List_fromArray(
+								[
+									mdgriffith$elm_ui$Element$width(
+									mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
+									mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill),
+									mdgriffith$elm_ui$Element$alignLeft,
+									mdgriffith$elm_ui$Element$Border$widthEach(
+									_Utils_update(
+										miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
+										{c7: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
+									mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
+								]),
+							mdgriffith$elm_ui$Element$none);
+					case 1:
+						return A2(
+							mdgriffith$elm_ui$Element$el,
+							_List_fromArray(
+								[
+									mdgriffith$elm_ui$Element$height(
+									mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
+									mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
+									mdgriffith$elm_ui$Element$alignTop,
+									mdgriffith$elm_ui$Element$Border$widthEach(
+									_Utils_update(
+										miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
+										{ce: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
+									mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
+								]),
+							mdgriffith$elm_ui$Element$none);
+					default:
+						return A2(
+							mdgriffith$elm_ui$Element$row,
+							_List_fromArray(
+								[
+									mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
+									mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill)
+								]),
+							_List_fromArray(
+								[
+									A2(
+									mdgriffith$elm_ui$Element$el,
+									_List_fromArray(
+										[
+											mdgriffith$elm_ui$Element$width(
+											mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
+											mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill),
+											mdgriffith$elm_ui$Element$Border$widthEach(
+											_Utils_update(
+												miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
+												{c7: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
+											mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
+										]),
+									mdgriffith$elm_ui$Element$none),
+									A2(
+									mdgriffith$elm_ui$Element$el,
+									_List_fromArray(
+										[
+											mdgriffith$elm_ui$Element$height(
+											mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
+											mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
+											mdgriffith$elm_ui$Element$alignTop,
+											mdgriffith$elm_ui$Element$Border$widthEach(
+											_Utils_update(
+												miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
+												{ce: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
+											mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
+										]),
+									mdgriffith$elm_ui$Element$none)
+								]));
+				}
+			}());
+	});
+var miyamoen$bibliopola$Model$Book$shelfIsOpen = function (_n0) {
+	var book = _n0;
+	return book.aG;
+};
+var miyamoen$bibliopola$Molecule$ShelfItem$caret = function (shelf) {
+	return (!miyamoen$bibliopola$Model$Shelf$hasShelves(shelf)) ? A2(
+		miyamoen$bibliopola$Atom$Icon$RuledLine$view,
+		{di: 1},
+		1) : A2(
+		miyamoen$bibliopola$Atom$Icon$Caret$view,
+		{cl: miyamoen$bibliopola$Color$grey, cX: elm$core$Maybe$Nothing, di: 1},
+		A2(miyamoen$bibliopola$Model$Shelf$mapBook, miyamoen$bibliopola$Model$Book$shelfIsOpen, shelf) ? 1 : 2);
+};
+var miyamoen$bibliopola$Atom$Icon$Books$path0 = 'M259.031,156.638c-0.009-8.693-0.009-16.24,1.061-23.4l-6.258,7.169\n c-10.95,12.627-38.637,20.788-61.835,18.237c-23.215-2.561-33.138-14.859-22.179-27.494l82.473-86.306\n c1.601-1.684,2.055-4.161,1.138-6.301c-0.91-2.123-3.016-3.521-5.341-3.521h-13.283c-3.892,0-7.614,1.55-10.336,4.33\n l-71.548,72.499c-14.681,15.365-13.999,23.898-13.999,47.802c0,17.066,0,276.892,0,276.892c0,20.494,25.758,37.417,48.964,39.96\n c23.207,2.57,54.996-5.61,65.946-18.228l7.287-8.474c-1.306-4.228-2.089-8.642-2.089-13.258V156.638z';
+var miyamoen$bibliopola$Atom$Icon$Books$path1 = 'M120.113,156.638c-0.009-8.693-0.009-16.24,1.062-23.4l-6.267,7.169\n c-10.95,12.627-38.629,20.788-61.835,18.237c-23.207-2.561-33.138-14.859-22.179-27.494l82.481-86.306\n c1.591-1.684,2.054-4.161,1.137-6.301c-0.91-2.123-3.016-3.521-5.34-3.521H95.879c-3.883,0-7.597,1.55-10.326,4.33l-71.548,72.499\n c-14.682,15.365-14,23.898-14,47.802c0,17.066,0,276.892,0,276.892c0,20.494,25.75,37.417,48.965,39.96\n c23.197,2.57,54.988-5.61,65.938-18.228l7.303-8.474c-1.314-4.228-2.098-8.642-2.098-13.258V156.638z';
+var miyamoen$bibliopola$Atom$Icon$Books$path2 = 'M506.197,35.022h-14.379c-4.195,0-8.188,1.82-10.951,4.978l-87.51,100.406\n c-10.95,12.627-38.638,20.788-61.835,18.237c-23.215-2.561-33.137-14.859-22.179-27.494l82.473-86.306\n c1.601-1.684,2.055-4.161,1.145-6.301c-0.918-2.123-3.024-3.521-5.34-3.521H374.33c-3.883,0-7.607,1.55-10.336,4.33l-71.548,72.499\n c-14.682,15.365-13.999,23.898-13.999,47.802c0,17.066,0,276.892,0,276.892c0,20.494,25.758,37.417,48.964,39.96\n c23.214,2.57,54.996-5.61,65.946-18.228L501.454,332.72c6.806-7.918,10.546-17.992,10.546-28.42V40.826\n C512,37.625,509.397,35.022,506.197,35.022z';
+var miyamoen$bibliopola$Atom$Icon$Books$view = function (config) {
+	return A2(
+		miyamoen$bibliopola$Atom$Icon$view,
+		_List_fromArray(
+			[
+				A2(
+				elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Books$path0)
+					]),
+				_List_Nil),
+				A2(
+				elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Books$path1)
+					]),
+				_List_Nil),
+				A2(
+				elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Books$path2)
+					]),
+				_List_Nil)
+			]),
+		config);
+};
+var miyamoen$bibliopola$Molecule$ShelfItem$icon = function (shelf) {
+	return (miyamoen$bibliopola$Model$Shelf$hasShelves(shelf) ? miyamoen$bibliopola$Atom$Icon$Books$view : miyamoen$bibliopola$Atom$Icon$Book$view)(
+		{cl: miyamoen$bibliopola$Color$grey, cX: elm$core$Maybe$Nothing, di: 1});
+};
+var elm$core$List$repeatHelp = F3(
+	function (result, n, value) {
+		repeatHelp:
+		while (true) {
+			if (n <= 0) {
+				return result;
+			} else {
+				var $temp$result = A2(elm$core$List$cons, value, result),
+					$temp$n = n - 1,
+					$temp$value = value;
+				result = $temp$result;
+				n = $temp$n;
+				value = $temp$value;
+				continue repeatHelp;
+			}
+		}
+	});
+var elm$core$List$repeat = F2(
+	function (n, value) {
+		return A3(elm$core$List$repeatHelp, _List_Nil, n, value);
+	});
+var miyamoen$bibliopola$Atom$Icon$RuledLine$Vertical = 0;
+var miyamoen$bibliopola$Atom$Icon$RuledLine$VerticalRight = 2;
+var miyamoen$tree_with_zipper$Tree$Zipper$breadcrumbs = function (_n0) {
+	var bs = _n0.b;
+	return A2(
+		elm$core$List$map,
+		function (_n1) {
+			var parent = _n1.z;
+			return parent;
+		},
+		bs);
+};
+var miyamoen$bibliopola$Model$Shelf$depth = function (_n0) {
+	var zipper = _n0;
+	return elm$core$List$length(
+		miyamoen$tree_with_zipper$Tree$Zipper$breadcrumbs(zipper));
+};
+var miyamoen$bibliopola$Molecule$ShelfItem$ruledLine = function (shelf) {
+	var depth = miyamoen$bibliopola$Model$Shelf$depth(shelf);
+	switch (depth) {
+		case 0:
+			return _List_Nil;
+		case 1:
+			return _List_fromArray(
+				[
+					A2(
+					miyamoen$bibliopola$Atom$Icon$RuledLine$view,
+					{di: 1},
+					2)
+				]);
+		default:
+			return _Utils_ap(
+				A2(
+					elm$core$List$repeat,
+					depth - 1,
+					A2(
+						miyamoen$bibliopola$Atom$Icon$RuledLine$view,
+						{di: 1},
+						0)),
+				_List_fromArray(
+					[
+						A2(
+						miyamoen$bibliopola$Atom$Icon$RuledLine$view,
+						{di: 1},
+						2)
+					]));
+	}
+};
+var miyamoen$bibliopola$Molecule$ShelfItem$view = function (shelf) {
+	return A2(
+		mdgriffith$elm_ui$Element$row,
+		_List_fromArray(
+			[
+				mdgriffith$elm_ui$Element$spacing(
+				miyamoen$bibliopola$Atom$Constant$space(1)),
+				mdgriffith$elm_ui$Element$pointer,
+				mdgriffith$elm_ui$Element$Events$onClick(
+				miyamoen$bibliopola$Types$SetShelf(
+					A2(miyamoen$bibliopola$Model$Shelf$updateBook, miyamoen$bibliopola$Model$Book$toggleShelf, shelf)))
+			]),
+		_Utils_ap(
+			miyamoen$bibliopola$Molecule$ShelfItem$ruledLine(shelf),
+			_List_fromArray(
+				[
+					miyamoen$bibliopola$Molecule$ShelfItem$caret(shelf),
+					miyamoen$bibliopola$Molecule$ShelfItem$icon(shelf),
+					A2(
+					mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							mdgriffith$elm_ui$Element$Font$size(
+							miyamoen$bibliopola$Atom$Constant$fontSize(2))
+						]),
+					mdgriffith$elm_ui$Element$text(
+						A2(miyamoen$bibliopola$Model$Shelf$mapBook, miyamoen$bibliopola$Model$Book$title, shelf)))
+				])));
+};
+var miyamoen$bibliopola$Organism$FrontCover$view = function (shelf) {
+	return A2(
+		mdgriffith$elm_ui$Element$column,
+		_List_fromArray(
+			[
+				mdgriffith$elm_ui$Element$centerX,
+				mdgriffith$elm_ui$Element$centerY,
+				mdgriffith$elm_ui$Element$spacing(
+				miyamoen$bibliopola$Atom$Constant$space(1)),
+				mdgriffith$elm_ui$Element$Events$onClick(
+				miyamoen$bibliopola$Types$SetShelf(
+					A2(miyamoen$bibliopola$Model$Shelf$updateBook, miyamoen$bibliopola$Model$Book$toggle, shelf)))
+			]),
+		_List_fromArray(
+			[
+				miyamoen$bibliopola$Atom$Icon$Book$view(
+				{cl: miyamoen$bibliopola$Color$grey, cX: elm$core$Maybe$Nothing, di: 5}),
+				A2(
+				mdgriffith$elm_ui$Element$el,
+				_List_fromArray(
+					[
+						mdgriffith$elm_ui$Element$Font$size(
+						miyamoen$bibliopola$Atom$Constant$fontSize(2)),
+						mdgriffith$elm_ui$Element$centerX
+					]),
+				mdgriffith$elm_ui$Element$text('Click to Open'))
+			]));
+};
+var miyamoen$bibliopola$Organism$BookPage$view = function (shelf) {
+	var book = miyamoen$bibliopola$Model$Shelf$book(shelf);
+	return A2(
+		mdgriffith$elm_ui$Element$column,
+		_List_fromArray(
+			[
+				mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
+				mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill),
+				mdgriffith$elm_ui$Element$spacing(
+				miyamoen$bibliopola$Atom$Constant$space(3))
+			]),
+		_List_fromArray(
+			[
+				A2(
+				mdgriffith$elm_ui$Element$row,
+				_List_fromArray(
+					[
+						mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
+						mdgriffith$elm_ui$Element$spacing(
+						miyamoen$bibliopola$Atom$Constant$space(4))
+					]),
+				_List_fromArray(
+					[
+						miyamoen$bibliopola$Molecule$BookToggle$view(shelf),
+						A2(
+						mdgriffith$elm_ui$Element$el,
+						_List_fromArray(
+							[
+								mdgriffith$elm_ui$Element$Font$size(
+								miyamoen$bibliopola$Atom$Constant$fontSize(3))
+							]),
+						mdgriffith$elm_ui$Element$text(
+							A2(
+								elm$core$String$join,
+								'/',
+								_List_fromArray(
+									[
+										A2(
+										miyamoen$bibliopola$Model$Shelf$mapBook,
+										miyamoen$bibliopola$Model$Book$title,
+										miyamoen$bibliopola$Model$Shelf$root(shelf)),
+										miyamoen$bibliopola$Model$Shelf$pathString(shelf)
+									]))))
+					])),
+				miyamoen$bibliopola$Model$Book$hasNoPage(book) ? A2(
+				mdgriffith$elm_ui$Element$column,
+				_List_fromArray(
+					[
+						mdgriffith$elm_ui$Element$spacing(
+						miyamoen$bibliopola$Atom$Constant$space(3))
+					]),
+				A2(
+					elm$core$List$map,
+					miyamoen$bibliopola$Molecule$ShelfItem$view,
+					miyamoen$bibliopola$Model$Shelf$openChirdren(shelf))) : (miyamoen$bibliopola$Model$Book$isOpen(book) ? A2(
+				elm$core$Maybe$withDefault,
+				A2(
+					mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[mdgriffith$elm_ui$Element$centerX, mdgriffith$elm_ui$Element$centerY]),
+					mdgriffith$elm_ui$Element$text('PAGE NOT FOUND')),
+				miyamoen$bibliopola$Model$Book$storiesPage(book)) : A2(
+				elm$core$Maybe$withDefault,
+				miyamoen$bibliopola$Organism$FrontCover$view(shelf),
+				miyamoen$bibliopola$Model$Book$frontCover(book)))
+			]));
 };
 var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
-var mdgriffith$elm_ui$Internal$Model$Empty = {$: 3};
 var mdgriffith$elm_ui$Internal$Model$map = F2(
 	function (fn, el) {
 		switch (el.$) {
@@ -12382,28 +13240,6 @@ var mdgriffith$elm_ui$Internal$Model$map = F2(
 		}
 	});
 var mdgriffith$elm_ui$Element$map = mdgriffith$elm_ui$Internal$Model$map;
-var mdgriffith$elm_ui$Element$Background$color = function (clr) {
-	return A2(
-		mdgriffith$elm_ui$Internal$Model$StyleClass,
-		mdgriffith$elm_ui$Internal$Flag$bgColor,
-		A3(
-			mdgriffith$elm_ui$Internal$Model$Colored,
-			'bg-' + mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
-			'background-color',
-			clr));
-};
-var mdgriffith$elm_ui$Internal$Flag$borderColor = mdgriffith$elm_ui$Internal$Flag$flag(28);
-var mdgriffith$elm_ui$Element$Border$color = function (clr) {
-	return A2(
-		mdgriffith$elm_ui$Internal$Model$StyleClass,
-		mdgriffith$elm_ui$Internal$Flag$borderColor,
-		A3(
-			mdgriffith$elm_ui$Internal$Model$Colored,
-			'border-color-' + mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
-			'border-color',
-			clr));
-};
-var mdgriffith$elm_ui$Internal$Flag$borderRound = mdgriffith$elm_ui$Internal$Flag$flag(17);
 var mdgriffith$elm_ui$Element$Border$roundEach = function (_n0) {
 	var topLeft = _n0.dG;
 	var topRight = _n0.dH;
@@ -12418,67 +13254,14 @@ var mdgriffith$elm_ui$Element$Border$roundEach = function (_n0) {
 			'border-radius',
 			elm$core$String$fromInt(topLeft) + ('px ' + (elm$core$String$fromInt(topRight) + ('px ' + (elm$core$String$fromInt(bottomRight) + ('px ' + (elm$core$String$fromInt(bottomLeft) + 'px'))))))));
 };
-var mdgriffith$elm_ui$Element$Border$widthEach = function (_n0) {
-	var bottom = _n0.ce;
-	var top = _n0.dF;
-	var left = _n0.cP;
-	var right = _n0.c7;
-	return A2(
-		mdgriffith$elm_ui$Internal$Model$StyleClass,
-		mdgriffith$elm_ui$Internal$Flag$borderWidth,
-		A3(
-			mdgriffith$elm_ui$Internal$Model$Single,
-			'border-' + (elm$core$String$fromInt(top) + ('-' + (elm$core$String$fromInt(right) + (elm$core$String$fromInt(bottom) + ('-' + elm$core$String$fromInt(left)))))),
-			'border-width',
-			elm$core$String$fromInt(top) + ('px ' + (elm$core$String$fromInt(right) + ('px ' + (elm$core$String$fromInt(bottom) + ('px ' + (elm$core$String$fromInt(left) + 'px'))))))));
-};
-var miyamoen$bibliopola$Atom$Constant$borderWidth = function (rescale) {
-	return elm$core$Basics$round(
-		A3(mdgriffith$elm_ui$Element$modular, 2, 1.25, rescale));
-};
 var miyamoen$bibliopola$Atom$Constant$roundLength = function (rescale) {
 	return elm$core$Basics$round(
 		A3(mdgriffith$elm_ui$Element$modular, 5, 1.25, rescale));
 };
 var miyamoen$bibliopola$Atom$Constant$zero = {ce: 0, cP: 0, c7: 0, dF: 0};
 var miyamoen$bibliopola$Atom$Constant$zeroCorner = {cf: 0, cg: 0, dG: 0, dH: 0};
-var mdgriffith$elm_ui$Element$rgba255 = F4(
-	function (red, green, blue, a) {
-		return A4(mdgriffith$elm_ui$Internal$Model$Rgba, red / 255, green / 255, blue / 255, a);
-	});
-var miyamoen$bibliopola$Color$alphaGrey = A4(mdgriffith$elm_ui$Element$rgba255, 138, 142, 180, 0.22);
-var mdgriffith$elm_ui$Element$rgb255 = F3(
-	function (red, green, blue) {
-		return A4(mdgriffith$elm_ui$Internal$Model$Rgba, red / 255, green / 255, blue / 255, 1);
-	});
-var miyamoen$bibliopola$Color$white = A3(mdgriffith$elm_ui$Element$rgb255, 230, 230, 230);
-var miyamoen$bibliopola$Atom$Constant$space = function (rescale) {
-	return elm$core$Basics$round(
-		A3(mdgriffith$elm_ui$Element$modular, 5, 1.25, rescale));
-};
-var mdgriffith$elm_ui$Internal$Flag$cursor = mdgriffith$elm_ui$Internal$Flag$flag(21);
-var mdgriffith$elm_ui$Element$pointer = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$cursor, mdgriffith$elm_ui$Internal$Style$classes.co);
-var elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 0, a: a};
-};
-var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			elm$virtual_dom$VirtualDom$on,
-			event,
-			elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		elm$html$Html$Events$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
-var mdgriffith$elm_ui$Element$Events$onClick = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Attr, elm$html$Html$Events$onClick);
 var mdgriffith$elm_ui$Internal$Flag$fontAlignment = mdgriffith$elm_ui$Internal$Flag$flag(12);
 var mdgriffith$elm_ui$Element$Font$center = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontAlignment, mdgriffith$elm_ui$Internal$Style$classes.dr);
-var miyamoen$bibliopola$Color$grey = A3(mdgriffith$elm_ui$Element$rgb255, 97, 99, 116);
 var miyamoen$bibliopola$Atom$Tab$view = F2(
 	function (_n0, label) {
 		var selected = _n0.de;
@@ -12682,7 +13465,6 @@ var mdgriffith$elm_ui$Element$Font$color = function (fontColor) {
 };
 var mdgriffith$elm_ui$Element$Font$italic = mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.cO);
 var mdgriffith$elm_ui$Element$Font$underline = mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.dI);
-var miyamoen$bibliopola$Color$blue = A3(mdgriffith$elm_ui$Element$rgb255, 45, 129, 204);
 var miyamoen$bibliopola$Organism$Credit$gitHubLink = 'https://github.com/miyamoen/bibliopola';
 var miyamoen$bibliopola$Organism$Credit$packageLink = 'http://package.elm-lang.org/packages/miyamoen/bibliopola/latest';
 var miyamoen$bibliopola$Organism$Credit$twitterLink = 'https://twitter.com/miyamo_madoka';
@@ -12721,11 +13503,6 @@ var miyamoen$bibliopola$Organism$Credit$view = A2(
 				aV: miyamoen$bibliopola$Organism$Credit$twitterLink
 			})
 		]));
-var mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
-	return {$: 5, a: a};
-};
-var mdgriffith$elm_ui$Internal$Model$Top = 0;
-var mdgriffith$elm_ui$Element$alignTop = mdgriffith$elm_ui$Internal$Model$AlignY(0);
 var mdgriffith$elm_ui$Element$Keyed$column = F2(
 	function (attrs, children) {
 		return A4(
@@ -12746,125 +13523,6 @@ var mdgriffith$elm_ui$Element$Keyed$column = F2(
 							mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
 							attrs)))),
 			mdgriffith$elm_ui$Internal$Model$Keyed(children));
-	});
-var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
-var elm$svg$Svg$path = elm$svg$Svg$trustedNode('path');
-var elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
-var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
-var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
-var mdgriffith$elm_ui$Internal$Model$unstyled = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Unstyled, elm$core$Basics$always);
-var mdgriffith$elm_ui$Element$html = mdgriffith$elm_ui$Internal$Model$unstyled;
-var miyamoen$bibliopola$Atom$Constant$iconSize = function (rescale) {
-	return elm$core$Basics$round(
-		A3(mdgriffith$elm_ui$Element$modular, 16, 1.75, rescale));
-};
-var elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2(elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
-var elm$html$Html$Attributes$classList = function (classes) {
-	return elm$html$Html$Attributes$class(
-		A2(
-			elm$core$String$join,
-			' ',
-			A2(
-				elm$core$List$map,
-				elm$core$Tuple$first,
-				A2(elm$core$List$filter, elm$core$Tuple$second, classes))));
-};
-var mdgriffith$elm_ui$Element$htmlAttribute = mdgriffith$elm_ui$Internal$Model$Attr;
-var miyamoen$bibliopola$Element$Util$attributeWhenJust = F2(
-	function (maybe, toAttr) {
-		if (!maybe.$) {
-			var a = maybe.a;
-			return toAttr(a);
-		} else {
-			return mdgriffith$elm_ui$Element$htmlAttribute(
-				elm$html$Html$Attributes$classList(_List_Nil));
-		}
-	});
-var miyamoen$bibliopola$Element$Util$onClickWhenJust = function (maybe) {
-	return A2(miyamoen$bibliopola$Element$Util$attributeWhenJust, maybe, mdgriffith$elm_ui$Element$Events$onClick);
-};
-var mdgriffith$elm_ui$Element$toRgb = function (_n0) {
-	var r = _n0.a;
-	var g = _n0.b;
-	var b = _n0.c;
-	var a = _n0.d;
-	return {b0: a, b7: b, cz: g, c5: r};
-};
-var miyamoen$bibliopola$Color$toCss = function (color) {
-	var record = mdgriffith$elm_ui$Element$toRgb(color);
-	return elm$core$String$concat(
-		_List_fromArray(
-			[
-				'rgba(',
-				A2(
-				elm$core$String$join,
-				',',
-				_List_fromArray(
-					[
-						elm$core$String$fromInt(
-						elm$core$Basics$round(record.c5 * 255)),
-						elm$core$String$fromInt(
-						elm$core$Basics$round(record.cz * 255)),
-						elm$core$String$fromInt(
-						elm$core$Basics$round(record.b7 * 255)),
-						elm$core$String$fromFloat(record.b0)
-					])),
-				')'
-			]));
-};
-var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
-var miyamoen$bibliopola$Element$Util$style = F2(
-	function (key, value) {
-		return mdgriffith$elm_ui$Element$htmlAttribute(
-			A2(elm$html$Html$Attributes$style, key, value));
-	});
-var miyamoen$bibliopola$Element$Util$svgColor = function (color) {
-	return A2(
-		miyamoen$bibliopola$Element$Util$style,
-		'fill',
-		miyamoen$bibliopola$Color$toCss(color));
-};
-var miyamoen$bibliopola$Atom$Icon$view = F2(
-	function (svgDoms, _n0) {
-		var onClick = _n0.cX;
-		var size = _n0.di;
-		var color = _n0.cl;
-		return A2(
-			mdgriffith$elm_ui$Element$el,
-			_List_fromArray(
-				[
-					mdgriffith$elm_ui$Element$width(
-					mdgriffith$elm_ui$Element$px(
-						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
-					mdgriffith$elm_ui$Element$height(
-					mdgriffith$elm_ui$Element$px(
-						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
-					miyamoen$bibliopola$Element$Util$svgColor(color),
-					A2(
-					miyamoen$bibliopola$Element$Util$attributeWhenJust,
-					onClick,
-					elm$core$Basics$always(mdgriffith$elm_ui$Element$pointer)),
-					miyamoen$bibliopola$Element$Util$onClickWhenJust(onClick)
-				]),
-			mdgriffith$elm_ui$Element$html(
-				A2(
-					elm$svg$Svg$svg,
-					_List_fromArray(
-						[
-							elm$svg$Svg$Attributes$viewBox('0 0 512 512')
-						]),
-					svgDoms)));
 	});
 var miyamoen$bibliopola$Atom$Icon$Ban$pathString = 'M256,0C114.613,0,0,114.615,0,256s114.613,256,256,256c141.383,0,256-114.615,256-256S397.383,0,256,0z\n M99.594,144.848L367.15,412.406C335.754,434.781,297.402,448,256,448c-105.871,0-192-86.131-192-192\n C64,214.596,77.217,176.244,99.594,144.848z M412.404,367.15L144.848,99.594C176.242,77.219,214.594,64,256,64\n c105.867,0,192,86.131,192,192C448,297.404,434.781,335.756,412.404,367.15z';
 var miyamoen$bibliopola$Atom$Icon$Ban$view = function (config) {
@@ -12911,6 +13569,28 @@ var mdgriffith$elm_ui$Element$paddingEach = function (_n0) {
 			bottom,
 			left));
 };
+var mdgriffith$elm_ui$Internal$Model$Describe = function (a) {
+	return {$: 2, a: a};
+};
+var mdgriffith$elm_ui$Internal$Model$Paragraph = {$: 9};
+var mdgriffith$elm_ui$Element$paragraph = F2(
+	function (attrs, children) {
+		return A4(
+			mdgriffith$elm_ui$Internal$Model$element,
+			mdgriffith$elm_ui$Internal$Model$asParagraph,
+			mdgriffith$elm_ui$Internal$Model$div,
+			A2(
+				elm$core$List$cons,
+				mdgriffith$elm_ui$Internal$Model$Describe(mdgriffith$elm_ui$Internal$Model$Paragraph),
+				A2(
+					elm$core$List$cons,
+					mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
+					A2(
+						elm$core$List$cons,
+						mdgriffith$elm_ui$Element$spacing(5),
+						attrs))),
+			mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
+	});
 var mdgriffith$elm_ui$Element$Font$alignRight = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontAlignment, mdgriffith$elm_ui$Internal$Style$classes.dA);
 var miyamoen$bibliopola$Atom$Log$view = function (_n0) {
 	var id = _n0.cG;
@@ -13201,110 +13881,6 @@ var mdgriffith$elm_ui$Element$Keyed$el = F2(
 				_List_fromArray(
 					[child])));
 	});
-var mdgriffith$elm_ui$Internal$Model$CenterY = 1;
-var mdgriffith$elm_ui$Element$centerY = mdgriffith$elm_ui$Internal$Model$AlignY(1);
-var mdgriffith$elm_ui$Element$none = mdgriffith$elm_ui$Internal$Model$Empty;
-var mdgriffith$elm_ui$Element$Border$rounded = function (radius) {
-	return A2(
-		mdgriffith$elm_ui$Internal$Model$StyleClass,
-		mdgriffith$elm_ui$Internal$Flag$borderRound,
-		A3(
-			mdgriffith$elm_ui$Internal$Model$Single,
-			'border-radius-' + elm$core$String$fromInt(radius),
-			'border-radius',
-			elm$core$String$fromInt(radius) + 'px'));
-};
-var mdgriffith$elm_ui$Element$Border$width = function (v) {
-	return A2(
-		mdgriffith$elm_ui$Internal$Model$StyleClass,
-		mdgriffith$elm_ui$Internal$Flag$borderWidth,
-		A3(
-			mdgriffith$elm_ui$Internal$Model$Single,
-			'border-' + elm$core$String$fromInt(v),
-			'border-width',
-			elm$core$String$fromInt(v) + 'px'));
-};
-var miyamoen$bibliopola$Color$greyBlue = A3(mdgriffith$elm_ui$Element$rgb255, 139, 190, 236);
-var miyamoen$bibliopola$Atom$Toggle$view = F2(
-	function (_n0, on) {
-		var label = _n0.bk;
-		var onClick = _n0.cX;
-		return A2(
-			mdgriffith$elm_ui$Element$row,
-			_List_fromArray(
-				[
-					mdgriffith$elm_ui$Element$spacing(
-					miyamoen$bibliopola$Atom$Constant$space(1)),
-					mdgriffith$elm_ui$Element$centerY,
-					mdgriffith$elm_ui$Element$Events$onClick(
-					onClick(!on)),
-					mdgriffith$elm_ui$Element$pointer
-				]),
-			_List_fromArray(
-				[
-					A2(
-					mdgriffith$elm_ui$Element$el,
-					_List_fromArray(
-						[
-							mdgriffith$elm_ui$Element$Font$size(
-							miyamoen$bibliopola$Atom$Constant$fontSize(2))
-						]),
-					mdgriffith$elm_ui$Element$text(label)),
-					A2(
-					mdgriffith$elm_ui$Element$el,
-					_List_fromArray(
-						[
-							mdgriffith$elm_ui$Element$padding(
-							miyamoen$bibliopola$Atom$Constant$space(-1)),
-							mdgriffith$elm_ui$Element$Border$width(
-							miyamoen$bibliopola$Atom$Constant$borderWidth(1)),
-							mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey),
-							mdgriffith$elm_ui$Element$Border$rounded(20)
-						]),
-					A2(
-						mdgriffith$elm_ui$Element$el,
-						_List_fromArray(
-							[
-								mdgriffith$elm_ui$Element$width(
-								mdgriffith$elm_ui$Element$px(40)),
-								mdgriffith$elm_ui$Element$height(
-								mdgriffith$elm_ui$Element$px(16)),
-								mdgriffith$elm_ui$Element$Border$rounded(20),
-								mdgriffith$elm_ui$Element$Background$color(
-								on ? miyamoen$bibliopola$Color$greyBlue : miyamoen$bibliopola$Color$white),
-								A2(miyamoen$bibliopola$Element$Util$style, 'transition', 'background-color .5s')
-							]),
-						A2(
-							mdgriffith$elm_ui$Element$el,
-							_List_fromArray(
-								[
-									mdgriffith$elm_ui$Element$width(
-									mdgriffith$elm_ui$Element$px(16)),
-									mdgriffith$elm_ui$Element$height(
-									mdgriffith$elm_ui$Element$px(16)),
-									mdgriffith$elm_ui$Element$Border$rounded(8),
-									mdgriffith$elm_ui$Element$Background$color(miyamoen$bibliopola$Color$blue),
-									A2(miyamoen$bibliopola$Element$Util$style, 'transition', 'transform .2s'),
-									A2(
-									miyamoen$bibliopola$Element$Util$style,
-									'transform',
-									on ? 'translateX(24px)' : 'translateX(0px)')
-								]),
-							mdgriffith$elm_ui$Element$none)))
-				]));
-	});
-var miyamoen$bibliopola$Model$Book$toggle = function (_n0) {
-	var book = _n0;
-	return _Utils_update(
-		book,
-		{aa: !book.aa});
-};
-var miyamoen$bibliopola$Model$Shelf$pathString = function (shelf) {
-	return A2(
-		elm$core$String$join,
-		'/',
-		miyamoen$bibliopola$Model$Shelf$path(shelf));
-};
 var elm$html$Html$select = _VirtualDom_node('select');
 var elm$json$Json$Encode$bool = _Json_wrap;
 var elm$html$Html$Attributes$boolProperty = F2(
@@ -13438,9 +14014,6 @@ var miyamoen$bibliopola$Model$Book$setStories = F2(
 			book,
 			{U: newStories});
 	});
-var miyamoen$bibliopola$Types$SetShelf = function (a) {
-	return {$: 7, a: a};
-};
 var miyamoen$select_list$SelectList$set = F2(
 	function (a, _n0) {
 		var before = _n0.a;
@@ -13510,20 +14083,12 @@ var miyamoen$bibliopola$Organism$Stories$view = function (shelf) {
 			[
 				mdgriffith$elm_ui$Element$spacing(
 				miyamoen$bibliopola$Atom$Constant$space(3)),
-				mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill)
+				mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
+				mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill)
 			]),
 		_List_fromArray(
 			[
-				A2(
-				miyamoen$bibliopola$Atom$Toggle$view,
-				{
-					bk: 'Book Open',
-					cX: function (_n0) {
-						return miyamoen$bibliopola$Types$SetShelf(
-							A2(miyamoen$bibliopola$Model$Shelf$updateBook, miyamoen$bibliopola$Model$Book$toggle, shelf));
-					}
-				},
-				A2(miyamoen$bibliopola$Model$Shelf$mapBook, miyamoen$bibliopola$Model$Book$isOpen, shelf)),
+				miyamoen$bibliopola$Molecule$BookToggle$view(shelf),
 				A2(
 				mdgriffith$elm_ui$Element$Keyed$el,
 				_List_fromArray(
@@ -13615,56 +14180,7 @@ var elm$core$Basics$composeR = F3(
 		return g(
 			f(x));
 	});
-var miyamoen$bibliopola$Model$Book$shelfIsOpen = function (_n0) {
-	var book = _n0;
-	return book.aG;
-};
-var miyamoen$tree_with_zipper$Tree$Zipper$sliceForest_ = F3(
-	function (acc, left, right) {
-		sliceForest_:
-		while (true) {
-			if (!right.b) {
-				return elm$core$List$reverse(acc);
-			} else {
-				var head = right.a;
-				var tail = right.b;
-				var newItem = _Utils_Tuple3(left, head, tail);
-				var $temp$acc = A2(elm$core$List$cons, newItem, acc),
-					$temp$left = A2(elm$core$List$cons, head, left),
-					$temp$right = tail;
-				acc = $temp$acc;
-				left = $temp$left;
-				right = $temp$right;
-				continue sliceForest_;
-			}
-		}
-	});
-var miyamoen$tree_with_zipper$Tree$Zipper$sliceForest = A2(miyamoen$tree_with_zipper$Tree$Zipper$sliceForest_, _List_Nil, _List_Nil);
-var miyamoen$tree_with_zipper$Tree$Zipper$openAll = function (_n0) {
-	var tree = _n0.a;
-	var bs = _n0.b;
-	return A2(
-		elm$core$List$map,
-		function (_n1) {
-			var left = _n1.a;
-			var parent = _n1.b;
-			var right = _n1.c;
-			return A2(
-				miyamoen$tree_with_zipper$Tree$Zipper$Zipper,
-				parent,
-				A2(
-					elm$core$List$cons,
-					{
-						cP: left,
-						z: miyamoen$tree_with_zipper$Tree$item(tree),
-						c7: right
-					},
-					bs));
-		},
-		miyamoen$tree_with_zipper$Tree$Zipper$sliceForest(
-			miyamoen$tree_with_zipper$Tree$descendants(tree)));
-};
-var miyamoen$bibliopola$Model$Shelf$openAll = function (shelf) {
+var miyamoen$bibliopola$Model$Shelf$openDesc = function (shelf) {
 	var zipper = shelf;
 	return (!A2(miyamoen$bibliopola$Model$Shelf$mapBook, miyamoen$bibliopola$Model$Book$shelfIsOpen, shelf)) ? _List_fromArray(
 		[shelf]) : A2(
@@ -13672,380 +14188,8 @@ var miyamoen$bibliopola$Model$Shelf$openAll = function (shelf) {
 		shelf,
 		A2(
 			elm$core$List$concatMap,
-			A2(elm$core$Basics$composeR, elm$core$Basics$identity, miyamoen$bibliopola$Model$Shelf$openAll),
+			A2(elm$core$Basics$composeR, elm$core$Basics$identity, miyamoen$bibliopola$Model$Shelf$openDesc),
 			miyamoen$tree_with_zipper$Tree$Zipper$openAll(zipper)));
-};
-var miyamoen$bibliopola$Model$Book$toggleShelf = function (_n0) {
-	var book = _n0;
-	return _Utils_update(
-		book,
-		{aG: !book.aG});
-};
-var miyamoen$bibliopola$Atom$Icon$Caret$Down = 1;
-var miyamoen$bibliopola$Atom$Icon$Caret$Right = 2;
-var elm$svg$Svg$polygon = elm$svg$Svg$trustedNode('polygon');
-var elm$svg$Svg$Attributes$points = _VirtualDom_attribute('points');
-var mdgriffith$elm_ui$Internal$Flag$rotate = mdgriffith$elm_ui$Internal$Flag$flag(24);
-var mdgriffith$elm_ui$Internal$Model$Rotate = F2(
-	function (a, b) {
-		return {$: 4, a: a, b: b};
-	});
-var mdgriffith$elm_ui$Internal$Model$TransformComponent = F2(
-	function (a, b) {
-		return {$: 10, a: a, b: b};
-	});
-var mdgriffith$elm_ui$Element$rotate = function (angle) {
-	return A2(
-		mdgriffith$elm_ui$Internal$Model$TransformComponent,
-		mdgriffith$elm_ui$Internal$Flag$rotate,
-		A2(
-			mdgriffith$elm_ui$Internal$Model$Rotate,
-			_Utils_Tuple3(0, 0, 1),
-			angle));
-};
-var elm$core$Basics$pi = _Basics_pi;
-var elm$core$Basics$degrees = function (angleInDegrees) {
-	return (angleInDegrees * elm$core$Basics$pi) / 180;
-};
-var miyamoen$bibliopola$Atom$Icon$Caret$directionAngle = function (direction) {
-	return elm$core$Basics$degrees(
-		function () {
-			switch (direction) {
-				case 0:
-					return 0;
-				case 1:
-					return 180;
-				case 2:
-					return 90;
-				default:
-					return -90;
-			}
-		}());
-};
-var miyamoen$bibliopola$Atom$Icon$Caret$pointsString = '255.992,92.089 0,348.081 71.821,419.911 255.992,235.74 440.18,419.911 512,348.081';
-var miyamoen$bibliopola$Atom$Icon$Caret$view = F2(
-	function (_n0, direction) {
-		var color = _n0.cl;
-		var onClick = _n0.cX;
-		var size = _n0.di;
-		return A2(
-			mdgriffith$elm_ui$Element$el,
-			_List_fromArray(
-				[
-					mdgriffith$elm_ui$Element$width(
-					mdgriffith$elm_ui$Element$px(
-						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
-					mdgriffith$elm_ui$Element$height(
-					mdgriffith$elm_ui$Element$px(
-						miyamoen$bibliopola$Atom$Constant$iconSize(size))),
-					miyamoen$bibliopola$Element$Util$svgColor(color),
-					A2(miyamoen$bibliopola$Element$Util$style, 'transition-property', 'transform'),
-					A2(miyamoen$bibliopola$Element$Util$style, 'transition-duration', '0.2s'),
-					mdgriffith$elm_ui$Element$rotate(
-					miyamoen$bibliopola$Atom$Icon$Caret$directionAngle(direction)),
-					A2(
-					miyamoen$bibliopola$Element$Util$attributeWhenJust,
-					onClick,
-					elm$core$Basics$always(mdgriffith$elm_ui$Element$pointer)),
-					A2(
-					miyamoen$bibliopola$Element$Util$attributeWhenJust,
-					onClick,
-					elm$core$Basics$always(mdgriffith$elm_ui$Element$pointer)),
-					miyamoen$bibliopola$Element$Util$onClickWhenJust(
-					A2(
-						elm$core$Maybe$map,
-						function (f) {
-							return f(direction);
-						},
-						onClick))
-				]),
-			mdgriffith$elm_ui$Element$html(
-				A2(
-					elm$svg$Svg$svg,
-					_List_fromArray(
-						[
-							elm$svg$Svg$Attributes$viewBox('0 0 512 512')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							elm$svg$Svg$polygon,
-							_List_fromArray(
-								[
-									elm$svg$Svg$Attributes$points(miyamoen$bibliopola$Atom$Icon$Caret$pointsString)
-								]),
-							_List_Nil)
-						]))));
-	});
-var miyamoen$bibliopola$Atom$Icon$RuledLine$Horizontal = 1;
-var mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
-	return {$: 6, a: a};
-};
-var mdgriffith$elm_ui$Internal$Model$Left = 0;
-var mdgriffith$elm_ui$Element$alignLeft = mdgriffith$elm_ui$Internal$Model$AlignX(0);
-var miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth = miyamoen$bibliopola$Atom$Constant$borderWidth(1);
-var miyamoen$bibliopola$Atom$Icon$RuledLine$zero = {ce: 0, cP: 0, c7: 0, dF: 0};
-var miyamoen$bibliopola$Atom$Icon$RuledLine$view = F2(
-	function (_n0, ruledLine) {
-		var size = _n0.di;
-		var unit = miyamoen$bibliopola$Atom$Constant$iconSize(size);
-		return A2(
-			mdgriffith$elm_ui$Element$el,
-			_List_fromArray(
-				[
-					mdgriffith$elm_ui$Element$width(
-					mdgriffith$elm_ui$Element$px(unit)),
-					mdgriffith$elm_ui$Element$height(
-					mdgriffith$elm_ui$Element$px(unit))
-				]),
-			function () {
-				switch (ruledLine) {
-					case 0:
-						return A2(
-							mdgriffith$elm_ui$Element$el,
-							_List_fromArray(
-								[
-									mdgriffith$elm_ui$Element$width(
-									mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
-									mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill),
-									mdgriffith$elm_ui$Element$alignLeft,
-									mdgriffith$elm_ui$Element$Border$widthEach(
-									_Utils_update(
-										miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
-										{c7: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
-									mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
-								]),
-							mdgriffith$elm_ui$Element$none);
-					case 1:
-						return A2(
-							mdgriffith$elm_ui$Element$el,
-							_List_fromArray(
-								[
-									mdgriffith$elm_ui$Element$height(
-									mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
-									mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
-									mdgriffith$elm_ui$Element$alignTop,
-									mdgriffith$elm_ui$Element$Border$widthEach(
-									_Utils_update(
-										miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
-										{ce: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
-									mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
-								]),
-							mdgriffith$elm_ui$Element$none);
-					default:
-						return A2(
-							mdgriffith$elm_ui$Element$row,
-							_List_fromArray(
-								[
-									mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
-									mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill)
-								]),
-							_List_fromArray(
-								[
-									A2(
-									mdgriffith$elm_ui$Element$el,
-									_List_fromArray(
-										[
-											mdgriffith$elm_ui$Element$width(
-											mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
-											mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill),
-											mdgriffith$elm_ui$Element$Border$widthEach(
-											_Utils_update(
-												miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
-												{c7: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
-											mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
-										]),
-									mdgriffith$elm_ui$Element$none),
-									A2(
-									mdgriffith$elm_ui$Element$el,
-									_List_fromArray(
-										[
-											mdgriffith$elm_ui$Element$height(
-											mdgriffith$elm_ui$Element$px(((unit / 2) | 0) + ((miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth / 2) | 0))),
-											mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
-											mdgriffith$elm_ui$Element$alignTop,
-											mdgriffith$elm_ui$Element$Border$widthEach(
-											_Utils_update(
-												miyamoen$bibliopola$Atom$Icon$RuledLine$zero,
-												{ce: miyamoen$bibliopola$Atom$Icon$RuledLine$borderWidth})),
-											mdgriffith$elm_ui$Element$Border$color(miyamoen$bibliopola$Color$alphaGrey)
-										]),
-									mdgriffith$elm_ui$Element$none)
-								]));
-				}
-			}());
-	});
-var miyamoen$tree_with_zipper$Tree$children = A2(
-	elm$core$Basics$composeL,
-	elm$core$List$map(miyamoen$tree_with_zipper$Tree$item),
-	miyamoen$tree_with_zipper$Tree$descendants);
-var miyamoen$tree_with_zipper$Tree$isEmpty = A2(elm$core$Basics$composeL, elm$core$List$isEmpty, miyamoen$tree_with_zipper$Tree$children);
-var miyamoen$tree_with_zipper$Tree$Zipper$isEmpty = function (_n0) {
-	var tree = _n0.a;
-	return miyamoen$tree_with_zipper$Tree$isEmpty(tree);
-};
-var miyamoen$bibliopola$Model$Shelf$hasShelves = function (_n0) {
-	var zipper = _n0;
-	return !miyamoen$tree_with_zipper$Tree$Zipper$isEmpty(zipper);
-};
-var miyamoen$bibliopola$Molecule$ShelfItem$caret = function (shelf) {
-	return (!miyamoen$bibliopola$Model$Shelf$hasShelves(shelf)) ? A2(
-		miyamoen$bibliopola$Atom$Icon$RuledLine$view,
-		{di: 1},
-		1) : A2(
-		miyamoen$bibliopola$Atom$Icon$Caret$view,
-		{cl: miyamoen$bibliopola$Color$grey, cX: elm$core$Maybe$Nothing, di: 1},
-		A2(miyamoen$bibliopola$Model$Shelf$mapBook, miyamoen$bibliopola$Model$Book$shelfIsOpen, shelf) ? 1 : 2);
-};
-var miyamoen$bibliopola$Atom$Icon$Book$pathString = 'M415.594,93.344l-18.906-62.563c4.625-2.969,7.75-8.156,7.75-14.078C404.438,7.469,396.969,0,387.719,0\n H129.891C112.5,0,96.609,7.094,85.25,18.5c-11.406,11.359-18.516,27.25-18.5,44.625V470.75C66.75,493.531,85.219,512,108,512h302.5\n c19.188,0,34.75-15.547,34.75-34.734V127.578C445.25,110.125,432.344,95.844,415.594,93.344z M129.891,92.844\n c-8.266,0-15.594-3.313-21.016-8.703c-5.406-5.453-8.719-12.766-8.719-21.016s3.313-15.578,8.719-21.016\n c5.422-5.391,12.75-8.703,21.016-8.703h241.984l17.969,59.438H129.891z';
-var miyamoen$bibliopola$Atom$Icon$Book$view = function (config) {
-	return A2(
-		miyamoen$bibliopola$Atom$Icon$view,
-		_List_fromArray(
-			[
-				A2(
-				elm$svg$Svg$path,
-				_List_fromArray(
-					[
-						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Book$pathString)
-					]),
-				_List_Nil)
-			]),
-		config);
-};
-var miyamoen$bibliopola$Atom$Icon$Books$path0 = 'M259.031,156.638c-0.009-8.693-0.009-16.24,1.061-23.4l-6.258,7.169\n c-10.95,12.627-38.637,20.788-61.835,18.237c-23.215-2.561-33.138-14.859-22.179-27.494l82.473-86.306\n c1.601-1.684,2.055-4.161,1.138-6.301c-0.91-2.123-3.016-3.521-5.341-3.521h-13.283c-3.892,0-7.614,1.55-10.336,4.33\n l-71.548,72.499c-14.681,15.365-13.999,23.898-13.999,47.802c0,17.066,0,276.892,0,276.892c0,20.494,25.758,37.417,48.964,39.96\n c23.207,2.57,54.996-5.61,65.946-18.228l7.287-8.474c-1.306-4.228-2.089-8.642-2.089-13.258V156.638z';
-var miyamoen$bibliopola$Atom$Icon$Books$path1 = 'M120.113,156.638c-0.009-8.693-0.009-16.24,1.062-23.4l-6.267,7.169\n c-10.95,12.627-38.629,20.788-61.835,18.237c-23.207-2.561-33.138-14.859-22.179-27.494l82.481-86.306\n c1.591-1.684,2.054-4.161,1.137-6.301c-0.91-2.123-3.016-3.521-5.34-3.521H95.879c-3.883,0-7.597,1.55-10.326,4.33l-71.548,72.499\n c-14.682,15.365-14,23.898-14,47.802c0,17.066,0,276.892,0,276.892c0,20.494,25.75,37.417,48.965,39.96\n c23.197,2.57,54.988-5.61,65.938-18.228l7.303-8.474c-1.314-4.228-2.098-8.642-2.098-13.258V156.638z';
-var miyamoen$bibliopola$Atom$Icon$Books$path2 = 'M506.197,35.022h-14.379c-4.195,0-8.188,1.82-10.951,4.978l-87.51,100.406\n c-10.95,12.627-38.638,20.788-61.835,18.237c-23.215-2.561-33.137-14.859-22.179-27.494l82.473-86.306\n c1.601-1.684,2.055-4.161,1.145-6.301c-0.918-2.123-3.024-3.521-5.34-3.521H374.33c-3.883,0-7.607,1.55-10.336,4.33l-71.548,72.499\n c-14.682,15.365-13.999,23.898-13.999,47.802c0,17.066,0,276.892,0,276.892c0,20.494,25.758,37.417,48.964,39.96\n c23.214,2.57,54.996-5.61,65.946-18.228L501.454,332.72c6.806-7.918,10.546-17.992,10.546-28.42V40.826\n C512,37.625,509.397,35.022,506.197,35.022z';
-var miyamoen$bibliopola$Atom$Icon$Books$view = function (config) {
-	return A2(
-		miyamoen$bibliopola$Atom$Icon$view,
-		_List_fromArray(
-			[
-				A2(
-				elm$svg$Svg$path,
-				_List_fromArray(
-					[
-						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Books$path0)
-					]),
-				_List_Nil),
-				A2(
-				elm$svg$Svg$path,
-				_List_fromArray(
-					[
-						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Books$path1)
-					]),
-				_List_Nil),
-				A2(
-				elm$svg$Svg$path,
-				_List_fromArray(
-					[
-						elm$svg$Svg$Attributes$d(miyamoen$bibliopola$Atom$Icon$Books$path2)
-					]),
-				_List_Nil)
-			]),
-		config);
-};
-var miyamoen$bibliopola$Molecule$ShelfItem$icon = function (shelf) {
-	return (miyamoen$bibliopola$Model$Shelf$hasShelves(shelf) ? miyamoen$bibliopola$Atom$Icon$Books$view : miyamoen$bibliopola$Atom$Icon$Book$view)(
-		{cl: miyamoen$bibliopola$Color$grey, cX: elm$core$Maybe$Nothing, di: 1});
-};
-var elm$core$List$repeatHelp = F3(
-	function (result, n, value) {
-		repeatHelp:
-		while (true) {
-			if (n <= 0) {
-				return result;
-			} else {
-				var $temp$result = A2(elm$core$List$cons, value, result),
-					$temp$n = n - 1,
-					$temp$value = value;
-				result = $temp$result;
-				n = $temp$n;
-				value = $temp$value;
-				continue repeatHelp;
-			}
-		}
-	});
-var elm$core$List$repeat = F2(
-	function (n, value) {
-		return A3(elm$core$List$repeatHelp, _List_Nil, n, value);
-	});
-var miyamoen$bibliopola$Atom$Icon$RuledLine$Vertical = 0;
-var miyamoen$bibliopola$Atom$Icon$RuledLine$VerticalRight = 2;
-var miyamoen$tree_with_zipper$Tree$Zipper$breadcrumbs = function (_n0) {
-	var bs = _n0.b;
-	return A2(
-		elm$core$List$map,
-		function (_n1) {
-			var parent = _n1.z;
-			return parent;
-		},
-		bs);
-};
-var miyamoen$bibliopola$Model$Shelf$depth = function (_n0) {
-	var zipper = _n0;
-	return elm$core$List$length(
-		miyamoen$tree_with_zipper$Tree$Zipper$breadcrumbs(zipper));
-};
-var miyamoen$bibliopola$Molecule$ShelfItem$ruledLine = function (shelf) {
-	var depth = miyamoen$bibliopola$Model$Shelf$depth(shelf);
-	switch (depth) {
-		case 0:
-			return _List_Nil;
-		case 1:
-			return _List_fromArray(
-				[
-					A2(
-					miyamoen$bibliopola$Atom$Icon$RuledLine$view,
-					{di: 1},
-					2)
-				]);
-		default:
-			return _Utils_ap(
-				A2(
-					elm$core$List$repeat,
-					depth - 1,
-					A2(
-						miyamoen$bibliopola$Atom$Icon$RuledLine$view,
-						{di: 1},
-						0)),
-				_List_fromArray(
-					[
-						A2(
-						miyamoen$bibliopola$Atom$Icon$RuledLine$view,
-						{di: 1},
-						2)
-					]));
-	}
-};
-var miyamoen$bibliopola$Molecule$ShelfItem$view = function (shelf) {
-	return A2(
-		mdgriffith$elm_ui$Element$row,
-		_List_fromArray(
-			[
-				mdgriffith$elm_ui$Element$spacing(
-				miyamoen$bibliopola$Atom$Constant$space(1)),
-				mdgriffith$elm_ui$Element$pointer,
-				mdgriffith$elm_ui$Element$Events$onClick(
-				miyamoen$bibliopola$Types$SetShelf(
-					A2(miyamoen$bibliopola$Model$Shelf$updateBook, miyamoen$bibliopola$Model$Book$toggleShelf, shelf)))
-			]),
-		_Utils_ap(
-			miyamoen$bibliopola$Molecule$ShelfItem$ruledLine(shelf),
-			_List_fromArray(
-				[
-					miyamoen$bibliopola$Molecule$ShelfItem$caret(shelf),
-					miyamoen$bibliopola$Molecule$ShelfItem$icon(shelf),
-					A2(
-					mdgriffith$elm_ui$Element$el,
-					_List_fromArray(
-						[
-							mdgriffith$elm_ui$Element$Font$size(
-							miyamoen$bibliopola$Atom$Constant$fontSize(2))
-						]),
-					mdgriffith$elm_ui$Element$text(
-						A2(miyamoen$bibliopola$Model$Shelf$mapBook, miyamoen$bibliopola$Model$Book$title, shelf)))
-				])));
 };
 var miyamoen$bibliopola$Organism$ShelfTree$item = function (shelf) {
 	return A2(
@@ -14064,7 +14208,7 @@ var miyamoen$bibliopola$Organism$ShelfTree$view = function (shelf) {
 		A2(
 			elm$core$List$map,
 			miyamoen$bibliopola$Organism$ShelfTree$item,
-			miyamoen$bibliopola$Model$Shelf$openAll(
+			miyamoen$bibliopola$Model$Shelf$openDesc(
 				miyamoen$bibliopola$Model$Shelf$root(shelf))));
 };
 var miyamoen$bibliopola$Page$Main$panelHeight = 210;
@@ -14072,10 +14216,14 @@ var miyamoen$bibliopola$Page$Main$space = miyamoen$bibliopola$Atom$Constant$spac
 var miyamoen$bibliopola$Page$Main$restHeight = function (full) {
 	return (full - miyamoen$bibliopola$Page$Main$panelHeight) - (miyamoen$bibliopola$Page$Main$space * 3);
 };
-var miyamoen$bibliopola$Page$Main$treeWidth = 200;
-var miyamoen$bibliopola$Page$Main$restWidth = function (full) {
-	return (full - miyamoen$bibliopola$Page$Main$treeWidth) - (miyamoen$bibliopola$Page$Main$space * 3);
+var miyamoen$bibliopola$Page$Main$treeWidth = function (shelf) {
+	return miyamoen$bibliopola$Model$Shelf$hasShelves(
+		miyamoen$bibliopola$Model$Shelf$root(shelf)) ? 200 : 0;
 };
+var miyamoen$bibliopola$Page$Main$restWidth = F2(
+	function (full, shelf) {
+		return (full - miyamoen$bibliopola$Page$Main$treeWidth(shelf)) - (miyamoen$bibliopola$Page$Main$space * 3);
+	});
 var miyamoen$bibliopola$Page$Main$view = function (model) {
 	return A2(
 		mdgriffith$elm_ui$Element$column,
@@ -14106,16 +14254,18 @@ var miyamoen$bibliopola$Page$Main$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						A2(
+						miyamoen$bibliopola$Model$Shelf$hasShelves(
+						miyamoen$bibliopola$Model$Shelf$root(model.dg)) ? A2(
 						mdgriffith$elm_ui$Element$el,
 						_List_fromArray(
 							[
 								mdgriffith$elm_ui$Element$scrollbars,
 								mdgriffith$elm_ui$Element$width(
-								mdgriffith$elm_ui$Element$px(miyamoen$bibliopola$Page$Main$treeWidth)),
+								mdgriffith$elm_ui$Element$px(
+									miyamoen$bibliopola$Page$Main$treeWidth(model.dg))),
 								mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill)
 							]),
-						miyamoen$bibliopola$Organism$ShelfTree$view(model.dg)),
+						miyamoen$bibliopola$Organism$ShelfTree$view(model.dg)) : mdgriffith$elm_ui$Element$none,
 						A2(
 						mdgriffith$elm_ui$Element$el,
 						_List_fromArray(
@@ -14123,7 +14273,7 @@ var miyamoen$bibliopola$Page$Main$view = function (model) {
 								mdgriffith$elm_ui$Element$scrollbars,
 								mdgriffith$elm_ui$Element$width(
 								mdgriffith$elm_ui$Element$px(
-									miyamoen$bibliopola$Page$Main$restWidth(model.dM))),
+									A2(miyamoen$bibliopola$Page$Main$restWidth, model.dM, model.dg))),
 								mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$fill)
 							]),
 						miyamoen$bibliopola$Organism$BookPage$view(model.dg))
@@ -14213,7 +14363,10 @@ var miyamoen$bibliopola$Atom$Icon$Index$sizeStory = A3(
 	miyamoen$bibliopola$Bibliopola$Story$build,
 	'size',
 	elm$core$String$fromInt,
-	A2(elm$core$List$range, -5, 10));
+	_Utils_ap(
+		A2(elm$core$List$range, 1, 10),
+		_List_fromArray(
+			[0, -1, -2, -3, -4, -5])));
 var miyamoen$bibliopola$Atom$Icon$Index$viewHelper = F4(
 	function (view, color, size, onClick) {
 		return view(
@@ -14470,6 +14623,24 @@ var miyamoen$bibliopola$Atom$Icon$Index$caret = function () {
 							A2(miyamoen$bibliopola$Bibliopola$Story, 'direction', miyamoen$bibliopola$Atom$Icon$Caret$directions),
 							A3(miyamoen$bibliopola$Bibliopola$intoBook, 'Caret', elm$core$Basics$identity, view)))))));
 }();
+var miyamoen$bibliopola$Atom$Icon$Index$openBook = A2(
+	miyamoen$bibliopola$Bibliopola$withFrontCover,
+	miyamoen$bibliopola$Atom$Icon$OpenBook$view(miyamoen$bibliopola$Atom$Icon$Index$defaultConfig),
+	miyamoen$bibliopola$Bibliopola$buildBook(
+		A2(
+			miyamoen$bibliopola$Bibliopola$addStory,
+			miyamoen$bibliopola$Atom$Icon$Index$clickStory,
+			A2(
+				miyamoen$bibliopola$Bibliopola$addStory,
+				miyamoen$bibliopola$Atom$Icon$Index$sizeStory,
+				A2(
+					miyamoen$bibliopola$Bibliopola$addStory,
+					miyamoen$bibliopola$Atom$Icon$Index$colorStory,
+					A3(
+						miyamoen$bibliopola$Bibliopola$intoBook,
+						'OpenBook',
+						elm$core$Basics$identity,
+						miyamoen$bibliopola$Atom$Icon$Index$viewHelper(miyamoen$bibliopola$Atom$Icon$OpenBook$view)))))));
 var miyamoen$bibliopola$Atom$Icon$RuledLine$ruledLines = _List_fromArray(
 	[
 		A2(elm$core$Tuple$pair, 'vertical', 0),
@@ -14548,14 +14719,17 @@ var miyamoen$bibliopola$Atom$Icon$Index$shelf = A2(
 		miyamoen$bibliopola$Atom$Icon$Index$books,
 		A2(
 			miyamoen$bibliopola$Bibliopola$addBook,
-			miyamoen$bibliopola$Atom$Icon$Index$book,
+			miyamoen$bibliopola$Atom$Icon$Index$openBook,
 			A2(
 				miyamoen$bibliopola$Bibliopola$addBook,
-				miyamoen$bibliopola$Atom$Icon$Index$ban,
+				miyamoen$bibliopola$Atom$Icon$Index$book,
 				A2(
 					miyamoen$bibliopola$Bibliopola$addBook,
-					miyamoen$bibliopola$Atom$Icon$Index$caret,
-					miyamoen$bibliopola$Bibliopola$emptyShelf('Icon'))))));
+					miyamoen$bibliopola$Atom$Icon$Index$ban,
+					A2(
+						miyamoen$bibliopola$Bibliopola$addBook,
+						miyamoen$bibliopola$Atom$Icon$Index$caret,
+						miyamoen$bibliopola$Bibliopola$emptyShelf('Icon')))))));
 var miyamoen$bibliopola$Atom$Index$labels = _List_fromArray(
 	[
 		A2(elm$core$Tuple$pair, 'empty', ''),
@@ -14682,28 +14856,74 @@ var miyamoen$bibliopola$Atom$Index$tab = function () {
 					A2(miyamoen$bibliopola$Bibliopola$Story, 'label', miyamoen$bibliopola$Atom$Index$labels),
 					A3(miyamoen$bibliopola$Bibliopola$intoBook, 'Tab', elm$core$Basics$identity, view)))));
 }();
+var miyamoen$bibliopola$Bibliopola$Story$addOption = F3(
+	function (optionLabel, a, story) {
+		return _Utils_update(
+			story,
+			{
+				bp: A2(
+					elm$core$List$cons,
+					_Utils_Tuple2(optionLabel, a),
+					story.bp)
+			});
+	});
+var miyamoen$bibliopola$Bibliopola$Story$map = F2(
+	function (tagger, _n0) {
+		var label = _n0.bk;
+		var options = _n0.bp;
+		return {
+			bk: label,
+			bp: A2(
+				elm$core$List$map,
+				elm$core$Tuple$mapSecond(tagger),
+				options)
+		};
+	});
 var miyamoen$bibliopola$Atom$Index$toggle = function () {
+	var view = F3(
+		function (label, onClick, on) {
+			return A2(
+				miyamoen$bibliopola$Atom$Toggle$view,
+				{bk: label, cX: onClick},
+				on);
+		});
 	var msg = function (on) {
 		return on ? 'Clicked off' : 'Clicked on';
 	};
-	var view = F2(
-		function (label, on) {
-			return A2(
-				miyamoen$bibliopola$Atom$Toggle$view,
-				{bk: label, cX: msg},
-				on);
-		});
 	return A2(
 		miyamoen$bibliopola$Bibliopola$withFrontCover,
-		A2(view, 'On', true),
+		A3(
+			view,
+			elm$core$Maybe$Just('On'),
+			elm$core$Maybe$Just(msg),
+			true),
 		miyamoen$bibliopola$Bibliopola$buildBook(
 			A2(
 				miyamoen$bibliopola$Bibliopola$addStory,
 				miyamoen$bibliopola$Bibliopola$Story$bool('on'),
 				A2(
 					miyamoen$bibliopola$Bibliopola$addStory,
-					A2(miyamoen$bibliopola$Bibliopola$Story, 'label', miyamoen$bibliopola$Atom$Index$labels),
-					A3(miyamoen$bibliopola$Bibliopola$intoBook, 'Toggle', elm$core$Basics$identity, view)))));
+					A2(
+						miyamoen$bibliopola$Bibliopola$Story,
+						'msg',
+						_List_fromArray(
+							[
+								_Utils_Tuple2('nothing', elm$core$Maybe$Nothing),
+								_Utils_Tuple2(
+								'click',
+								elm$core$Maybe$Just(msg))
+							])),
+					A2(
+						miyamoen$bibliopola$Bibliopola$addStory,
+						A3(
+							miyamoen$bibliopola$Bibliopola$Story$addOption,
+							'nothing',
+							elm$core$Maybe$Nothing,
+							A2(
+								miyamoen$bibliopola$Bibliopola$Story$map,
+								elm$core$Maybe$Just,
+								A2(miyamoen$bibliopola$Bibliopola$Story, 'label', miyamoen$bibliopola$Atom$Index$labels))),
+						A3(miyamoen$bibliopola$Bibliopola$intoBook, 'Toggle', elm$core$Basics$identity, view))))));
 }();
 var miyamoen$bibliopola$Bibliopola$addShelf = F2(
 	function (_n0, _n2) {
@@ -14779,6 +14999,43 @@ var miyamoen$bibliopola$Dummy$shelf = A2(
 				miyamoen$bibliopola$Model$Shelf$updateBook,
 				miyamoen$bibliopola$Model$Book$toggleShelf,
 				miyamoen$bibliopola$Bibliopola$emptyShelf('root')))));
+var miyamoen$bibliopola$Dummy$model = {
+	cC: 500,
+	cQ: _List_fromArray(
+		[
+			{cG: 2, cR: 'dummy msg'},
+			{cG: 1, cR: 'dummy msg'},
+			{cG: 0, cR: 'dummy msg'}
+		]),
+	c3: A3(
+		miyamoen$select_list$SelectList$fromLists,
+		_List_Nil,
+		0,
+		_List_fromArray(
+			[1, 2, 0, 0, 0])),
+	dg: miyamoen$bibliopola$Dummy$shelf,
+	dM: 600
+};
+var miyamoen$bibliopola$Molecule$Index$bookToggle = function () {
+	var view = function (isOpen) {
+		return miyamoen$bibliopola$Molecule$BookToggle$view(
+			isOpen ? A2(miyamoen$bibliopola$Model$Shelf$updateBook, miyamoen$bibliopola$Model$Book$toggle, miyamoen$bibliopola$Dummy$model.dg) : miyamoen$bibliopola$Dummy$model.dg);
+	};
+	var mapMsg = function (_n0) {
+		return 'Toggled';
+	};
+	return A2(
+		miyamoen$bibliopola$Bibliopola$withFrontCover,
+		A2(
+			mdgriffith$elm_ui$Element$map,
+			mapMsg,
+			miyamoen$bibliopola$Molecule$BookToggle$view(miyamoen$bibliopola$Dummy$model.dg)),
+		miyamoen$bibliopola$Bibliopola$buildBook(
+			A2(
+				miyamoen$bibliopola$Bibliopola$addStory,
+				miyamoen$bibliopola$Bibliopola$Story$bool('open'),
+				A3(miyamoen$bibliopola$Bibliopola$intoBook, 'BookToggle', mapMsg, view))));
+}();
 var miyamoen$bibliopola$Molecule$Index$shelfItem = function () {
 	var toString = function (item) {
 		return '#' + miyamoen$bibliopola$Model$Shelf$pathString(item);
@@ -14799,7 +15056,7 @@ var miyamoen$bibliopola$Molecule$Index$shelfItem = function () {
 					miyamoen$bibliopola$Bibliopola$Story$build,
 					'shelf',
 					toString,
-					miyamoen$bibliopola$Model$Shelf$openAll(miyamoen$bibliopola$Dummy$shelf)),
+					miyamoen$bibliopola$Model$Shelf$openDesc(miyamoen$bibliopola$Dummy$shelf)),
 				A3(miyamoen$bibliopola$Bibliopola$intoBook, 'ShelfItem', mapMsg, miyamoen$bibliopola$Molecule$ShelfItem$view))));
 }();
 var miyamoen$bibliopola$Molecule$Index$tabs = function () {
@@ -14831,11 +15088,14 @@ var miyamoen$bibliopola$Molecule$Index$tabs = function () {
 }();
 var miyamoen$bibliopola$Molecule$Index$shelf = A2(
 	miyamoen$bibliopola$Bibliopola$addBook,
-	miyamoen$bibliopola$Molecule$Index$tabs,
+	miyamoen$bibliopola$Molecule$Index$bookToggle,
 	A2(
 		miyamoen$bibliopola$Bibliopola$addBook,
-		miyamoen$bibliopola$Molecule$Index$shelfItem,
-		miyamoen$bibliopola$Bibliopola$emptyShelf('Molecule')));
+		miyamoen$bibliopola$Molecule$Index$tabs,
+		A2(
+			miyamoen$bibliopola$Bibliopola$addBook,
+			miyamoen$bibliopola$Molecule$Index$shelfItem,
+			miyamoen$bibliopola$Bibliopola$emptyShelf('Molecule'))));
 var miyamoen$bibliopola$Bibliopola$bookWithFrontCover = F2(
 	function (title, view) {
 		return A2(
@@ -14843,23 +15103,6 @@ var miyamoen$bibliopola$Bibliopola$bookWithFrontCover = F2(
 			view,
 			miyamoen$bibliopola$Model$Book$empty(title));
 	});
-var miyamoen$bibliopola$Dummy$model = {
-	cC: 500,
-	cQ: _List_fromArray(
-		[
-			{cG: 2, cR: 'dummy msg'},
-			{cG: 1, cR: 'dummy msg'},
-			{cG: 0, cR: 'dummy msg'}
-		]),
-	c3: A3(
-		miyamoen$select_list$SelectList$fromLists,
-		_List_Nil,
-		0,
-		_List_fromArray(
-			[1, 2, 0, 0, 0])),
-	dg: miyamoen$bibliopola$Dummy$shelf,
-	dM: 600
-};
 var miyamoen$bibliopola$Organism$Index$toString = function (_n0) {
 	return 'Some event happened!';
 };
@@ -14871,6 +15114,11 @@ var miyamoen$bibliopola$Organism$Index$bookPage = A2(
 	'BookPage',
 	miyamoen$bibliopola$Organism$Index$mapMsg(
 		miyamoen$bibliopola$Organism$BookPage$view(miyamoen$bibliopola$Dummy$model.dg)));
+var miyamoen$bibliopola$Organism$Index$frontCover = A2(
+	miyamoen$bibliopola$Bibliopola$bookWithFrontCover,
+	'FrontCover',
+	miyamoen$bibliopola$Organism$Index$mapMsg(
+		miyamoen$bibliopola$Organism$FrontCover$view(miyamoen$bibliopola$Dummy$model.dg)));
 var elm$core$List$takeReverse = F3(
 	function (n, list, kept) {
 		takeReverse:
@@ -14996,18 +15244,6 @@ var elm$core$List$takeFast = F3(
 var elm$core$List$take = F2(
 	function (n, list) {
 		return A3(elm$core$List$takeFast, 0, n, list);
-	});
-var miyamoen$bibliopola$Bibliopola$Story$map = F2(
-	function (tagger, _n0) {
-		var label = _n0.bk;
-		var options = _n0.bp;
-		return {
-			bk: label,
-			bp: A2(
-				elm$core$List$map,
-				elm$core$Tuple$mapSecond(tagger),
-				options)
-		};
 	});
 var miyamoen$bibliopola$Organism$Index$logger = function () {
 	var logs = A2(
@@ -15153,8 +15389,11 @@ var miyamoen$bibliopola$Organism$Index$shelf = A2(
 				miyamoen$bibliopola$Organism$Index$shelfTree,
 				A2(
 					miyamoen$bibliopola$Bibliopola$addBook,
-					miyamoen$bibliopola$Organism$Index$bookPage,
-					miyamoen$bibliopola$Bibliopola$emptyShelf('Organism'))))));
+					miyamoen$bibliopola$Organism$Index$frontCover,
+					A2(
+						miyamoen$bibliopola$Bibliopola$addBook,
+						miyamoen$bibliopola$Organism$Index$bookPage,
+						miyamoen$bibliopola$Bibliopola$emptyShelf('Organism')))))));
 var miyamoen$bibliopola$Page$Index$mainPage = A2(
 	miyamoen$bibliopola$Bibliopola$bookWithFrontCover,
 	'Main',
