@@ -1,7 +1,7 @@
 {
     "type": "package",
     "name": "miyamoen/bibliopola",
-    "summary": "UI Catalog for Elm applications built by style-elements inspired by Storybook",
+    "summary": "UI Catalog for Elm applications built by elm-ui inspired by Storybook",
     "license": "BSD-3-Clause",
     "version": "1.0.0",
     "exposed-modules": [
