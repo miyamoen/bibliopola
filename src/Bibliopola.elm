@@ -229,7 +229,7 @@ bookWithFrontCover title view =
     |> addStory
         (Story "msg" [ ( "nothing", Nothing ), ( "click", Just "msg" ) ])
 
-To build `Story`, see [Bibliopola.Story](../Bibliopola-Story).
+To build `Story`, see [Bibliopola.Story](./Bibliopola-Story).
 
 -}
 type alias Story a =
