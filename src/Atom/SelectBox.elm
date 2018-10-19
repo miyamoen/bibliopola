@@ -33,7 +33,7 @@ view { label, onChange, disabled } selectList =
                     , htmlOnChange onChange selectList
                     ]
                 <|
-                    SelectList.mapBy optionNode selectList
+                    SelectList.selectedMap optionNode selectList
         ]
 
 
@@ -72,9 +72,10 @@ htmlOnChange toMsg selectList =
     on "change" <|
         decoder <|
             \selected ->
-                SelectList.attempt
-                    (SelectList.select ((==) selected))
-                    selectList
+                selectList
+                    |> SelectList.selectHead
+                    |> SelectList.attempt
+                        (SelectList.selectAfterIf ((==) selected))
                     |> toMsg
 
 

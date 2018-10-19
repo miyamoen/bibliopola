@@ -13,7 +13,7 @@ import Organism.Logger as Logger
 import Organism.Panel as Panel
 import Organism.ShelfTree as ShelfTree
 import Organism.Stories as Stories
-import SelectList exposing (Direction(..))
+import SelectList
 
 
 main : Bibliopola.Program
@@ -79,7 +79,7 @@ panel =
         view index =
             { model
                 | panel =
-                    SelectList.attempt (SelectList.changePosition After index) panel_
+                    SelectList.attempt (SelectList.selectBy index) panel_
             }
                 |> Panel.view
                 |> mapMsg

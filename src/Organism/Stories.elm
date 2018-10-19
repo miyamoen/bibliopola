@@ -24,7 +24,7 @@ view shelf =
                 , width fill
                 ]
                 (Shelf.mapBook Book.stories shelf
-                    |> SelectList.mapBy_ (selectBoxEl shelf)
+                    |> SelectList.selectedMapForList (selectBoxEl shelf)
                 )
             )
         ]
@@ -44,7 +44,7 @@ selectBoxEl shelf focusedStory =
                     Shelf.updateBook
                         (Book.setStories <|
                             SelectList.toList <|
-                                SelectList.set ( label, newOption ) focusedStory
+                                SelectList.replaceSelected ( label, newOption ) focusedStory
                         )
                         shelf
         , disabled = not <| Shelf.mapBook Book.isOpen shelf

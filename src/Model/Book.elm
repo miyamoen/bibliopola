@@ -42,7 +42,11 @@ turn query (Book book) =
                 List.map
                     (\( label, options ) ->
                         Dict.get label queryDict
-                            |> Maybe.andThen (\selected -> SelectList.select ((==) selected) options)
+                            |> Maybe.andThen
+                                (\selected ->
+                                    SelectList.selectHead options
+                                        |> SelectList.selectAfterIf ((==) selected)
+                                )
                             |> Maybe.map (Tuple.pair label)
                             |> Maybe.withDefault ( label, options )
                     )
