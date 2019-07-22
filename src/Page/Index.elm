@@ -21,4 +21,4 @@ mainPage : Book
 mainPage =
     bookWithFrontCover "Main" <|
         Element.map (\_ -> "Some event happened.") <|
-            Main.view Dummy.model
+            Main.view Nothing Dummy.model

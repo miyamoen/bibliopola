@@ -1,6 +1,6 @@
 module Bibliopola exposing
     ( Program, Book, Shelf
-    , fromBook, fromShelf
+    , fromBook, fromShelf, customProgram
     , withFrontCover
     , IntoBook, Story, intoBook, addStory, buildBook, buildHtmlBook
     , bookWithFrontCover
@@ -22,7 +22,7 @@ module Bibliopola exposing
 
 Entry point of Bibliopola
 
-@docs fromBook, fromShelf
+@docs fromBook, fromShelf, customProgram
 
 
 # Book
@@ -114,9 +114,24 @@ fromBook book =
 
 -}
 fromShelf : Shelf -> Program
-fromShelf shelf =
+fromShelf =
+    customProgram { title = "", front = Nothing }
+
+
+makeTitle : String -> String
+makeTitle title =
+    case title of
+        "" ->
+            "Bibliopola"
+
+        _ ->
+            title ++ " - Bibliopola"
+
+
+customProgram : { title : String, front : Maybe (Element String) } -> Shelf -> Program
+customProgram { title, front } shelf =
     Browser.application
-        { view = \model -> { title = "Bibliopola", body = [ view model ] }
+        { view = \model -> { title = makeTitle title, body = [ view front model ] }
         , init = init shelf
         , update = update
         , subscriptions = subscriptions
