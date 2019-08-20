@@ -1,84 +1,104 @@
 module Types exposing
-    ( Book(..)
-    , Log
-    , Model
+    ( Arg(..)
+    , Book
+    , BookArg
+    , BookModel
+    , Item
     , Msg(..)
-    , Panel
-    , PanelItem(..)
-    , ParsedRoute
-    , Shelf(..)
-    , ShelfPath
-    , SubModel
+    , Page(..)
+    , PageMsg(..)
+    , Select(..)
+    , Shelf
+    , Stitcher
+    , ToString
+    , UnboundBook
+    , UnboundPage(..)
     )
 
 import Browser exposing (UrlRequest)
 import Browser.Dom exposing (Viewport)
 import Browser.Navigation exposing (Key)
-import Dict exposing (Dict)
 import Element exposing (Element)
-import SelectList exposing (SelectList)
-import Tree.Zipper exposing (Zipper)
+import Html exposing (Html)
+import Random exposing (Seed)
+import Tree exposing (Tree)
 
 
 type Msg
     = NoOp
-    | ClickLink UrlRequest
-    | ChangeRoute ParsedRoute
-    | RouteError
-    | SetWindowSize { width : Int, height : Int }
-    | LogMsg String
-    | ClearLogs
-    | SetShelf Shelf
-    | SetPanel Panel
 
 
-type alias Model =
-    SubModel { key : Key }
+
+---------------- UnboundBook ----------------
 
 
-type alias SubModel a =
-    { a
-        | shelf : Shelf
-        , panel : Panel
-        , logs : List Log
-        , width : Int
-        , height : Int
+type alias UnboundBook view =
+    BookArg -> UnboundPage view
+
+
+type UnboundPage view
+    = UnboundPage view
+
+
+type Arg a
+    = GenArg (Random.Generator a)
+    | ListArg a (List a)
+    | GenOrListArg (Random.Generator a) a (List a)
+
+
+type alias ToString a =
+    a -> String
+
+
+
+---------------- Book ----------------
+
+
+{-| seedはhistoryになる予定
+-}
+type alias BookModel =
+    { seed : Seed
+    , selects : List Select
+    , book : Book
     }
 
 
-type Shelf
-    = Shelf (Zipper Book)
+type alias BookArg =
+    { seed : Seed, selects : List Select }
 
 
-type Book
-    = Book
-        { title : String
-        , pages : Dict String (Element Msg)
-        , stories : List ( String, SelectList String )
-        , isOpen : Bool
-        , shelfIsOpen : Bool
-        }
+type alias Book =
+    BookArg -> Page
 
 
-type alias ShelfPath =
-    List String
+type Page
+    = HtmlPage (Html PageMsg)
+    | ElementPage (Element PageMsg)
 
 
-type alias Panel =
-    SelectList PanelItem
+type alias Stitcher view =
+    view -> Page
 
 
-type PanelItem
-    = StoryPanel
-    | MsgLoggerPanel
-    | CreditPanel
+type PageMsg
+    = LogMsg String
+    | RequireNewSeed
 
 
-type alias Log =
-    { message : String, id : Int }
+type Select
+    = Select Int
+    | RandomSelect
 
 
-type alias ParsedRoute =
-    { path : List String
-    , query : List ( String, String )
+
+---------------- Shelf ----------------
+
+
+type alias Shelf =
+    Tree Item
+
+
+type alias Item =
+    { book : BookModel
+    , label : String
     }
