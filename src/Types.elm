@@ -1,5 +1,7 @@
 module Types exposing
-    ( Arg(..)
+    ( Arg
+    , ArgType(..)
+    , ArgView(..)
     , Book
     , BookArg
     , BookModel
@@ -12,7 +14,6 @@ module Types exposing
     , Stitcher
     , ToString
     , UnboundBook
-    , UnboundPage(..)
     )
 
 import Browser exposing (UrlRequest)
@@ -33,14 +34,24 @@ type Msg
 
 
 type alias UnboundBook view =
-    BookArg -> UnboundPage view
+    { book : BookArg -> ( view, List String )
+    , args : List ArgView
+    }
 
 
-type UnboundPage view
-    = UnboundPage view
+
+-------- Arg --------
 
 
-type Arg a
+{-| 見たいviewにいれる引数
+-}
+type alias Arg a =
+    { toString : ToString a
+    , type_ : ArgType a
+    }
+
+
+type ArgType a
     = GenArg (Random.Generator a)
     | ListArg a (List a)
     | GenOrListArg (Random.Generator a) a (List a)
@@ -48,6 +59,13 @@ type Arg a
 
 type alias ToString a =
     a -> String
+
+
+{-| uiを生成できるように
+-}
+type ArgView
+    = RandomArgView
+    | ListArgView String (List String)
 
 
 
