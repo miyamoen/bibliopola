@@ -1,42 +1,55 @@
 module Types exposing
     ( Arg
+    , ArgSelect(..)
     , ArgType(..)
-    , ArgView(..)
+    , ArgViewType(..)
     , Book
-    , BookArg
-    , BookModel
-    , Item
+    , BookItem
+    , Model
     , Msg(..)
-    , Page(..)
+    , Page
+    , PageArg
+    , PageModel
     , PageMsg(..)
-    , Select(..)
-    , Shelf
-    , Stitcher
+    , PageViewAcc
     , ToString
-    , UnboundBook
+    , TreeItem
     )
 
 import Browser exposing (UrlRequest)
 import Browser.Dom exposing (Viewport)
 import Browser.Navigation exposing (Key)
-import Element exposing (Element)
+import Element exposing (Attribute, Element)
 import Html exposing (Html)
 import Random exposing (Seed)
+import SelectList exposing (SelectList)
 import Tree exposing (Tree)
 
 
-type Msg
-    = NoOp
+
+---------------- Page ----------------
 
 
-
----------------- UnboundBook ----------------
-
-
-type alias UnboundBook view =
-    { book : BookArg -> ( view, List String )
-    , args : List ArgView
+type alias Page view =
+    { label : String
+    , view : PageArg -> ( view, List PageViewAcc )
     }
+
+
+type alias PageViewAcc =
+    { type_ : ArgViewType
+    , label : String
+    , value : String
+    }
+
+
+type ArgSelect
+    = ArgSelect Int
+    | RandomArgSelect
+
+
+type alias PageArg =
+    { seed : Seed, selects : List ArgSelect }
 
 
 
@@ -46,7 +59,8 @@ type alias UnboundBook view =
 {-| 見たいviewにいれる引数
 -}
 type alias Arg a =
-    { toString : ToString a
+    { label : String
+    , toString : ToString a
     , type_ : ArgType a
     }
 
@@ -63,7 +77,7 @@ type alias ToString a =
 
 {-| uiを生成できるように
 -}
-type ArgView
+type ArgViewType
     = RandomArgView
     | ListArgView String (List String)
 
@@ -72,51 +86,43 @@ type ArgView
 ---------------- Book ----------------
 
 
-{-| seedはhistoryになる予定
--}
-type alias BookModel =
-    { seed : Seed
-    , selects : List Select
-    , book : Book
+type alias Book view =
+    Tree (BookItem view)
+
+
+type alias BookItem view =
+    { label : String
+    , pages : List (Page view)
     }
 
 
-type alias BookArg =
-    { seed : Seed, selects : List Select }
 
-
-type alias Book =
-    BookArg -> Page
-
-
-type Page
-    = HtmlPage (Html PageMsg)
-    | ElementPage (Element PageMsg)
-
-
-type alias Stitcher view =
-    view -> Page
+---------------- Bibliopola ----------------
 
 
 type PageMsg
     = LogMsg String
     | RequireNewSeed
+    | SetArgSelects (List ArgSelect)
 
 
-type Select
-    = Select Int
-    | RandomSelect
-
-
-
----------------- Shelf ----------------
-
-
-type alias Shelf =
-    Tree Item
-
-
-type alias Item =
-    { book : BookModel
-    , label : String
+{-| -}
+type alias PageModel =
+    { label : String
+    , seeds : SelectList Seed
+    , selects : List ArgSelect
+    , view : List (Attribute PageMsg) -> SelectList Seed -> List ArgSelect -> Element PageMsg
     }
+
+
+type alias Model =
+    { book : Tree TreeItem }
+
+
+type alias TreeItem =
+    { label : String, pages : List PageModel }
+
+
+type Msg
+    = NoOp
+    | PageMsg PageMsg

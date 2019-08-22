@@ -1,6 +1,6 @@
 module Arg exposing
-    ( fromGenerator, fromList, withGenerator
-    , consumeBookArg, toView
+    ( fromGenerator, fromList, withGenerator, view
+    , consumePageArg, toPageViewAcc
     )
 
 {-|
@@ -8,32 +8,36 @@ module Arg exposing
 
 ## public function
 
-@docs fromGenerator, fromList, withGenerator
+@docs fromGenerator, fromList, withGenerator, view
 
 
 ## internal function
 
-@docs consumeBookArg, toView, listView, view
+@docs consumePageArg, toPageViewAcc, singleView
 
 -}
 
 import Element exposing (..)
+import Element.Input
 import List.Extra as List
 import Random exposing (Generator)
 import Random.Extra as Random
+import SelectList exposing (SelectList)
 import Types exposing (..)
 
 
-fromGenerator : ToString a -> Generator a -> Arg a
-fromGenerator toString gen =
-    { toString = toString
+fromGenerator : String -> ToString a -> Generator a -> Arg a
+fromGenerator label toString gen =
+    { label = label
+    , toString = toString
     , type_ = GenArg gen
     }
 
 
-fromList : ToString a -> a -> List a -> Arg a
-fromList toString item list =
-    { toString = toString
+fromList : String -> ToString a -> a -> List a -> Arg a
+fromList label toString item list =
+    { label = label
+    , toString = toString
     , type_ = ListArg item list
     }
 
@@ -56,30 +60,30 @@ withGenerator gen arg =
     }
 
 
-consumeBookArg : BookArg -> ArgType a -> ( a, BookArg )
-consumeBookArg bookArg arg =
+consumePageArg : PageArg -> ArgType a -> ( a, PageArg )
+consumePageArg bookArg arg =
     case arg of
         GenArg gen ->
-            consumeBookArgGenHelp bookArg gen
+            consumePageArgGenHelp bookArg gen
 
         ListArg item list ->
-            consumeBookArgListHelp bookArg item list
+            consumePageArgListHelp bookArg item list
 
         GenOrListArg gen item list ->
-            case List.head bookArg.selects |> Maybe.withDefault RandomSelect of
-                RandomSelect ->
-                    ( consumeBookArgGenHelp bookArg gen
+            case List.head bookArg.selects |> Maybe.withDefault RandomArgSelect of
+                RandomArgSelect ->
+                    ( consumePageArgGenHelp bookArg gen
                         |> Tuple.first
-                    , consumeBookArgListHelp bookArg item list
+                    , consumePageArgListHelp bookArg item list
                         |> Tuple.second
                     )
 
-                Select _ ->
-                    consumeBookArgGenHelp bookArg gen
+                ArgSelect _ ->
+                    consumePageArgGenHelp bookArg gen
 
 
-consumeBookArgGenHelp : BookArg -> Generator a -> ( a, BookArg )
-consumeBookArgGenHelp { seed, selects } gen =
+consumePageArgGenHelp : PageArg -> Generator a -> ( a, PageArg )
+consumePageArgGenHelp { seed, selects } gen =
     let
         ( a, nextSeed ) =
             Random.step gen seed
@@ -91,20 +95,20 @@ consumeBookArgGenHelp { seed, selects } gen =
     )
 
 
-consumeBookArgListHelp : BookArg -> a -> List a -> ( a, BookArg )
-consumeBookArgListHelp { seed, selects } item list =
+consumePageArgListHelp : PageArg -> a -> List a -> ( a, PageArg )
+consumePageArgListHelp { seed, selects } item list =
     let
         ( randomA, nextSeed ) =
             Random.step (Random.uniform item list) seed
 
         select =
-            List.head selects |> Maybe.withDefault RandomSelect
+            List.head selects |> Maybe.withDefault RandomArgSelect
 
         nextSelects =
             List.tail selects |> Maybe.withDefault []
     in
     case select of
-        Select index ->
+        ArgSelect index ->
             ( if index == 0 then
                 item
 
@@ -116,7 +120,7 @@ consumeBookArgListHelp { seed, selects } item list =
               }
             )
 
-        RandomSelect ->
+        RandomArgSelect ->
             ( randomA
             , { seed = nextSeed
               , selects = nextSelects
@@ -124,8 +128,16 @@ consumeBookArgListHelp { seed, selects } item list =
             )
 
 
-toView : Arg a -> ArgView
-toView { type_, toString } =
+toPageViewAcc : Arg a -> a -> PageViewAcc
+toPageViewAcc arg value =
+    { type_ = toViewType arg
+    , label = arg.label
+    , value = arg.toString value
+    }
+
+
+toViewType : Arg a -> ArgViewType
+toViewType { type_, toString } =
     case type_ of
         GenArg _ ->
             RandomArgView
@@ -137,29 +149,41 @@ toView { type_, toString } =
             ListArgView (toString item) <| List.map toString list
 
 
-{-| 引数は変更頻度順
-Maybe Select -- BookArg由来。あるかわかんない。なければRandom扱い
-Maybe String -- 実際使ってる値を文字列化したやつ。型的にMaybeがでちゃう。bookから返してもらう予定
--}
-view : ArgView -> Maybe Select -> Maybe String -> Element Msg
-view arg select value =
-    case arg of
-        RandomArgView ->
-            text "引数は生成されるよぅ"
+view : List ArgSelect -> List PageViewAcc -> Element PageMsg
+view selects args =
+    let
+        integrated =
+            List.indexedMap
+                (\index arg ->
+                    ( arg
+                    , List.getAt index selects
+                        |> Maybe.withDefault RandomArgSelect
+                    )
+                )
+                args
+    in
+    column [ spacing 32 ] <| SelectList.selectedMapForList singleView integrated
 
-        ListArgView string stringList ->
-            text "リストを表示する"
 
+singleView : SelectList ( PageViewAcc, ArgSelect ) -> Element PageMsg
+singleView list =
+    let
+        ( arg, select ) =
+            SelectList.selected list
+    in
+    column [ spacing 16 ]
+        [ row [ spacing 16 ] [ text arg.label, text " : ", text arg.value ]
+        , Element.Input.radio
+        []
+        { onChange : option -> msg
+        , options : List.List (Element.Input.Option option msg)
+        , selected : Just select
+        , label : Element.Input.labelRight [] <| text "test" }
 
-{-| 引数は変更頻度順
-List Select -- BookArg由来
-List String -- 実際使ってる値を文字列化したやつ。bookから返してもらう予定
--}
-listView : List ArgView -> List Select -> List String -> Element Msg
-listView args selects values =
-    column [] <|
-        List.indexedMap
-            (\index arg ->
-                view arg (List.getAt index selects) (List.getAt index values)
-            )
-            args
+        case arg.type_ of
+            RandomArgView ->
+                text "引数は生成されるよぅ"
+
+            ListArgView item list  ->
+                text "リストを表示する"
+        ]
