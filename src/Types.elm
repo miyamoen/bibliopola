@@ -1,7 +1,9 @@
 module Types exposing
     ( Arg
-    , ArgSelect(..)
+    , ArgSelect
+    , ArgSelectType(..)
     , ArgType(..)
+    , ArgView
     , ArgViewType(..)
     , Book
     , BookItem
@@ -11,7 +13,6 @@ module Types exposing
     , PageArg
     , PageModel
     , PageMsg(..)
-    , PageViewAcc
     , ToString
     , TreeItem
     )
@@ -32,19 +33,25 @@ import Tree exposing (Tree)
 
 type alias Page view =
     { label : String
-    , view : PageArg -> ( view, List PageViewAcc )
+    , view : PageArg -> ( view, List ArgView )
     }
 
 
-type alias PageViewAcc =
+type alias ArgView =
     { type_ : ArgViewType
     , label : String
     , value : String
     }
 
 
-type ArgSelect
-    = ArgSelect Int
+type alias ArgSelect =
+    { type_ : ArgSelectType
+    , index : Maybe Int
+    }
+
+
+type ArgSelectType
+    = ListArgSelect
     | RandomArgSelect
 
 

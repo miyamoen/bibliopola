@@ -79,7 +79,8 @@ toPageModel msgToString toHtml seed page =
                     |> html
                     |> el attrs
                 , seedView seeds
-                , Arg.view selects acc
+
+                -- , Arg.view selects acc
                 ]
     }
 
