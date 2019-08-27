@@ -1,6 +1,6 @@
 module Arg exposing
     ( fromGenerator, fromList, withGenerator
-    , consumePageArg, toPageViewAcc
+    , consumePageArg, toArgView
     )
 
 {-|
@@ -13,7 +13,7 @@ module Arg exposing
 
 ## internal function
 
-@docs consumePageArg, toPageViewAcc
+@docs consumePageArg, toArgView
 
 -}
 
@@ -67,15 +67,15 @@ consumePageArg bookArg arg =
             consumePageArgListHelp bookArg item list
 
         GenOrListArg gen item list ->
-            case List.head bookArg.selects |> Maybe.withDefault (RandomArgSelect Nothing) of
-                RandomArgSelect _ ->
+            case List.head bookArg.selects |> Maybe.map .type_ |> Maybe.withDefault RandomArgSelect of
+                RandomArgSelect ->
                     ( consumePageArgGenHelp bookArg gen
                         |> Tuple.first
                     , consumePageArgListHelp bookArg item list
                         |> Tuple.second
                     )
 
-                ArgSelect _ ->
+                ListArgSelect ->
                     consumePageArgGenHelp bookArg gen
 
 
@@ -99,25 +99,25 @@ consumePageArgListHelp { seed, selects } item list =
             Random.step (Random.uniform item list) seed
 
         select =
-            List.head selects |> Maybe.withDefault (RandomArgSelect Nothing)
+            List.head selects |> Maybe.withDefault randomArgSelect
 
         nextSelects =
             List.tail selects |> Maybe.withDefault []
     in
-    case select of
-        ArgSelect (Just index) ->
-            ( if index == 0 then
+    case select.type_ of
+        ListArgSelect ->
+            ( if select.index == Just 0 then
                 item
 
               else
-                List.getAt (index + 1) list
+                Maybe.andThen (\index -> List.getAt (index + 1) list) select.index
                     |> Maybe.withDefault item
             , { seed = nextSeed
               , selects = nextSelects
               }
             )
 
-        _ ->
+        RandomArgSelect ->
             ( randomA
             , { seed = nextSeed
               , selects = nextSelects
@@ -125,8 +125,13 @@ consumePageArgListHelp { seed, selects } item list =
             )
 
 
-toPageViewAcc : Arg a -> a -> PageViewAcc
-toPageViewAcc arg value =
+randomArgSelect : ArgSelect
+randomArgSelect =
+    { type_ = RandomArgSelect, index = Nothing }
+
+
+toArgView : Arg a -> a -> ArgView
+toArgView arg value =
     { type_ = toViewType arg
     , label = arg.label
     , value = arg.toString value
