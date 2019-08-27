@@ -19,21 +19,22 @@ import Ui.Color as Color
 type alias Config msg =
     { selected : Bool
     , msg : msg
-    , label : Element msg
+    , label : String
     }
 
 
 view : List (Element.Attribute msg) -> Config msg -> Element msg
 view attrs { selected, msg, label } =
     -- elm-uiバグ対応。focusがバグって下のDOMにもいくのを回避
-    el [] <|
+    el attrs <|
         row
-            ([ spacing 8
-             , padding 8
-             , htmlAttribute <| Html.Attributes.tabindex 1
-             , focusedStyle
-             , onClick msg
-             , htmlAttribute <|
+            [ width fill
+            , spacing 8
+            , padding 8
+            , htmlAttribute <| Html.Attributes.tabindex 0
+            , focusedStyle
+            , onClick msg
+            , htmlAttribute <|
                 on "keydown" <|
                     considerKeyboardEvent
                         (\{ keyCode } ->
@@ -43,10 +44,8 @@ view attrs { selected, msg, label } =
                             else
                                 Nothing
                         )
-             ]
-                ++ attrs
-            )
-            [ circle selected, label ]
+            ]
+            [ circle selected, text label ]
 
 
 circle : Bool -> Element msg
@@ -57,6 +56,7 @@ circle checked =
         , Border.rounded 10
         , Border.width 3
         , Border.color <| Color.uiColor Color.primary
+        , alignTop
         ]
         [ if checked then
             el
@@ -85,12 +85,12 @@ main =
                         [ view []
                             { selected = "first" == model
                             , msg = "first"
-                            , label = text "first"
+                            , label = "first"
                             }
                         , view []
                             { selected = "second" == model
                             , msg = "second"
-                            , label = text "second"
+                            , label = "second"
                             }
                         ]
         , update = \msg _ -> Debug.log "msg" msg

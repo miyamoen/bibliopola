@@ -63,7 +63,7 @@ view attrs { data, selected, msg, toString, notSelectedLabel } =
 
 triangle : List (Element.Attribute msg) -> Element msg
 triangle attrs =
-    el attrs <|
+    el ((htmlAttribute <| style "pointer-events" "none") :: attrs) <|
         html <|
             div
                 [ style "border-top" <| "12px solid " ++ Color.toCss Color.primary
