@@ -1,5 +1,6 @@
 module Ui.Basic.Select exposing (Config, view)
 
+import Browser
 import Element exposing (..)
 import Element.Border as Border
 import Html exposing (..)
@@ -7,6 +8,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import List.Extra as List
 import SelectList
+import Ui.Basic exposing (..)
 import Ui.Color as Color
 
 
@@ -52,37 +54,43 @@ view attrs { data, selected, msg, toString, notSelectedLabel } =
         )
         |> html
         |> el
-            ([ behindContent <|
-                el
-                    [ alignRight
-                    , centerY
-                    , moveLeft 10
-                    ]
-                <|
-                    html <|
-                        div
-                            [ style "border-top" <| "12px solid " ++ Color.toCss Color.primary
-                            , style "border-right" "8px solid transparent"
-                            , style "border-bottom" "0px solid transparent"
-                            , style "border-left" "8px solid transparent"
-                            ]
-                            []
+            ([ behindContent <| triangle [ alignRight, centerY, moveLeft 10 ]
+             , focusedStyle
              ]
                 ++ attrs
             )
 
 
-main : Html String
+triangle : List (Element.Attribute msg) -> Element msg
+triangle attrs =
+    el attrs <|
+        html <|
+            div
+                [ style "border-top" <| "12px solid " ++ Color.toCss Color.primary
+                , style "border-right" "8px solid transparent"
+                , style "border-bottom" "0px solid transparent"
+                , style "border-left" "8px solid transparent"
+                ]
+                []
+
+
+main : Program () Int String
 main =
-    layout [ padding 64 ] <|
-        view
-            [ Element.width <| fill ]
-            { data = [ "banana", "orange", "apple" ]
-            , toString = identity
-            , selected = Just 1
-            , msg =
-                Maybe.map (String.fromInt >> (++) "select : ")
-                    >> Maybe.withDefault "not select"
-                    >> Debug.log "message"
-            , notSelectedLabel = "Choose your favorite"
-            }
+    Browser.sandbox
+        { init = 0
+        , view =
+            \_ ->
+                layout [ padding 64 ] <|
+                    view
+                        [ Element.width <| fill ]
+                        { data = [ "banana", "orange", "apple" ]
+                        , toString = identity
+                        , selected = Just 1
+                        , msg =
+                            Maybe.map (String.fromInt >> (++) "select : ")
+                                >> Maybe.withDefault "not select"
+                                >> Debug.log "message"
+                        , notSelectedLabel = "Choose your favorite"
+                        }
+        , update = \_ _ -> 1
+        }

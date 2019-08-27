@@ -1,4 +1,4 @@
-module Ui.Color exposing (aoki, primary, toCss, uiColor)
+module Ui.Color exposing (aoki, primary, secondary, toCss, uiColor)
 
 {-| 配色アイデア手帳　日本の美しい色と言葉
 056 七草
@@ -23,6 +23,13 @@ toCss color =
 primary : Color
 primary =
     aoki
+
+
+{-| 仮
+-}
+secondary : Color
+secondary =
+    rgb255 145 216 206
 
 
 aoki : Color

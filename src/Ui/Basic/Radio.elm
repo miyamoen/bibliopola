@@ -1,11 +1,18 @@
 module Ui.Basic.Radio exposing (Config, view)
 
+import Browser
 import Color
 import Element exposing (..)
+import Element.Background as Background
 import Element.Border as Border
+import Element.Events exposing (onClick)
 import Html exposing (Html)
 import Html.Attributes
+import Html.Events exposing (on)
+import Keyboard.Event exposing (considerKeyboardEvent)
+import Keyboard.Key as Key
 import List.Extra as List
+import Ui.Basic exposing (..)
 import Ui.Color as Color
 
 
@@ -18,28 +25,73 @@ type alias Config msg =
 
 view : List (Element.Attribute msg) -> Config msg -> Element msg
 view attrs { selected, msg, label } =
+    -- elm-uiバグ対応。focusがバグって下のDOMにもいくのを回避
     el [] <|
         row
             ([ spacing 8
+             , padding 8
              , htmlAttribute <| Html.Attributes.tabindex 1
+             , focusedStyle
+             , onClick msg
+             , htmlAttribute <|
+                on "keydown" <|
+                    considerKeyboardEvent
+                        (\{ keyCode } ->
+                            if keyCode == Key.Enter then
+                                Just msg
+
+                            else
+                                Nothing
+                        )
              ]
                 ++ attrs
             )
-            [ text "選ぶやつ", label ]
+            [ circle selected, label ]
 
 
-main : Html String
+circle : Bool -> Element msg
+circle checked =
+    column
+        [ width <| px 20
+        , height <| px 20
+        , Border.rounded 10
+        , Border.width 3
+        , Border.color <| Color.uiColor Color.primary
+        ]
+        [ if checked then
+            el
+                [ width <| px 10
+                , height <| px 10
+                , centerX
+                , centerY
+                , Border.rounded 5
+                , Background.color <| Color.uiColor Color.primary
+                ]
+                none
+
+          else
+            none
+        ]
+
+
+main : Program () String String
 main =
-    layout [ padding 64 ] <|
-        column []
-            [ view []
-                { selected = True
-                , msg = "first"
-                , label = text "first"
-                }
-            , view []
-                { selected = False
-                , msg = "second"
-                , label = text "second"
-                }
-            ]
+    Browser.sandbox
+        { init = "init"
+        , view =
+            \model ->
+                layout [ padding 64 ] <|
+                    column [ spacing 16 ]
+                        [ view []
+                            { selected = "first" == model
+                            , msg = "first"
+                            , label = text "first"
+                            }
+                        , view []
+                            { selected = "second" == model
+                            , msg = "second"
+                            , label = text "second"
+                            }
+                        ]
+        , update = \msg _ -> Debug.log "msg" msg
+        }
