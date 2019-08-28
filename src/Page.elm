@@ -1,7 +1,8 @@
-module Page exposing (fold, fold1, fold2, map)
+module Page exposing (fold, fold1, fold2, map, sample)
 
 import Arg
 import Element exposing (..)
+import Element.Events exposing (onClick)
 import Element.Input
 import Html exposing (Html)
 import List.Extra as List
@@ -35,7 +36,7 @@ fold1 label view argA =
                 ( a, pageArgB ) =
                     Arg.consumePageArg pageArgA argA.type_
             in
-            ( view a, [ Arg.toPageViewAcc argA a ] )
+            ( view a, [ Arg.toArgView argA a ] )
     }
 
 
@@ -52,11 +53,24 @@ fold2 label view argA argB =
                     Arg.consumePageArg pageArgB argB.type_
             in
             ( view a b
-            , [ Arg.toPageViewAcc argA a
-              , Arg.toPageViewAcc argB b
+            , [ Arg.toArgView argA a
+              , Arg.toArgView argB b
               ]
             )
     }
+
+
+sample : Page (Element String)
+sample =
+    fold2 "sample-page"
+        (\a b ->
+            column [ spacing 32, width fill, height fill ]
+                [ el [ onClick a ] <| text a
+                , el [ onClick b ] <| text b
+                ]
+        )
+        (Arg.fromList "list-arg" identity "a" [ "aa", "aaa", String.repeat 6 "ai" ])
+        (Arg.fromGenerator "random-arg" identity <| Random.String.string 8 Random.Char.lowerCaseLatin)
 
 
 toPageModel : (msg -> String) -> (view -> Html msg) -> Seed -> Page view -> PageModel

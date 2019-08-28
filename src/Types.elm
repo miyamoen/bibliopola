@@ -110,7 +110,8 @@ type alias BookItem view =
 type PageMsg
     = LogMsg String
     | RequireNewSeed
-    | SetArgSelects (List ArgSelect)
+    | ChangeArgSelects (List ArgSelect)
+    | ChangeSeeds (SelectList Seed)
 
 
 {-| -}

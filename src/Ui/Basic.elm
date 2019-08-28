@@ -1,8 +1,12 @@
-module Ui.Basic exposing (focusedStyle, font)
+module Ui.Basic exposing (focusedStyle, font, onEnter, tabindex)
 
 import Element exposing (..)
 import Element.Border as Border
 import Element.Font as Font
+import Html.Attributes
+import Html.Events exposing (on)
+import Keyboard.Event exposing (considerKeyboardEvent)
+import Keyboard.Key as Key
 import Ui.Color as Color
 
 
@@ -27,4 +31,25 @@ font =
             }
         , Font.sansSerif
         ]
+    , Font.size 20
+    , Font.color <| Color.uiColor Color.font
     ]
+
+
+tabindex : Attribute msg
+tabindex =
+    htmlAttribute <| Html.Attributes.tabindex 0
+
+
+onEnter : msg -> Attribute msg
+onEnter msg =
+    htmlAttribute <|
+        on "keydown" <|
+            considerKeyboardEvent
+                (\{ keyCode } ->
+                    if keyCode == Key.Enter then
+                        Just msg
+
+                    else
+                        Nothing
+                )

@@ -1,17 +1,10 @@
 module Ui.Basic.Radio exposing (Config, view)
 
 import Browser
-import Color
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (onClick)
-import Html exposing (Html)
-import Html.Attributes
-import Html.Events exposing (on)
-import Keyboard.Event exposing (considerKeyboardEvent)
-import Keyboard.Key as Key
-import List.Extra as List
 import Ui.Basic exposing (..)
 import Ui.Color as Color
 
@@ -23,7 +16,7 @@ type alias Config msg =
     }
 
 
-view : List (Element.Attribute msg) -> Config msg -> Element msg
+view : List (Attribute msg) -> Config msg -> Element msg
 view attrs { selected, msg, label } =
     -- elm-uiバグ対応。focusがバグって下のDOMにもいくのを回避
     el attrs <|
@@ -31,19 +24,10 @@ view attrs { selected, msg, label } =
             [ width fill
             , spacing 8
             , padding 8
-            , htmlAttribute <| Html.Attributes.tabindex 0
+            , tabindex
             , focusedStyle
             , onClick msg
-            , htmlAttribute <|
-                on "keydown" <|
-                    considerKeyboardEvent
-                        (\{ keyCode } ->
-                            if keyCode == Key.Enter then
-                                Just msg
-
-                            else
-                                Nothing
-                        )
+            , onEnter msg
             ]
             [ circle selected, text label ]
 

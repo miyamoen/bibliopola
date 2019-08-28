@@ -8,6 +8,7 @@ import List.Extra as List
 import SelectList exposing (SelectList)
 import Types exposing (..)
 import Ui.Basic exposing (..)
+import Ui.Basic.Card as Card
 import Ui.Basic.Radio as Radio
 import Ui.Basic.Select as Select
 
@@ -25,7 +26,7 @@ view selects args =
                 )
                 args
     in
-    wrappedRow [ spacing 32 ] <|
+    wrappedRow (Card.attributes ++ [ width fill, spacing 32 ]) <|
         SelectList.selectedMapForList singleView integrated
 
 
@@ -39,18 +40,20 @@ singleView args =
             SelectList.map Tuple.second args
                 |> SelectList.updateSelected (\select_ -> { select_ | type_ = type_ })
                 |> SelectList.toList
-                |> SetArgSelects
+                |> ChangeArgSelects
 
         changeArgIndex index =
             SelectList.map Tuple.second args
                 |> SelectList.updateSelected (\select_ -> { select_ | index = index })
                 |> SelectList.toList
-                |> SetArgSelects
+                |> ChangeArgSelects
     in
     column
-        [ spacing 16
-        , alignTop
-        ]
+        (Card.attributes
+            ++ [ spacing 16
+               , alignTop
+               ]
+        )
         [ row [ spacing 8 ] [ text arg.label, text " : ", text arg.value ]
         , case arg.type_ of
             RandomArgView ->
@@ -92,12 +95,13 @@ singleView args =
         ]
 
 
+main : Program () String String
 main =
     Browser.sandbox
         { init = "init"
         , view =
             \model ->
-                layout ([ padding 64 ] ++ font)
+                layout (padding 64 :: font)
                     (view
                         [ { type_ = ListArgSelect, index = Just 0 }
                         , { type_ = RandomArgSelect, index = Nothing }
