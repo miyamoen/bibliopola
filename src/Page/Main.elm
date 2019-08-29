@@ -10,8 +10,8 @@ import Organism.ShelfTree as ShelfTree
 import Types exposing (..)
 
 
-view : SubModel a -> Element Msg
-view model =
+view : Maybe (Element String) -> SubModel a -> Element Msg
+view front model =
     column
         [ width fill
         , height fill
@@ -43,7 +43,12 @@ view model =
                 , height fill
                 ]
               <|
-                BookPage.view model.shelf
+                case ( front, Shelf.hasShelves (Shelf.root model.shelf) && Shelf.depth model.shelf == 0 ) of
+                    ( Just frontEl, True ) ->
+                        Element.map (always NoOp) frontEl
+
+                    _ ->
+                        BookPage.view model.shelf
             ]
         , el [ scrollbarY, clipX, height <| px panelHeight, width fill ] <|
             Panel.view model
