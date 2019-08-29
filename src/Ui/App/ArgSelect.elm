@@ -13,8 +13,8 @@ import Ui.Basic.Radio as Radio
 import Ui.Basic.Select as Select
 
 
-view : List ArgSelect -> List ArgView -> Element PageMsg
-view selects args =
+view : List (Attribute PageMsg) -> List ArgSelect -> List ArgView -> Element PageMsg
+view attrs selects args =
     let
         integrated =
             List.indexedMap
@@ -26,8 +26,12 @@ view selects args =
                 )
                 args
     in
-    wrappedRow (Card.attributes ++ [ width fill, spacing 32 ]) <|
-        SelectList.selectedMapForList singleView integrated
+    Card.view attrs
+        { label = text "args"
+        , content =
+            wrappedRow [ width fill, spacing 32 ] <|
+                SelectList.selectedMapForList singleView integrated
+        }
 
 
 singleView : SelectList ( ArgView, ArgSelect ) -> Element PageMsg
@@ -48,51 +52,50 @@ singleView args =
                 |> SelectList.toList
                 |> ChangeArgSelects
     in
-    column
-        (Card.attributes
-            ++ [ spacing 16
-               , alignTop
-               ]
-        )
-        [ row [ spacing 8 ] [ text arg.label, text " : ", text arg.value ]
-        , case arg.type_ of
-            RandomArgView ->
-                Radio.view [ width fill ]
-                    { selected = select.type_ == RandomArgSelect
-                    , msg = changeArgType RandomArgSelect
-                    , label = "Generate random value"
-                    }
-
-            ListArgView item list ->
-                column [ spacing 16 ]
-                    [ Radio.view [ width fill ]
-                        { selected = select.type_ == RandomArgSelect
-                        , msg = changeArgType RandomArgSelect
-                        , label = "Generate random value"
-                        }
-                    , column [ spacing 8, width fill ]
-                        [ Radio.view [ width fill ]
-                            { selected = select.type_ == ListArgSelect
-                            , msg = changeArgType ListArgSelect
-                            , label =
-                                "Select from list"
+    Card.view [ alignTop ]
+        { label = text arg.label
+        , content =
+            column [ spacing 32 ]
+                [ wrappedText [] arg.value
+                , case arg.type_ of
+                    RandomArgView ->
+                        Radio.view []
+                            { selected = select.type_ == RandomArgSelect
+                            , msg = changeArgType RandomArgSelect
+                            , label = "Generate random value"
                             }
-                        , el
-                            [ width fill
-                            , paddingEach
-                                { top = 0, right = 0, bottom = 0, left = 36 }
-                            ]
-                          <|
-                            Select.view [ width fill ]
-                                { data = item :: list
-                                , toString = identity
-                                , selected = select.index
-                                , notSelectedLabel = "Choose an Arg"
-                                , msg = changeArgIndex
+
+                    ListArgView item list ->
+                        column [ spacing 16 ]
+                            [ Radio.view []
+                                { selected = select.type_ == RandomArgSelect
+                                , msg = changeArgType RandomArgSelect
+                                , label = "Generate random value"
                                 }
-                        ]
-                    ]
-        ]
+                            , column [ spacing 8, width fill ]
+                                [ Radio.view []
+                                    { selected = select.type_ == ListArgSelect
+                                    , msg = changeArgType ListArgSelect
+                                    , label =
+                                        "Select from list"
+                                    }
+                                , el
+                                    [ width fill
+                                    , paddingEach
+                                        { top = 0, right = 0, bottom = 0, left = 36 }
+                                    ]
+                                  <|
+                                    Select.view [ width fill ]
+                                        { data = item :: list
+                                        , toString = identity
+                                        , selected = select.index
+                                        , notSelectedLabel = "Choose an Arg"
+                                        , msg = changeArgIndex
+                                        }
+                                ]
+                            ]
+                ]
+        }
 
 
 main : Program () String String
@@ -102,7 +105,7 @@ main =
         , view =
             \model ->
                 layout (padding 64 :: font)
-                    (view
+                    (view []
                         [ { type_ = ListArgSelect, index = Just 0 }
                         , { type_ = RandomArgSelect, index = Nothing }
                         , { type_ = RandomArgSelect, index = Nothing }

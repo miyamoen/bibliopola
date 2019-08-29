@@ -92,7 +92,7 @@ styles =
     [ style "-webkit-appearance" "none"
     , style "-moz-appearance" "none"
     , style "appearance" "none"
-    , style "padding" "0.5em 1em"
+    , style "padding" "0.25em 1.5em 0.3em 1em"
     , style "border-radius" "4px"
     , style "border-color" <| Color.toCss Color.primary
     , style "border-width" "4px"

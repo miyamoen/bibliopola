@@ -1,4 +1,4 @@
-module Ui.Basic exposing (focusedStyle, font, onEnter, tabindex)
+module Ui.Basic exposing (focusedStyle, font, onEnter, tabindex, wrappedText)
 
 import Element exposing (..)
 import Element.Border as Border
@@ -53,3 +53,8 @@ onEnter msg =
                     else
                         Nothing
                 )
+
+
+wrappedText : List (Attribute msg) -> String -> Element msg
+wrappedText attrs str =
+    paragraph attrs [ text str ]

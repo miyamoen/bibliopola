@@ -7,24 +7,28 @@ module Types exposing
     , ArgViewType(..)
     , Book
     , BookItem
+    , BoundPage
+    , Mode(..)
     , Model
     , Msg(..)
     , Page
     , PageArg
-    , PageModel
     , PageMsg(..)
+    , Route(..)
     , ToString
-    , TreeItem
+    , ViewConfig
     )
 
 import Browser exposing (UrlRequest)
 import Browser.Dom exposing (Viewport)
 import Browser.Navigation exposing (Key)
+import Dict exposing (Dict)
 import Element exposing (Attribute, Element)
 import Html exposing (Html)
 import Random exposing (Seed)
 import SelectList exposing (SelectList)
 import Tree exposing (Tree)
+import Url exposing (Url)
 
 
 
@@ -99,7 +103,7 @@ type alias Book view =
 
 type alias BookItem view =
     { label : String
-    , pages : List (Page view)
+    , pages : Dict String (Page view)
     }
 
 
@@ -110,27 +114,54 @@ type alias BookItem view =
 type PageMsg
     = LogMsg String
     | RequireNewSeed
+    | GotNewSeed Seed
     | ChangeArgSelects (List ArgSelect)
     | ChangeSeeds (SelectList Seed)
 
 
 {-| -}
-type alias PageModel =
+type alias BoundPage =
     { label : String
     , seeds : SelectList Seed
     , selects : List ArgSelect
-    , view : List (Attribute PageMsg) -> SelectList Seed -> List ArgSelect -> Element PageMsg
+    , logs : List String
+    , view :
+        SelectList Seed
+        -> List ArgSelect
+        ->
+            { page : List (Attribute PageMsg) -> Element PageMsg
+            , args : List (Attribute PageMsg) -> Element PageMsg
+            }
     }
 
 
 type alias Model =
-    { book : Tree TreeItem }
+    { mode : Mode
+    , route : Route
+    , key : Key
+    }
 
 
-type alias TreeItem =
-    { label : String, pages : List PageModel }
+type alias ViewConfig view msg =
+    { viewToElement : view -> Element msg
+    , msgToString : msg -> String
+    }
+
+
+type Route
+    = TopRoute
+    | PageRoute String (List String)
+    | BrokenRoute String
+    | NotFoundRoute String
+
+
+type Mode
+    = BookMode (Tree { label : String, pages : Dict String BoundPage })
+    | PageMode BoundPage
 
 
 type Msg
     = NoOp
-    | PageMsg PageMsg
+    | PageMsg String (List String) PageMsg
+    | ClickedLink UrlRequest
+    | ChangeUrl Url

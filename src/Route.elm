@@ -1,64 +1,46 @@
-module Route exposing (fromBool, parse, toBool, url)
+module Route exposing (parse)
 
-import Parser
-import Route.Parser as Parser
-import Types exposing (ParsedRoute)
+import Maybe.Extra as Maybe
+import Types exposing (Route(..))
 import Url exposing (Url)
-import Url.Builder as Builder exposing (Root(..))
 
 
-parse : Url -> Maybe ParsedRoute
-parse { query, fragment } =
-    let
-        path =
-            case fragment of
-                Just str ->
-                    Parser.run Parser.path str
-                        |> Result.map Just
-                        |> Result.withDefault Nothing
+parse : Url -> Route
+parse url =
+    case preparePath url.path of
+        [] ->
+            TopRoute
 
-                Nothing ->
-                    Just []
+        "pages" :: pageKey :: bookKeys ->
+            case ( Url.percentDecode pageKey, List.map Url.percentDecode bookKeys |> Maybe.combine ) of
+                ( Just pageKey_, Just bookKeys_ ) ->
+                    PageRoute pageKey_ bookKeys_
 
-        queryList =
-            case query of
-                Just str ->
-                    Parser.run Parser.query str
-                        |> Result.map Just
-                        |> Result.withDefault Nothing
-
-                Nothing ->
-                    Just []
-    in
-    Maybe.map2 ParsedRoute path queryList
-
-
-url : ParsedRoute -> String
-url { path, query } =
-    Builder.custom Relative
-        []
-        (List.map (\( k, v ) -> Builder.string k v) query)
-        (String.join "/" path |> Just)
-
-
-fromBool : Bool -> String
-fromBool bool =
-    case bool of
-        True ->
-            "true"
-
-        False ->
-            "false"
-
-
-toBool : String -> Maybe Bool
-toBool string =
-    case string of
-        "true" ->
-            Just True
-
-        "false" ->
-            Just False
+                _ ->
+                    BrokenRoute <| Url.toString url
 
         _ ->
-            Nothing
+            NotFoundRoute <| Url.toString url
+
+
+preparePath : String -> List String
+preparePath path =
+    case String.split "/" path of
+        "" :: segments ->
+            removeFinalEmpty segments
+
+        segments ->
+            removeFinalEmpty segments
+
+
+removeFinalEmpty : List String -> List String
+removeFinalEmpty segments =
+    case segments of
+        [] ->
+            []
+
+        "" :: [] ->
+            []
+
+        segment :: rest ->
+            segment :: removeFinalEmpty rest
