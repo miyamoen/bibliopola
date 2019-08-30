@@ -1,6 +1,7 @@
 module Bibliopola exposing (Program, displayPage)
 
 import Arg
+import Book
 import BoundPage
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav exposing (Key)
@@ -11,7 +12,6 @@ import Page
 import Random exposing (Generator, Seed)
 import Route
 import SelectList
-import Tree
 import Types exposing (..)
 import Ui.App.Page as Page
 import Url exposing (Url)
@@ -24,7 +24,7 @@ type alias Program =
 displayPage : ViewConfig view msg -> Page view -> Program
 displayPage config page =
     Browser.application
-        { init = init <| PageMode <| BoundPage.bind config (Random.initialSeed 1234) page
+        { init = initPageMode config page
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -33,9 +33,14 @@ displayPage config page =
         }
 
 
-init : Mode -> () -> Url -> Key -> ( Model, Cmd Msg )
-init mode _ url key =
-    ( { mode = mode, key = key, route = Route.parse url }, Cmd.none )
+initPageMode : ViewConfig view msg -> Page view -> () -> Url -> Key -> ( Model, Cmd Msg )
+initPageMode config page _ url key =
+    ( { mode = PageMode <| BoundPage.bind config (Random.initialSeed 1234) page
+      , key = key
+      , route = Route.parse url
+      }
+    , Cmd.map (PageMsg { pagePath = page.label, bookPaths = [] }) BoundPage.generateSeed
+    )
 
 
 view : Model -> Document Msg
@@ -51,17 +56,22 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        PageMsg pageKey bookKeys pageMsg ->
+        PageMsg path pageMsg ->
             case model.mode of
                 BookMode tree ->
-                    Debug.todo "String.String"
+                    case Book.openZipper path.bookPaths tree of
+                        Just zipper ->
+                            Debug.todo "todo"
+
+                        Nothing ->
+                            Debug.todo "todo"
 
                 PageMode page ->
                     let
                         ( newPage, cmd ) =
                             BoundPage.update pageMsg page
                     in
-                    ( { model | mode = PageMode newPage }, Cmd.map (PageMsg pageKey bookKeys) cmd )
+                    ( { model | mode = PageMode newPage }, Cmd.map (PageMsg path) cmd )
 
         ClickedLink urlRequest ->
             case urlRequest of

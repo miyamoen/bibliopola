@@ -32,7 +32,7 @@ view attrs { color, msg, label, disabled } =
              , Font.color <| Color.uiColor white
              ]
                 ++ (if disabled then
-                        [ Background.color <| Color.uiColor <| Color.desaturate 0.1 color ]
+                        [ Background.color <| Color.uiColor <| Color.fadeOut 0.4 color ]
 
                     else
                         [ onEnter msg
@@ -70,6 +70,12 @@ main =
                             , msg = "third"
                             , label = text "third"
                             , disabled = False
+                            }
+                        , view []
+                            { color = Color.aoki
+                            , msg = "fourth"
+                            , label = text "fourth"
+                            , disabled = True
                             }
                         ]
         , update = \msg _ -> Debug.log "msg" msg

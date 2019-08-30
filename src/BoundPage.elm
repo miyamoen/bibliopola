@@ -1,16 +1,14 @@
-module BoundPage exposing (bind, update)
+module BoundPage exposing (bind, generateSeed, update)
 
 import Arg
 import Browser exposing (Document, UrlRequest(..))
 import Browser.Navigation as Nav exposing (Key)
 import Element exposing (..)
 import Html exposing (Html)
-import List.Extra as List
 import Page
 import Random exposing (Generator, Seed)
 import Route
 import SelectList
-import Tree
 import Types exposing (..)
 import Ui.App.Page as Page
 import Url exposing (Url)
@@ -33,7 +31,7 @@ update msg page =
             ( { page | logs = log :: page.logs }, Cmd.none )
 
         RequireNewSeed ->
-            ( page, Random.generate GotNewSeed Random.independentSeed )
+            ( page, generateSeed )
 
         GotNewSeed seed ->
             ( { page
@@ -49,3 +47,8 @@ update msg page =
 
         ChangeSeeds seeds ->
             ( { page | seeds = seeds }, Cmd.none )
+
+
+generateSeed : Cmd PageMsg
+generateSeed =
+    Random.generate GotNewSeed Random.independentSeed

@@ -1,5 +1,6 @@
 module Types exposing
-    ( Arg
+    ( AbstractBookItem
+    , Arg
     , ArgSelect
     , ArgSelectType(..)
     , ArgType(..)
@@ -7,6 +8,8 @@ module Types exposing
     , ArgViewType(..)
     , Book
     , BookItem
+    , BoundBook
+    , BoundBookItem
     , BoundPage
     , Mode(..)
     , Model
@@ -14,6 +17,7 @@ module Types exposing
     , Page
     , PageArg
     , PageMsg(..)
+    , PagePath
     , Route(..)
     , ToString
     , ViewConfig
@@ -25,9 +29,9 @@ import Browser.Navigation exposing (Key)
 import Dict exposing (Dict)
 import Element exposing (Attribute, Element)
 import Html exposing (Html)
+import Lazy.Tree exposing (Tree)
 import Random exposing (Seed)
 import SelectList exposing (SelectList)
-import Tree exposing (Tree)
 import Url exposing (Url)
 
 
@@ -107,6 +111,24 @@ type alias BookItem view =
     }
 
 
+type alias BoundBookItem =
+    { label : String
+    , pages : Dict String BoundPage
+    }
+
+
+type alias BoundBook =
+    Tree BoundBookItem
+
+
+type alias PagePath =
+    { pagePath : String, bookPaths : List String }
+
+
+type alias AbstractBookItem page =
+    { label : String, pages : Dict String page }
+
+
 
 ---------------- Bibliopola ----------------
 
@@ -150,18 +172,18 @@ type alias ViewConfig view msg =
 
 type Route
     = TopRoute
-    | PageRoute String (List String)
+    | PageRoute PagePath
     | BrokenRoute String
     | NotFoundRoute String
 
 
 type Mode
-    = BookMode (Tree { label : String, pages : Dict String BoundPage })
+    = BookMode BoundBook
     | PageMode BoundPage
 
 
 type Msg
     = NoOp
-    | PageMsg String (List String) PageMsg
+    | PageMsg PagePath PageMsg
     | ClickedLink UrlRequest
     | ChangeUrl Url
