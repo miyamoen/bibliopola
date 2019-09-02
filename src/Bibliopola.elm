@@ -13,6 +13,7 @@ import Random exposing (Generator, Seed)
 import Route
 import SelectList
 import Types exposing (..)
+import Ui
 import Ui.App.Page as Page
 import Url exposing (Url)
 
@@ -46,7 +47,7 @@ initPageMode config page _ url key =
 view : Model -> Document Msg
 view model =
     { title = "Bibliopola"
-    , body = []
+    , body = [ Ui.view model ]
     }
 
 
@@ -58,13 +59,12 @@ update msg model =
 
         PageMsg path pageMsg ->
             case model.mode of
-                BookMode tree ->
-                    case Book.openZipper path.bookPaths tree of
-                        Just zipper ->
-                            Debug.todo "todo"
-
-                        Nothing ->
-                            Debug.todo "todo"
+                BookMode book ->
+                    let
+                        ( newBook, cmd ) =
+                            Book.updatePage path (BoundPage.update pageMsg) book
+                    in
+                    ( { model | mode = BookMode newBook }, Cmd.map (PageMsg path) cmd )
 
                 PageMode page ->
                     let
