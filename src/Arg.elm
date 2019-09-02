@@ -110,7 +110,7 @@ consumePageArgListHelp { seed, selects } item list =
                 item
 
               else
-                Maybe.andThen (\index -> List.getAt (index + 1) list) select.index
+                Maybe.andThen (\index -> List.getAt (index - 1) list) select.index
                     |> Maybe.withDefault item
             , { seed = nextSeed
               , selects = nextSelects

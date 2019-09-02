@@ -1,4 +1,4 @@
-module Bibliopola exposing (Program, displayPage)
+module Bibliopola exposing (Program, displayPage, identityConfig)
 
 import Arg
 import Book
@@ -20,6 +20,11 @@ import Url exposing (Url)
 
 type alias Program =
     Platform.Program () Model Msg
+
+
+identityConfig : ViewConfig (Element String) String
+identityConfig =
+    { viewToElement = identity, msgToString = identity }
 
 
 displayPage : ViewConfig view msg -> Page view -> Program

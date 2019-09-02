@@ -1,4 +1,4 @@
-module Ui.Basic exposing (focusedStyle, font, onEnter, tabindex, wrappedText)
+module Ui.Basic exposing (focusedStyle, font, onEnter, style, tabindex, wrappedText)
 
 import Element exposing (..)
 import Element.Border as Border
@@ -58,3 +58,8 @@ onEnter msg =
 wrappedText : List (Attribute msg) -> String -> Element msg
 wrappedText attrs str =
     paragraph attrs [ text str ]
+
+
+style : String -> String -> Attribute msg
+style label value =
+    htmlAttribute <| Html.Attributes.style label value

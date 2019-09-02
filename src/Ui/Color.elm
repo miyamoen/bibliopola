@@ -4,6 +4,7 @@ module Ui.Color exposing
     , black
     , font
     , grey
+    , hukurasuzume
     , primary
     , samuzora
     , secondary
@@ -82,3 +83,8 @@ wakana =
 samuzora : Color
 samuzora =
     rgb255 192 214 207
+
+
+hukurasuzume : Color
+hukurasuzume =
+    rgb255 161 163 104

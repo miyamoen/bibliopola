@@ -1,5 +1,6 @@
 module Route exposing (parse)
 
+import List.Extra as List
 import Maybe.Extra as Maybe
 import Types exposing (Route(..))
 import Url exposing (Url)
@@ -11,13 +12,18 @@ parse url =
         [] ->
             TopRoute
 
-        "pages" :: pageKey :: bookKeys ->
-            case ( Url.percentDecode pageKey, List.map Url.percentDecode bookKeys |> Maybe.combine ) of
-                ( Just pageKey_, Just bookKeys_ ) ->
-                    PageRoute pageKey_ bookKeys_
+        "pages" :: rest ->
+            case List.unconsLast rest of
+                Just ( pagePath, bookPaths ) ->
+                    case ( Url.percentDecode pagePath, List.map Url.percentDecode bookPaths |> Maybe.combine ) of
+                        ( Just pagePath_, Just bookPaths_ ) ->
+                            PageRoute { pagePath = pagePath_, bookPaths = bookPaths_ }
 
-                _ ->
-                    BrokenRoute <| Url.toString url
+                        _ ->
+                            BrokenRoute <| Url.toString url
+
+                Nothing ->
+                    NotFoundRoute <| Url.toString url
 
         _ ->
             NotFoundRoute <| Url.toString url

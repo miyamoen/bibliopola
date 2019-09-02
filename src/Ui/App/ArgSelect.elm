@@ -52,11 +52,11 @@ singleView args =
                 |> SelectList.toList
                 |> ChangeArgSelects
     in
-    Card.view [ alignTop ]
-        { label = text arg.label
+    Card.view [ alignTop, width (fill |> minimum 275) ]
+        { label = wrappedText [] arg.label
         , content =
-            column [ spacing 32 ]
-                [ wrappedText [] arg.value
+            column [ spacing 32, width fill ]
+                [ wrappedText [ width fill, style "word-wrap" "break-word" ] arg.value
                 , case arg.type_ of
                     RandomArgView ->
                         Radio.view []
