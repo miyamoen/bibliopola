@@ -30,6 +30,7 @@ view attrs { color, msg, label, disabled } =
              , tabindex
              , focusedStyle
              , Font.color <| Color.uiColor white
+             , pointer
              ]
                 ++ (if disabled then
                         [ Background.color <| Color.uiColor <| Color.fadeOut 0.4 color ]

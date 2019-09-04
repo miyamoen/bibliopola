@@ -1,9 +1,24 @@
-module Book exposing (bind, bindChapter, empty, find, map, openPage, updatePage)
+module Book exposing
+    ( allPaths
+    , bind
+    , bindChapter
+    , bindPage
+    , closeAll
+    , empty
+    , find
+    , findPage
+    , map
+    , openAll
+    , openThroughPaths
+    , updatePage
+    )
 
+import BoundPage
 import Dict exposing (Dict)
 import Lazy.Tree as Tree exposing (Tree)
 import Lazy.Tree.Zipper as Zipper exposing (Zipper)
 import Page
+import Random exposing (Seed)
 import Types exposing (..)
 
 
@@ -24,8 +39,8 @@ empty label =
     Tree.singleton { label = label, pages = Dict.empty }
 
 
-bind : Page view -> Book view -> Book view
-bind page book =
+bindPage : Page view -> Book view -> Book view
+bindPage page book =
     Zipper.fromTree book
         |> Zipper.updateItem (\item -> { item | pages = Dict.insert page.label page item.pages })
         |> Zipper.getTree
@@ -36,13 +51,52 @@ bindChapter chapter book =
     book |> Tree.insert chapter
 
 
-find : List String -> Tree (AbstractBookItem page) -> Maybe (Zipper (AbstractBookItem page))
+bind : ViewConfig view msg -> Seed -> Book view -> BoundBook
+bind config seed book =
+    Tree.map
+        (\{ pages, label } ->
+            { label = label
+            , pages = Dict.map (\_ page -> BoundPage.bind config seed page) pages
+            , open = True
+            }
+        )
+        book
+
+
+allPaths : Tree (AbstractBookItem item page) -> List PagePath
+allPaths book =
+    Zipper.fromTree book
+        |> Zipper.openAll
+        |> List.concatMap
+            (\zipper ->
+                let
+                    { label, pages } =
+                        Zipper.current zipper
+                in
+                Dict.keys pages
+                    |> List.map
+                        (\pagePath ->
+                            { pagePath = pagePath
+                            , bookPaths =
+                                if Zipper.isRoot zipper then
+                                    []
+
+                                else
+                                    Zipper.getPath .label zipper
+                                        |> List.tail
+                                        |> Maybe.withDefault []
+                            }
+                        )
+            )
+
+
+find : List String -> Tree (AbstractBookItem item page) -> Maybe (Zipper (AbstractBookItem item page))
 find bookPaths tree =
     Zipper.fromTree tree
         |> findHelp bookPaths
 
 
-findHelp : List String -> Zipper (AbstractBookItem page) -> Maybe (Zipper (AbstractBookItem page))
+findHelp : List String -> Zipper (AbstractBookItem item page) -> Maybe (Zipper (AbstractBookItem item page))
 findHelp paths zipper =
     case paths of
         path :: rest ->
@@ -53,8 +107,59 @@ findHelp paths zipper =
             Just zipper
 
 
-openPage : String -> Zipper (AbstractBookItem page) -> Maybe page
-openPage path zipper =
+openAll : BoundBook -> BoundBook
+openAll book =
+    Tree.map (\item -> { item | open = True }) book
+
+
+closeAll : BoundBook -> BoundBook
+closeAll book =
+    Tree.map (\item -> { item | open = False }) book
+
+
+openThroughPaths : List String -> BoundBook -> BoundBook
+openThroughPaths paths book =
+    Zipper.fromTree book
+        |> openThroughPathsHelp paths
+        |> Zipper.root
+        |> Zipper.getTree
+
+
+openThroughPathsHelp : List String -> Zipper BoundBookItem -> Zipper BoundBookItem
+openThroughPathsHelp paths book =
+    case paths of
+        path :: rest ->
+            case Zipper.open (.label >> (==) path) book of
+                Just newBook ->
+                    openThroughPathsHelp rest (openItem book)
+
+                Nothing ->
+                    book
+
+        [] ->
+            book
+
+
+openItem : Zipper BoundBookItem -> Zipper BoundBookItem
+openItem book =
+    if Zipper.current book |> .open then
+        book
+
+    else
+        Zipper.updateItem (\item -> { item | open = True }) book
+
+
+closeItem : Zipper BoundBookItem -> Zipper BoundBookItem
+closeItem book =
+    if Zipper.current book |> .open then
+        Zipper.updateItem (\item -> { item | open = False }) book
+
+    else
+        book
+
+
+findPage : String -> Zipper (AbstractBookItem item page) -> Maybe page
+findPage path zipper =
     Zipper.current zipper
         |> .pages
         |> Dict.get path
@@ -69,7 +174,7 @@ updatePage { pagePath, bookPaths } f book =
 
 updatePageHelp : String -> (BoundPage -> ( BoundPage, Cmd PageMsg )) -> Zipper BoundBookItem -> ( Zipper BoundBookItem, Cmd PageMsg )
 updatePageHelp pagePath f book =
-    case openPage pagePath book of
+    case findPage pagePath book of
         Just page ->
             let
                 ( newPage, cmd ) =

@@ -1,4 +1,4 @@
-module Page exposing (fold, fold1, fold2, map, sample)
+module Page exposing (fold, fold1, fold2, fold3, map, sample)
 
 import Arg
 import Element exposing (..)
@@ -55,6 +55,30 @@ fold2 label view argA argB =
             ( view a b
             , [ Arg.toArgView argA a
               , Arg.toArgView argB b
+              ]
+            )
+    }
+
+
+fold3 : String -> (a -> b -> c -> view) -> Arg a -> Arg b -> Arg c -> Page view
+fold3 label view argA argB argC =
+    { label = label
+    , view =
+        \pageArgA ->
+            let
+                ( a, pageArgB ) =
+                    Arg.consumePageArg pageArgA argA.type_
+
+                ( b, pageArgC ) =
+                    Arg.consumePageArg pageArgB argB.type_
+
+                ( c, pageArgD ) =
+                    Arg.consumePageArg pageArgC argC.type_
+            in
+            ( view a b c
+            , [ Arg.toArgView argA a
+              , Arg.toArgView argB b
+              , Arg.toArgView argC c
               ]
             )
     }

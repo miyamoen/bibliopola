@@ -1,5 +1,8 @@
 module Ui.Basic.Select exposing (Config, ConfigS, view, viewS)
 
+{-| 文字列表現で選択状態を判定しているため、与えられたリストの中に文字列表現が重複するものがあるとバグる
+-}
+
 import Browser
 import Element exposing (..)
 import Element.Border as Border
@@ -8,7 +11,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import List.Extra as List
 import SelectList exposing (SelectList)
-import Ui.Basic exposing (..)
+import Ui.Basic exposing (focusedStyle)
 import Ui.Color as Color
 
 

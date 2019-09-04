@@ -114,6 +114,7 @@ type alias BookItem view =
 type alias BoundBookItem =
     { label : String
     , pages : Dict String BoundPage
+    , open : Bool
     }
 
 
@@ -125,8 +126,8 @@ type alias PagePath =
     { pagePath : String, bookPaths : List String }
 
 
-type alias AbstractBookItem page =
-    { label : String, pages : Dict String page }
+type alias AbstractBookItem item page =
+    { item | label : String, pages : Dict String page }
 
 
 

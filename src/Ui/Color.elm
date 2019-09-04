@@ -2,6 +2,7 @@ module Ui.Color exposing
     ( aoki
     , basicary
     , black
+    , colors
     , font
     , grey
     , hukurasuzume
@@ -9,6 +10,7 @@ module Ui.Color exposing
     , samuzora
     , secondary
     , toCss
+    , toString
     , uiColor
     , wakana
     , white
@@ -32,6 +34,50 @@ uiColor color =
 toCss : Color -> String
 toCss color =
     Color.Convert.colorToCssRgba color
+
+
+colors : ( Color, List Color )
+colors =
+    ( aoki
+    , [ basicary
+      , white
+      , black
+      , grey
+      , wakana
+      , samuzora
+      , hukurasuzume
+      ]
+    )
+
+
+toString : Color -> String
+toString color =
+    if color == aoki then
+        "aoki/primary"
+
+    else if color == wakana then
+        "wakana/secondary"
+
+    else if color == basicary then
+        "basicary"
+
+    else if color == grey then
+        "font/grey"
+
+    else if color == white then
+        "white"
+
+    else if color == black then
+        "black"
+
+    else if color == samuzora then
+        "samuzora"
+
+    else if color == hukurasuzume then
+        "hukurasuzume"
+
+    else
+        Color.toCssString color
 
 
 primary : Color
