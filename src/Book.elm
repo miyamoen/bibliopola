@@ -7,6 +7,7 @@ module Book exposing
     , empty
     , find
     , findPage
+    , getPath
     , map
     , openAll
     , openThroughPaths
@@ -70,24 +71,26 @@ allPaths book =
         |> List.concatMap
             (\zipper ->
                 let
-                    { label, pages } =
+                    { pages } =
                         Zipper.current zipper
                 in
                 Dict.keys pages
-                    |> List.map
-                        (\pagePath ->
-                            { pagePath = pagePath
-                            , bookPaths =
-                                if Zipper.isRoot zipper then
-                                    []
-
-                                else
-                                    Zipper.getPath .label zipper
-                                        |> List.tail
-                                        |> Maybe.withDefault []
-                            }
-                        )
+                    |> List.map (\pagePath -> getPath pagePath zipper)
             )
+
+
+getPath : String -> Zipper (AbstractBookItem item page) -> PagePath
+getPath pagePath book =
+    { pagePath = pagePath
+    , bookPaths =
+        if Zipper.isRoot book then
+            []
+
+        else
+            Zipper.getPath .label book
+                |> List.tail
+                |> Maybe.withDefault []
+    }
 
 
 find : List String -> Tree (AbstractBookItem item page) -> Maybe (Zipper (AbstractBookItem item page))

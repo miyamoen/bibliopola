@@ -7,8 +7,8 @@ import Element.Font as Font
 import Html exposing (Html)
 import Types exposing (..)
 import Ui.App.BoundPage as BoundPage
-import Ui.App.Explorer as Explorer
 import Ui.App.Seed as Seed
+import Ui.App.SideBar as SideBar
 import Ui.Basic exposing (..)
 import Ui.Basic.Card as Card
 import Ui.Color as Color
@@ -37,22 +37,17 @@ layout model =
 
         BookMode book ->
             row [ width fill, height fill ]
-                [ Explorer.view [ width <| px 100, height fill ] book
-                , router model
+                [ SideBar.view book
+                , case model.route of
+                    TopRoute ->
+                        Ui.Page.Top.view model
+
+                    PageRoute path ->
+                        Ui.Page.Page.view path book model
+
+                    BrokenRoute url ->
+                        text <| "Broken : " ++ url
+
+                    NotFoundRoute url ->
+                        text <| "NotFound : " ++ url
                 ]
-
-
-router : Model -> Element Msg
-router model =
-    case model.route of
-        TopRoute ->
-            Ui.Page.Top.view model
-
-        PageRoute path ->
-            Ui.Page.Page.view model
-
-        BrokenRoute url ->
-            text <| "Broken : " ++ url
-
-        NotFoundRoute url ->
-            text <| "NotFound : " ++ url
