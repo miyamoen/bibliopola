@@ -5,6 +5,7 @@ import Color.Manipulate as Color
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
+import Element.Font as Font
 import Ui.Basic exposing (..)
 import Ui.Color as Color
 
@@ -18,7 +19,7 @@ attributes =
         { offset = ( 0, 0 )
         , size = 1
         , blur = 0
-        , color = Color.uiColor Color.samuzora
+        , color = Color.uiColor Color.hinemos
         }
     ]
 
@@ -31,7 +32,7 @@ view attrs { label, content } =
             { offset = ( 0, 0 )
             , size = 1
             , blur = 0
-            , color = Color.uiColor Color.samuzora
+            , color = Color.uiColor Color.hinemos
             }
          ]
             ++ attrs
@@ -39,7 +40,8 @@ view attrs { label, content } =
         [ row
             [ paddingXY 32 8
             , width fill
-            , Background.color <| Color.uiColor Color.samuzora
+            , Background.color <| Color.uiColor Color.hinemos
+            , Font.color <| Color.uiColor Color.white
             ]
             [ el [ centerX ] label ]
         , column

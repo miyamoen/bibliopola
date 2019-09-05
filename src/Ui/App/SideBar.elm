@@ -14,19 +14,19 @@ import Ui.Color as Color
 import Url.Builder
 
 
-view : BoundBook -> Element Msg
-view book =
+view : List (Attribute Msg) -> BoundBook -> Element Msg
+view attrs book =
     column
-        [ width <| px 200
-        , height fill
-        , scrollbarY
-        , spacing 32
-        , Background.color <| Color.uiColor Color.hukurasuzume
-        , Font.color <| Color.uiColor <| Color.lighten 0.5 Color.font
-        ]
-        [ link []
+        ([ height fill
+         , scrollbarY
+         , Background.color <| Color.uiColor Color.umoregi
+         , Font.color <| Color.uiColor <| Color.lighten 0.3 Color.font
+         ]
+            ++ attrs
+        )
+        [ link [ width fill, padding 16, Font.size 32 ]
             { url = Url.Builder.absolute [] []
             , label = text "Bibliopola"
             }
-        , Explorer.view [] book
+        , Explorer.view [ width fill ] book
         ]

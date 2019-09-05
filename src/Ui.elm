@@ -16,17 +16,24 @@ import Ui.Page.Page
 import Ui.Page.Top
 
 
-view : Model -> Html Msg
+view : Model -> List (Html Msg)
 view model =
-    Element.layout
+    [ Element.layout
         ([ width fill
          , height fill
          , Background.color <| Color.uiColor Color.basicary
          ]
             ++ font
         )
-    <|
+      <|
         layout model
+    , Html.node "style"
+        []
+        [ Html.text """
+:focus { outline:none; }
+"""
+        ]
+    ]
 
 
 layout : Model -> Element Msg
@@ -34,16 +41,17 @@ layout model =
     case model.mode of
         PageMode page ->
             BoundPage.view [ width fill, height fill ] page
+                |> map (PageMsg { pagePath = page.label, bookPaths = [] })
 
         BookMode book ->
             row [ width fill, height fill ]
-                [ SideBar.view book
+                [ SideBar.view [ style "width" "20%", width fill ] book
                 , case model.route of
                     TopRoute ->
                         Ui.Page.Top.view model
 
                     PageRoute path ->
-                        Ui.Page.Page.view path book model
+                        Ui.Page.Page.view [ style "width" "80%", width (fillPortion 4) ] path book model
 
                     BrokenRoute url ->
                         text <| "Broken : " ++ url

@@ -186,5 +186,7 @@ type Mode
 type Msg
     = NoOp
     | PageMsg PagePath PageMsg
+    | OpenAllBook
+    | CloaseAllBook
     | ClickedLink UrlRequest
     | ChangeUrl Url

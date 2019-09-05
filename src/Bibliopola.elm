@@ -84,7 +84,7 @@ initBookMode config book _ url key =
 view : Model -> Document Msg
 view model =
     { title = "Bibliopola"
-    , body = [ Ui.view model ]
+    , body = Ui.view model
     }
 
 
@@ -109,6 +109,22 @@ update msg model =
                             BoundPage.update pageMsg page
                     in
                     ( { model | mode = PageMode newPage }, Cmd.map (PageMsg path) cmd )
+
+        CloaseAllBook ->
+            case model.mode of
+                BookMode book ->
+                    ( { model | mode = BookMode <| Book.closeAll book }, Cmd.none )
+
+                PageMode page ->
+                    ( model, Cmd.none )
+
+        OpenAllBook ->
+            case model.mode of
+                BookMode book ->
+                    ( { model | mode = BookMode <| Book.openAll book }, Cmd.none )
+
+                PageMode page ->
+                    ( model, Cmd.none )
 
         ClickedLink urlRequest ->
             case urlRequest of
