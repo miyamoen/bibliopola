@@ -45,7 +45,7 @@ layout model =
 
         BookMode book ->
             row [ width fill, height fill ]
-                [ SideBar.view [ style "width" "20%", width fill ] book
+                [ SideBar.view [ style "width" "20%", width fill ] book model
                 , case model.route of
                     TopRoute ->
                         Ui.Page.Top.view model

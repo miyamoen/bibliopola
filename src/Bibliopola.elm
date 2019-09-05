@@ -41,14 +41,10 @@ displayPage config page =
 
 initPageMode : ViewConfig view msg -> Page view -> () -> Url -> Key -> ( Model, Cmd Msg )
 initPageMode config page _ url key =
-    let
-        model =
-            { mode = PageMode <| BoundPage.bind config (Random.initialSeed 1234) page
-            , key = key
-            , route = Route.parse url
-            }
-    in
-    ( onRouteChange model.route model
+    ( { mode = PageMode <| BoundPage.bind config (Random.initialSeed 1234) page
+      , key = key
+      , route = Route.parse url
+      }
     , Cmd.map (PageMsg { pagePath = page.label, bookPaths = [] }) BoundPage.generateSeed
     )
 
@@ -67,14 +63,10 @@ displayBook config book =
 
 initBookMode : ViewConfig view msg -> Book view -> () -> Url -> Key -> ( Model, Cmd Msg )
 initBookMode config book _ url key =
-    let
-        model =
-            { mode = BookMode <| Book.bind config (Random.initialSeed 1234) book
-            , key = key
-            , route = Route.parse url
-            }
-    in
-    ( onRouteChange model.route model
+    ( { mode = BookMode <| Book.bind config (Random.initialSeed 1234) book
+      , key = key
+      , route = Route.parse url
+      }
     , Cmd.batch <|
         List.map (\path -> Cmd.map (PageMsg path) BoundPage.generateSeed) <|
             Book.allPaths book
@@ -126,6 +118,22 @@ update msg model =
                 PageMode page ->
                     ( model, Cmd.none )
 
+        CloseBook bookPaths ->
+            case model.mode of
+                BookMode book ->
+                    ( { model | mode = BookMode <| Book.closeAtPaths bookPaths book }, Cmd.none )
+
+                PageMode page ->
+                    ( model, Cmd.none )
+
+        OpenBook bookPaths ->
+            case model.mode of
+                BookMode book ->
+                    ( { model | mode = BookMode <| Book.openThroughPaths bookPaths book }, Cmd.none )
+
+                PageMode page ->
+                    ( model, Cmd.none )
+
         ClickedLink urlRequest ->
             case urlRequest of
                 Internal url ->
@@ -139,37 +147,9 @@ update msg model =
                     )
 
         ChangeUrl url ->
-            let
-                route =
-                    Route.parse url
-
-                newModel =
-                    onRouteChange route model
-            in
-            ( { newModel | route = route }, Cmd.none )
+            ( { model | route = Route.parse url }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
-
-
-onRouteChange : Route -> Model -> Model
-onRouteChange route model =
-    case route of
-        TopRoute ->
-            model
-
-        PageRoute { bookPaths } ->
-            case model.mode of
-                BookMode book ->
-                    { model | mode = BookMode <| Book.openThroughPaths bookPaths book }
-
-                PageMode _ ->
-                    model
-
-        BrokenRoute _ ->
-            model
-
-        NotFoundRoute _ ->
-            model

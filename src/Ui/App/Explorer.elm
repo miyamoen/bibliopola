@@ -16,8 +16,8 @@ import Ui.Color as Color
 import Url.Builder
 
 
-view : List (Attribute Msg) -> BoundBook -> Element Msg
-view attrs book =
+view : List (Attribute Msg) -> Route -> BoundBook -> Element Msg
+view attrs route book =
     let
         zipper =
             Zipper.fromTree book
@@ -37,7 +37,7 @@ view attrs book =
             , icon [ onClick CloaseAllBook, pointer ] 16 FeatherIcons.book
             ]
         , column
-            [ spacing 16
+            [ width fill
             , paddingEach
                 { top = 0, right = 0, bottom = 0, left = 16 }
             ]
@@ -47,8 +47,8 @@ view attrs book =
         ]
 
 
-viewHelp : List (Attribute msg) -> Zipper BoundBookItem -> Element msg
-viewHelp attrs book =
+viewHelp : Zipper BoundBookItem -> Element Msg
+viewHelp book =
     let
         current =
             Zipper.current book
@@ -57,11 +57,11 @@ viewHelp attrs book =
             Book.getPath "" book
                 |> .bookPaths
     in
-    column [ spacing 8 ]
-        [ chapterLabel current
+    column [ width fill ]
+        [ chapterLabel bookPaths current
         , if current.open then
             column
-                [ spacing 16
+                [ width fill
                 , paddingEach
                     { top = 0, right = 0, bottom = 0, left = 32 }
                 ]
@@ -74,15 +74,27 @@ viewHelp attrs book =
         ]
 
 
-chapterLabels : List (Zipper BoundBookItem) -> Element msg
+chapterLabels : List (Zipper BoundBookItem) -> Element Msg
 chapterLabels chapters =
-    column [ spacing 8 ] <|
-        List.map (viewHelp []) chapters
+    column [ width fill ] <|
+        List.map viewHelp chapters
 
 
-chapterLabel : BoundBookItem -> Element msg
-chapterLabel chapter =
-    row [ spacing 8 ]
+chapterLabel : List String -> BoundBookItem -> Element Msg
+chapterLabel paths chapter =
+    row
+        [ width fill
+        , spacing 8
+        , paddingEach { top = 12, right = 0, bottom = 8, left = 0 }
+        , mouseOver [ Background.color <| Color.uiColor <| Color.fadeOut 0.9 Color.white ]
+        , pointer
+        , onClick <|
+            if chapter.open then
+                CloseBook paths
+
+            else
+                OpenBook paths
+        ]
         [ icon [] 16 <|
             if chapter.open then
                 FeatherIcons.folderMinus
@@ -95,14 +107,18 @@ chapterLabel chapter =
 
 pageLabels : List String -> Dict String BoundPage -> Element msg
 pageLabels bookPaths pages =
-    column [ spacing 8 ] <|
+    column [ width fill ] <|
         List.map (pageLabel bookPaths) <|
             Dict.toList pages
 
 
 pageLabel : List String -> ( String, BoundPage ) -> Element msg
 pageLabel bookPaths ( pagePath, page ) =
-    link []
+    link
+        [ width fill
+        , paddingEach { top = 8, right = 0, bottom = 4, left = 0 }
+        , mouseOver [ Background.color <| Color.uiColor <| Color.fadeOut 0.9 Color.white ]
+        ]
         { url = Url.Builder.absolute ("pages" :: bookPaths ++ [ pagePath ]) []
         , label =
             row [ spacing 8 ]

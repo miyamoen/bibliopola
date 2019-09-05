@@ -14,8 +14,8 @@ import Ui.Color as Color
 import Url.Builder
 
 
-view : List (Attribute Msg) -> BoundBook -> Element Msg
-view attrs book =
+view : List (Attribute Msg) -> BoundBook -> Model -> Element Msg
+view attrs book model =
     column
         ([ height fill
          , scrollbarY
@@ -28,5 +28,5 @@ view attrs book =
             { url = Url.Builder.absolute [] []
             , label = text "Bibliopola"
             }
-        , Explorer.view [ width fill ] book
+        , Explorer.view [ width fill ] model.route book
         ]

@@ -1,6 +1,5 @@
 module Ui.Basic.Button exposing (Config, view)
 
-import Browser
 import Color
 import Color.Manipulate as Color
 import Element exposing (..)
@@ -44,40 +43,3 @@ view attrs { color, msg, label, disabled } =
                    )
             )
             [ label ]
-
-
-main : Program () String String
-main =
-    Browser.sandbox
-        { init = "init"
-        , view =
-            \model ->
-                layout ([ padding 64 ] ++ font) <|
-                    column [ spacing 16 ]
-                        [ view []
-                            { color = Color.samuzora
-                            , msg = "first"
-                            , label = text "first"
-                            , disabled = False
-                            }
-                        , view []
-                            { color = Color.samuzora
-                            , msg = "second"
-                            , label = text "second"
-                            , disabled = True
-                            }
-                        , view []
-                            { color = Color.aoki
-                            , msg = "third"
-                            , label = text "third"
-                            , disabled = False
-                            }
-                        , view []
-                            { color = Color.aoki
-                            , msg = "fourth"
-                            , label = text "fourth"
-                            , disabled = True
-                            }
-                        ]
-        , update = \msg _ -> Debug.log "msg" msg
-        }

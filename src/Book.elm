@@ -4,6 +4,7 @@ module Book exposing
     , bindChapter
     , bindPage
     , closeAll
+    , closeAtPaths
     , empty
     , find
     , findPage
@@ -134,13 +135,20 @@ openThroughPathsHelp paths book =
         path :: rest ->
             case Zipper.open (.label >> (==) path) book of
                 Just newBook ->
-                    openThroughPathsHelp rest (openItem book)
+                    openThroughPathsHelp rest (openItem newBook)
 
                 Nothing ->
                     book
 
         [] ->
             book
+
+
+closeAtPaths : List String -> BoundBook -> BoundBook
+closeAtPaths paths book =
+    find paths book
+        |> Maybe.map (closeItem >> Zipper.root >> Zipper.getTree)
+        |> Maybe.withDefault book
 
 
 openItem : Zipper BoundBookItem -> Zipper BoundBookItem

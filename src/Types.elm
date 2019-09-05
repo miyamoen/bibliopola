@@ -188,5 +188,7 @@ type Msg
     | PageMsg PagePath PageMsg
     | OpenAllBook
     | CloaseAllBook
+    | OpenBook (List String)
+    | CloseBook (List String)
     | ClickedLink UrlRequest
     | ChangeUrl Url

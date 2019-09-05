@@ -4,7 +4,6 @@ module Ui.Color exposing
     , primary, secondary, basicary, font
     , black, white, grey
     , irone, hinemos, benikakehanairo, akebono, oborotsuki, shinonome, aiirohatoba, shirahanoya, umoregi
-    , aoki, hukurasuzume, nukumori, samuzora, wakana
     )
 
 {-| 配色アイデア手帳　日本の美しい色と言葉
@@ -56,28 +55,50 @@ toCss color =
 
 colors : ( Color, List Color )
 colors =
-    ( aoki
-    , [ basicary
+    ( irone
+    , [ hinemos
+      , benikakehanairo
+      , akebono
+      , oborotsuki
+      , shinonome
+      , aiirohatoba
+      , shirahanoya
+      , umoregi
       , white
       , black
       , grey
-      , wakana
-      , samuzora
-      , hukurasuzume
       ]
     )
 
 
 toString : Color -> String
 toString color =
-    if color == aoki then
-        "aoki/primary"
+    if color == irone then
+        "irone"
 
-    else if color == wakana then
-        "wakana/secondary"
+    else if color == hinemos then
+        "hinemos"
 
-    else if color == basicary then
-        "basicary"
+    else if color == benikakehanairo then
+        "benikakehanairo"
+
+    else if color == akebono then
+        "primary/akebono"
+
+    else if color == oborotsuki then
+        "secondary/oborotsuki"
+
+    else if color == shinonome then
+        "shinonome"
+
+    else if color == aiirohatoba then
+        "aiirohatoba"
+
+    else if color == shirahanoya then
+        "basicary/shirahanoya"
+
+    else if color == umoregi then
+        "umoregi"
 
     else if color == grey then
         "font/grey"
@@ -87,12 +108,6 @@ toString color =
 
     else if color == black then
         "black"
-
-    else if color == samuzora then
-        "samuzora"
-
-    else if color == hukurasuzume then
-        "hukurasuzume"
 
     else
         Color.toCssString color
@@ -115,7 +130,6 @@ secondary =
 
 basicary : Color
 basicary =
-    -- rgb255 236 246 238
     shirahanoya
 
 
@@ -145,31 +159,6 @@ grey =
 
 
 ---------------- named ----------------
-
-
-aoki : Color
-aoki =
-    rgb255 102 177 179
-
-
-wakana : Color
-wakana =
-    rgb255 187 211 97
-
-
-samuzora : Color
-samuzora =
-    rgb255 192 214 207
-
-
-hukurasuzume : Color
-hukurasuzume =
-    rgb255 161 163 104
-
-
-nukumori : Color
-nukumori =
-    rgb255 212 207 160
 
 
 irone : Color
