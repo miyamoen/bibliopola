@@ -15,9 +15,9 @@ module Types exposing
     , Model
     , Msg(..)
     , Page
-    , PageArg
     , PageMsg(..)
     , PagePath
+    , PageSeed
     , Route(..)
     , ToString
     , ViewConfig
@@ -41,7 +41,7 @@ import Url exposing (Url)
 
 type alias Page view =
     { label : String
-    , view : PageArg -> ( view, List ArgView )
+    , view : PageSeed -> ( view, List ArgView )
     }
 
 
@@ -63,7 +63,7 @@ type ArgSelectType
     | RandomArgSelect
 
 
-type alias PageArg =
+type alias PageSeed =
     { seed : Seed, selects : List ArgSelect }
 
 

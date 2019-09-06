@@ -1,6 +1,6 @@
 module Arg exposing
     ( fromGenerator, fromList, withGenerator
-    , consumePageArg, toArgView
+    , step, toArgView
     )
 
 {-|
@@ -13,7 +13,7 @@ module Arg exposing
 
 ## internal function
 
-@docs consumePageArg, toArgView
+@docs step, toArgView
 
 -}
 
@@ -57,30 +57,30 @@ withGenerator gen arg =
     }
 
 
-consumePageArg : PageArg -> ArgType a -> ( a, PageArg )
-consumePageArg bookArg arg =
+step : ArgType a -> PageSeed -> ( a, PageSeed )
+step arg pageSeed =
     case arg of
         GenArg gen ->
-            consumePageArgGenHelp bookArg gen
+            stepGen gen pageSeed
 
         ListArg item list ->
-            consumePageArgListHelp bookArg item list
+            stepList item list pageSeed
 
         GenOrListArg gen item list ->
-            case List.head bookArg.selects |> Maybe.map .type_ |> Maybe.withDefault RandomArgSelect of
-                RandomArgSelect ->
-                    ( consumePageArgGenHelp bookArg gen
+            case List.head pageSeed.selects |> Maybe.map .type_ of
+                Just ListArgSelect ->
+                    stepList item list pageSeed
+
+                _ ->
+                    ( stepGen gen pageSeed
                         |> Tuple.first
-                    , consumePageArgListHelp bookArg item list
+                    , stepList item list pageSeed
                         |> Tuple.second
                     )
 
-                ListArgSelect ->
-                    consumePageArgGenHelp bookArg gen
 
-
-consumePageArgGenHelp : PageArg -> Generator a -> ( a, PageArg )
-consumePageArgGenHelp { seed, selects } gen =
+stepGen : Generator a -> PageSeed -> ( a, PageSeed )
+stepGen gen { seed, selects } =
     let
         ( a, nextSeed ) =
             Random.step gen seed
@@ -92,17 +92,27 @@ consumePageArgGenHelp { seed, selects } gen =
     )
 
 
-consumePageArgListHelp : PageArg -> a -> List a -> ( a, PageArg )
-consumePageArgListHelp { seed, selects } item list =
+stepList : a -> List a -> PageSeed -> ( a, PageSeed )
+stepList item list { seed, selects } =
     let
-        ( randomA, nextSeed ) =
+        ( randomValue, nextSeed ) =
             Random.step (Random.uniform item list) seed
 
-        select =
-            List.head selects |> Maybe.withDefault randomArgSelect
+        ( select, nextPageSeed ) =
+            case selects of
+                selectHead :: rest ->
+                    ( selectHead
+                    , { seed = nextSeed
+                      , selects = rest
+                      }
+                    )
 
-        nextSelects =
-            List.tail selects |> Maybe.withDefault []
+                [] ->
+                    ( randomArgSelect
+                    , { seed = nextSeed
+                      , selects = []
+                      }
+                    )
     in
     case select.type_ of
         ListArgSelect ->
@@ -112,17 +122,11 @@ consumePageArgListHelp { seed, selects } item list =
               else
                 Maybe.andThen (\index -> List.getAt (index - 1) list) select.index
                     |> Maybe.withDefault item
-            , { seed = nextSeed
-              , selects = nextSelects
-              }
+            , nextPageSeed
             )
 
         RandomArgSelect ->
-            ( randomA
-            , { seed = nextSeed
-              , selects = nextSelects
-              }
-            )
+            ( randomValue, nextPageSeed )
 
 
 randomArgSelect : ArgSelect
