@@ -40,7 +40,11 @@ buttonPage =
                 }
         )
         (colorArg "color")
-        (stringArg "label" [ "test label" ])
+        (stringArg "label"
+            [ "test label"
+            , "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong"
+            ]
+        )
         (boolArg "disabled")
 
 

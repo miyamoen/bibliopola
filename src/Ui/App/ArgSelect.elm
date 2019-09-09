@@ -26,12 +26,11 @@ view attrs selects args =
                 )
                 args
     in
-    Card.view attrs
-        { label = text "args"
-        , content =
-            wrappedRow [ width fill, spacing 32 ] <|
-                SelectList.selectedMapForList singleView integrated
-        }
+    column (Card.attributes ++ attrs)
+        [ el Card.headerAttributes <| text "args"
+        , column [ width fill, spacing 32 ] <|
+            SelectList.selectedMapForList singleView integrated
+        ]
 
 
 singleView : SelectList ( ArgView, ArgSelect ) -> Element PageMsg
@@ -40,62 +39,70 @@ singleView args =
         ( arg, select ) =
             SelectList.selected args
 
-        changeArgType type_ =
+        selects =
             SelectList.map Tuple.second args
-                |> SelectList.updateSelected (\select_ -> { select_ | type_ = type_ })
-                |> SelectList.toList
-                |> ChangeArgSelects
-
-        changeArgIndex index =
-            SelectList.map Tuple.second args
-                |> SelectList.updateSelected (\select_ -> { select_ | index = index })
-                |> SelectList.toList
-                |> ChangeArgSelects
     in
-    Card.view [ alignTop, width (fill |> minimum 275) ]
-        { label = wrappedText [] arg.label
-        , content =
-            column [ spacing 32, width fill ]
-                [ wrappedText [ width fill, style "word-wrap" "break-word" ] arg.value
-                , case arg.type_ of
-                    RandomArgView ->
-                        Radio.view []
-                            { selected = select.type_ == RandomArgSelect
-                            , msg = changeArgType RandomArgSelect
-                            , label = "Generate random value"
-                            }
+    column ([ width fill ] ++ Card.attributes)
+        [ wrappedText Card.headerAttributes arg.label
+        , column [ spacing 32, width fill ]
+            [ wrappedText [ width fill, style "word-wrap" "break-word" ] arg.value
+            , case arg.type_ of
+                RandomArgView ->
+                    randomRadio selects
 
-                    ListArgView item list ->
-                        column [ spacing 16 ]
-                            [ Radio.view []
-                                { selected = select.type_ == RandomArgSelect
-                                , msg = changeArgType RandomArgSelect
-                                , label = "Generate random value"
-                                }
-                            , column [ spacing 8, width fill ]
-                                [ Radio.view []
-                                    { selected = select.type_ == ListArgSelect
-                                    , msg = changeArgType ListArgSelect
-                                    , label =
-                                        "Select from list"
-                                    }
-                                , el
-                                    [ width fill
-                                    , paddingEach
-                                        { top = 0, right = 0, bottom = 0, left = 36 }
-                                    ]
-                                  <|
-                                    Select.view [ width fill ]
-                                        { data = item :: list
-                                        , toString = identity
-                                        , selected = select.index
-                                        , notSelectedLabel = "Choose an Arg"
-                                        , msg = changeArgIndex
-                                        }
-                                ]
-                            ]
-                ]
+                ListArgView item list ->
+                    column [ spacing 16 ]
+                        [ randomRadio selects
+                        , listRadio selects (item :: list)
+                        ]
+            ]
+        ]
+
+
+randomRadio : SelectList ArgSelect -> Element PageMsg
+randomRadio selects =
+    Radio.view []
+        { selected = (SelectList.selected selects |> .type_) == RandomArgSelect
+        , msg = changeArgType selects RandomArgSelect
+        , label = "Generate random value"
         }
+
+
+listRadio : SelectList ArgSelect -> List String -> Element PageMsg
+listRadio selects data =
+    let
+        select =
+            SelectList.selected selects
+    in
+    row [ spacing 8, width fill ]
+        [ Radio.view []
+            { selected = select.type_ == ListArgSelect
+            , msg = changeArgType selects ListArgSelect
+            , label =
+                "Select from list"
+            }
+        , Select.view [ width fill ]
+            { data = data
+            , toString = identity
+            , selected = select.index
+            , notSelectedLabel = "Choose an Arg"
+            , msg = changeArgIndex selects
+            }
+        ]
+
+
+changeArgType : SelectList ArgSelect -> ArgSelectType -> PageMsg
+changeArgType args type_ =
+    SelectList.updateSelected (\select_ -> { select_ | type_ = type_ }) args
+        |> SelectList.toList
+        |> ChangeArgSelects
+
+
+changeArgIndex : SelectList ArgSelect -> Maybe Int -> PageMsg
+changeArgIndex args index =
+    SelectList.updateSelected (\select_ -> { select_ | index = index }) args
+        |> SelectList.toList
+        |> ChangeArgSelects
 
 
 main : Program () String String
