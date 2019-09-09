@@ -3,7 +3,6 @@ module Types exposing
     , Arg
     , ArgSelect
     , ArgSelectType(..)
-    , ArgType(..)
     , ArgView
     , ArgViewType(..)
     , Book
@@ -76,14 +75,9 @@ type alias PageSeed =
 type alias Arg a =
     { label : String
     , toString : ToString a
-    , type_ : ArgType a
+    , generator : Random.Generator a
+    , list : Maybe ( a, List a )
     }
-
-
-type ArgType a
-    = GenArg (Random.Generator a)
-    | ListArg a (List a)
-    | GenOrListArg (Random.Generator a) a (List a)
 
 
 type alias ToString a =

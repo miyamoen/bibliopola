@@ -34,7 +34,7 @@ fold1 label view argA =
         \pageArgA ->
             let
                 ( a, pageArgB ) =
-                    Arg.consumePageArg pageArgA argA.type_
+                    Arg.step argA pageArgA
             in
             ( view a, [ Arg.toArgView argA a ] )
     }
@@ -47,10 +47,10 @@ fold2 label view argA argB =
         \pageArgA ->
             let
                 ( a, pageArgB ) =
-                    Arg.consumePageArg pageArgA argA.type_
+                    Arg.step argA pageArgA
 
                 ( b, pageArgC ) =
-                    Arg.consumePageArg pageArgB argB.type_
+                    Arg.step argB pageArgB
             in
             ( view a b
             , [ Arg.toArgView argA a
@@ -67,13 +67,13 @@ fold3 label view argA argB argC =
         \pageArgA ->
             let
                 ( a, pageArgB ) =
-                    Arg.consumePageArg pageArgA argA.type_
+                    Arg.step argA pageArgA
 
                 ( b, pageArgC ) =
-                    Arg.consumePageArg pageArgB argB.type_
+                    Arg.step argB pageArgB
 
                 ( c, pageArgD ) =
-                    Arg.consumePageArg pageArgC argC.type_
+                    Arg.step argC pageArgC
             in
             ( view a b c
             , [ Arg.toArgView argA a

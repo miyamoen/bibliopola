@@ -1,5 +1,5 @@
 module Arg exposing
-    ( fromGenerator, fromList, withGenerator
+    ( fromGenerator, fromList, withGenerator, withList
     , step, toArgView
     )
 
@@ -8,7 +8,7 @@ module Arg exposing
 
 ## public function
 
-@docs fromGenerator, fromList, withGenerator
+@docs fromGenerator, fromList, withGenerator, withList
 
 
 ## internal function
@@ -27,7 +27,8 @@ fromGenerator : String -> ToString a -> Generator a -> Arg a
 fromGenerator label toString gen =
     { label = label
     , toString = toString
-    , type_ = GenArg gen
+    , generator = gen
+    , list = Nothing
     }
 
 
@@ -35,102 +36,56 @@ fromList : String -> ToString a -> a -> List a -> Arg a
 fromList label toString item list =
     { label = label
     , toString = toString
-    , type_ = ListArg item list
+    , generator = Random.uniform item list
+    , list = Just ( item, list )
     }
 
 
-{-| 古いのと新しいのが半々の確率でくっつく。
+{-| 入れ替え
 -}
 withGenerator : Generator a -> Arg a -> Arg a
 withGenerator gen arg =
-    { arg
-        | type_ =
-            case arg.type_ of
-                GenArg old ->
-                    GenArg <| Random.choices old [ gen ]
-
-                ListArg item list ->
-                    GenOrListArg gen item list
-
-                GenOrListArg old item list ->
-                    GenOrListArg (Random.choices old [ gen ]) item list
-    }
+    { arg | generator = gen }
 
 
-step : ArgType a -> PageSeed -> ( a, PageSeed )
-step arg pageSeed =
-    case arg of
-        GenArg gen ->
-            stepGen gen pageSeed
-
-        ListArg item list ->
-            stepList item list pageSeed
-
-        GenOrListArg gen item list ->
-            case List.head pageSeed.selects |> Maybe.map .type_ of
-                Just ListArgSelect ->
-                    stepList item list pageSeed
-
-                _ ->
-                    ( stepGen gen pageSeed
-                        |> Tuple.first
-                    , stepList item list pageSeed
-                        |> Tuple.second
-                    )
+{-| 入れ替え
+-}
+withList : a -> List a -> Arg a -> Arg a
+withList item list arg =
+    { arg | list = Just ( item, list ) }
 
 
-stepGen : Generator a -> PageSeed -> ( a, PageSeed )
-stepGen gen { seed, selects } =
+step : Arg a -> PageSeed -> ( a, PageSeed )
+step { list, generator } pageSeed =
     let
-        ( a, nextSeed ) =
-            Random.step gen seed
+        ( select, nextSelects ) =
+            case pageSeed.selects of
+                s :: ss ->
+                    ( s, ss )
+
+                [] ->
+                    ( defaultSelect, [] )
+
+        ( randomValue, nextSeed ) =
+            Random.step generator pageSeed.seed
     in
-    ( a
-    , { seed = nextSeed
-      , selects = List.tail selects |> Maybe.withDefault []
-      }
+    ( case ( list, select.type_, select.index ) of
+        ( Just ( item, listItem ), ListArgSelect, Just index ) ->
+            if index == 0 then
+                item
+
+            else
+                List.getAt (index - 1) listItem
+                    |> Maybe.withDefault randomValue
+
+        _ ->
+            randomValue
+    , { seed = nextSeed, selects = nextSelects }
     )
 
 
-stepList : a -> List a -> PageSeed -> ( a, PageSeed )
-stepList item list { seed, selects } =
-    let
-        ( randomValue, nextSeed ) =
-            Random.step (Random.uniform item list) seed
-
-        ( select, nextPageSeed ) =
-            case selects of
-                selectHead :: rest ->
-                    ( selectHead
-                    , { seed = nextSeed
-                      , selects = rest
-                      }
-                    )
-
-                [] ->
-                    ( randomArgSelect
-                    , { seed = nextSeed
-                      , selects = []
-                      }
-                    )
-    in
-    case select.type_ of
-        ListArgSelect ->
-            ( if select.index == Just 0 then
-                item
-
-              else
-                Maybe.andThen (\index -> List.getAt (index - 1) list) select.index
-                    |> Maybe.withDefault item
-            , nextPageSeed
-            )
-
-        RandomArgSelect ->
-            ( randomValue, nextPageSeed )
-
-
-randomArgSelect : ArgSelect
-randomArgSelect =
+defaultSelect : ArgSelect
+defaultSelect =
     { type_ = RandomArgSelect, index = Nothing }
 
 
@@ -143,13 +98,10 @@ toArgView arg value =
 
 
 toViewType : Arg a -> ArgViewType
-toViewType { type_, toString } =
-    case type_ of
-        GenArg _ ->
+toViewType { list, toString } =
+    case list of
+        Nothing ->
             RandomArgView
 
-        ListArg item list ->
-            ListArgView (toString item) <| List.map toString list
-
-        GenOrListArg _ item list ->
-            ListArgView (toString item) <| List.map toString list
+        Just ( item, listItem ) ->
+            ListArgView (toString item) <| List.map toString listItem
