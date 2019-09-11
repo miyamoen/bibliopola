@@ -2,6 +2,7 @@ module Ui.App.ArgSelect exposing (singleView, view)
 
 import Browser
 import Element exposing (..)
+import Element.Border as Border
 import Element.Events exposing (onClick)
 import Element.Input
 import List.Extra as List
@@ -26,9 +27,9 @@ view attrs selects args =
                 )
                 args
     in
-    column (Card.attributes ++ attrs)
-        [ el Card.headerAttributes <| text "args"
-        , column [ width fill, spacing 32 ] <|
+    column (Card.attributes ++ [ spacing 8 ] ++ attrs)
+        [ el (Card.headerAttributes ++ [ paddingXY 16 8, Border.rounded 2 ]) <| text "args"
+        , column [ width fill, spacing 32, padding 8 ] <|
             SelectList.selectedMapForList singleView integrated
         ]
 
@@ -43,8 +44,8 @@ singleView args =
             SelectList.map Tuple.second args
     in
     column ([ width fill ] ++ Card.attributes)
-        [ wrappedText Card.headerAttributes arg.label
-        , column [ spacing 32, width fill ]
+        [ wrappedText (Card.headerAttributes ++ [ width shrink, paddingXY 16 8, Border.rounded 2 ]) arg.label
+        , column [ spacing 16, padding 8, width fill ]
             [ wrappedText [ width fill, style "word-wrap" "break-word" ] arg.value
             , case arg.type_ of
                 RandomArgView ->

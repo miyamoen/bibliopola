@@ -18,9 +18,9 @@ import Ui.Color as Color
 view : List (Attribute PageMsg) -> SelectList Seed -> Element PageMsg
 view attrs seeds =
     row (Card.attributes ++ attrs)
-        [ el Card.headerAttributes <| text "seed"
-        , row [ spacing 8 ]
-            [ Select.viewS [ width <| px 130 ]
+        [ row (Card.headerAttributes ++ [ height fill, paddingXY 16 0 ]) [ text "seed" ]
+        , row [ spacing 8, padding 8 ]
+            [ Select.viewS [ width <| px 130, alignTop ]
                 { data = seeds
                 , toString = toString
                 , msg = ChangeSeeds
