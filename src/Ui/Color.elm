@@ -1,7 +1,7 @@
 module Ui.Color exposing
     ( uiColor, toCss
     , colors, toString, view
-    , primary, secondary, basicary, font
+    , primary, secondary, basicary, font, fontLight
     , black, white, grey
     , irone, hinemos, benikakehanairo, akebono, oborotsuki, shinonome, aiirohatoba, shirahanoya, umoregi
     )
@@ -22,7 +22,7 @@ module Ui.Color exposing
 
 ### System
 
-@docs primary, secondary, basicary, font
+@docs primary, secondary, basicary, font, fontLight
 
 
 ### Mono
@@ -104,7 +104,7 @@ toString color =
         "font/grey"
 
     else if color == white then
-        "white"
+        "fontLight/white"
 
     else if color == black then
         "black"
@@ -136,6 +136,11 @@ basicary =
 font : Color
 font =
     grey
+
+
+fontLight : Color
+fontLight =
+    white
 
 
 

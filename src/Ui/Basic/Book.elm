@@ -10,9 +10,11 @@ import Random exposing (Generator)
 import Random.Char
 import Random.Int
 import Random.String
+import SelectList exposing (SelectList)
 import Types exposing (..)
 import Ui.Basic.Button as Button
 import Ui.Basic.Radio as Radio
+import Ui.Basic.Tab.Controls as TabControls
 import Ui.Color as Color
 
 
@@ -26,6 +28,10 @@ book =
     Book.empty "Basic"
         |> Book.bindPage buttonPage
         |> Book.bindPage radioPage
+        |> Book.bindChapter
+            (Book.empty "Tab"
+                |> Book.bindPage tabControlsPage
+            )
 
 
 buttonPage : Page (Element String)
@@ -54,6 +60,49 @@ radioPage =
         (\selected label -> Radio.view [] { selected = selected, label = label, msg = "Selected" })
         (boolArg "selected")
         (stringArg "label" [ "test label" ])
+
+
+type Tab
+    = Ham
+    | Egg
+    | Spam
+
+
+tabToString : Tab -> String
+tabToString tab =
+    case tab of
+        Ham ->
+            "Ham"
+
+        Egg ->
+            "Egg"
+
+        Spam ->
+            "Spam"
+
+
+tabs : SelectList Tab
+tabs =
+    SelectList.fromLists [] Ham [ Egg, Spam ]
+
+
+tabControlsPage : Page (Element String)
+tabControlsPage =
+    Page.fold1 "Controls"
+        (\tabs_ ->
+            TabControls.view []
+                { tabs = tabs_
+                , onSelect = SelectList.selected >> tabToString >> (++) "selected tab : "
+                , toLabel = tabToString
+                }
+        )
+        (Arg.fromList "selected"
+            (SelectList.selected >> tabToString)
+            tabs
+            [ SelectList.selectWhileLoopBy 1 tabs
+            , SelectList.selectWhileLoopBy 2 tabs
+            ]
+        )
 
 
 boolArg : String -> Arg Bool
