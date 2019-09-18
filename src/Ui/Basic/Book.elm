@@ -15,6 +15,7 @@ import Types exposing (..)
 import Ui.Basic.Button as Button
 import Ui.Basic.Radio as Radio
 import Ui.Basic.Tab.Controls as TabControls
+import Ui.Basic.Tab.Panel as TabPanel
 import Ui.Color as Color
 
 
@@ -31,6 +32,7 @@ book =
         |> Book.bindChapter
             (Book.empty "Tab"
                 |> Book.bindPage tabControlsPage
+                |> Book.bindPage tabPanelPage
             )
 
 
@@ -103,6 +105,12 @@ tabControlsPage =
             , SelectList.selectWhileLoopBy 2 tabs
             ]
         )
+
+
+tabPanelPage : Page (Element msg)
+tabPanelPage =
+    Page.fold "Panel"
+        (Element.column TabPanel.attributes [ Element.text "Tab", Element.text "Panel" ])
 
 
 boolArg : String -> Arg Bool
