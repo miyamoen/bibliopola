@@ -1,6 +1,5 @@
 module Ui.Basic.Tab.Panel exposing (attributes)
 
-import Color
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border

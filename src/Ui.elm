@@ -6,7 +6,7 @@ import Element.Background as Background
 import Element.Font as Font
 import Html exposing (Html)
 import Types exposing (..)
-import Ui.App.BoundPage as BoundPage
+import Ui.App.Main as Mian
 import Ui.App.Seed as Seed
 import Ui.App.SideBar as SideBar
 import Ui.Basic exposing (..)
@@ -21,7 +21,6 @@ view model =
     [ Element.layout
         ([ width fill
          , height fill
-         , Background.color <| Color.uiColor Color.basicary
          ]
             ++ font
         )
@@ -40,7 +39,7 @@ layout : Model -> Element Msg
 layout model =
     case model.mode of
         PageMode page ->
-            BoundPage.view [ width fill, height fill ] page
+            Mian.view [ width fill, height fill ] page
                 |> map (PageMsg { pagePath = page.label, bookPaths = [] })
 
         BookMode book ->

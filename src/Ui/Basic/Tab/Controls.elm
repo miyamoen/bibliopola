@@ -26,6 +26,7 @@ view attrs config =
         [ column
             [ width fill
             , height fill
+            , scrollbarY
             , spacing 2
             , htmlAttribute <| Html.Attributes.tabindex 0
             ]
@@ -63,14 +64,14 @@ viewSingle { onSelect, toLabel } pos tabs =
                     Color.aiirohatoba
 
                 else
-                    Color.shirahanoya
+                    Color.hinemos
         , Font.color <|
             Color.uiColor <|
                 if pos == SelectList.Selected then
                     Color.fontLight
 
                 else
-                    Color.font
+                    Color.fontLight
         ]
     <|
         text <|
