@@ -44,13 +44,13 @@ layout model =
 
         BookMode book ->
             row [ width fill, height fill ]
-                [ SideBar.view [ style "width" "20%", width fill ] book model
+                [ SideBar.view [ style "max-width" "20%", width fill ] book model
                 , case model.route of
                     TopRoute ->
                         Ui.Page.Top.view model
 
                     PageRoute path ->
-                        Ui.Page.Page.view [ style "width" "80%", width (fillPortion 4) ] path book model
+                        Ui.Page.Page.view [ style "max-width" "80%", width (fillPortion 4) ] path book model
 
                     BrokenRoute url ->
                         text <| "Broken : " ++ url

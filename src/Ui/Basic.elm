@@ -17,7 +17,7 @@ focusedStyle =
             { offset = ( 0, 0 )
             , size = 2
             , blur = 1
-            , color = Color.uiColor Color.secondary
+            , color = Color.uiColor Color.hinemos
             }
         ]
 

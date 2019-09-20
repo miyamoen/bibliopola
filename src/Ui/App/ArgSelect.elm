@@ -27,11 +27,8 @@ view attrs selects args =
                 )
                 args
     in
-    column (Card.attributes ++ [ spacing 8 ] ++ attrs)
-        [ el (Card.headerAttributes ++ [ paddingXY 16 8, Border.rounded 2 ]) <| text "args"
-        , column [ width fill, spacing 32, padding 8 ] <|
-            SelectList.selectedMapForList singleView integrated
-        ]
+    column ([ spacing 32 ] ++ attrs) <|
+        SelectList.selectedMapForList singleView integrated
 
 
 singleView : SelectList ( ArgView, ArgSelect ) -> Element PageMsg
@@ -82,7 +79,7 @@ listRadio selects data =
             , label =
                 "Select from list"
             }
-        , Select.view [ width fill ]
+        , Select.view []
             { data = data
             , toString = identity
             , selected = select.index

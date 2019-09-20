@@ -1,4 +1,4 @@
-module Ui.App.Main exposing (view)
+module Ui.App.Main exposing (Tab(..), tabToLabel, tabs, view)
 
 import Element exposing (..)
 import Element.Background as Background
@@ -50,10 +50,10 @@ view attrs page =
                 , onSelect = Debug.toString >> LogMsg
                 , toLabel = tabToLabel
                 }
-            , column (TabPanel.attributes ++ [])
-                [ case Seed of
+            , column (TabPanel.attributes ++ [ width fill ])
+                [ case Args of
                     Args ->
-                        pageView.args [ width fill ]
+                        pageView.args [ width fill, height fill, scrollbarY ]
 
                     Seed ->
                         Seed.view [] page.seeds

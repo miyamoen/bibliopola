@@ -17,21 +17,18 @@ import Ui.Color as Color
 
 view : List (Attribute PageMsg) -> SelectList Seed -> Element PageMsg
 view attrs seeds =
-    row (Card.attributes ++ attrs)
-        [ row (Card.headerAttributes ++ [ height fill, paddingXY 16 0 ]) [ text "seed" ]
-        , row [ spacing 8, padding 8 ]
-            [ Select.viewS [ width <| px 130, alignTop ]
-                { data = seeds
-                , toString = toString
-                , msg = ChangeSeeds
-                }
-            , Button.view []
-                { color = Color.primary
-                , msg = RequireNewSeed
-                , label = text "new seed"
-                , disabled = False
-                }
-            ]
+    row ([ spacing 8, width fill ] ++ attrs)
+        [ Button.view []
+            { color = Color.primary
+            , msg = RequireNewSeed
+            , label = text "new seed"
+            , disabled = False
+            }
+        , Select.viewS [ alignTop ]
+            { data = seeds
+            , toString = toString
+            , msg = ChangeSeeds
+            }
         ]
 
 

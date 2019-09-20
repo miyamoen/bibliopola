@@ -95,13 +95,12 @@ styles =
     [ style "-webkit-appearance" "none"
     , style "-moz-appearance" "none"
     , style "appearance" "none"
-    , style "padding" "0.25em 1.5em 0.3em 1em"
-    , style "border-radius" "4px"
+    , style "padding" "12px 40px 8px 28px"
     , style "border-color" <| Color.toCss Color.primary
     , style "border-width" "4px"
-    , style "width" "100%"
     , style "font" "inherit"
-    , style "line-height" "1.5em"
+    , style "font-size" "20px"
+    , style "line-height" "normal"
     , style "color" <| Color.toCss Color.font
     ]
 
@@ -110,7 +109,7 @@ toElement : List (Element.Attribute msg) -> Html msg -> Element msg
 toElement attrs html =
     Element.html html
         |> el
-            ([ behindContent <| triangle [ alignRight, centerY, moveLeft 10 ]
+            ([ behindContent <| triangle [ alignRight, centerY, moveLeft 16, moveDown 4 ]
              , focusedStyle
              ]
                 ++ attrs
