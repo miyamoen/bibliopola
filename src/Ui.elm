@@ -30,6 +30,10 @@ view model =
         []
         [ Html.text """
 :focus { outline:none; }
+
+@import url("https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap");
+
+body { font-family: "Barlow Semi Condensed", sans-serif; }
 """
         ]
     ]

@@ -24,14 +24,15 @@ focusedStyle =
 
 font : List (Attribute msg)
 font =
-    [ Font.family
-        [ Font.external
-            { url = "https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap"
-            , name = "Barlow Semi Condensed"
-            }
-        , Font.sansSerif
-        ]
-    , Font.size 20
+    [ -- Font.family
+      --     [
+      --      Font.external
+      --         { url = "https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap"
+      --         , name = "Barlow Semi Condensed"
+      --         }
+      --     , Font.sansSerif
+      --     ]
+      Font.size 20
     , Font.color <| Color.uiColor Color.font
     ]
 
