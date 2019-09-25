@@ -18,6 +18,7 @@ module Types exposing
     , PagePath
     , PageSeed
     , Route(..)
+    , Tab(..)
     , ToString
     , ViewConfig
     )
@@ -156,6 +157,7 @@ type alias Model =
     { mode : Mode
     , route : Route
     , key : Key
+    , tabs : SelectList Tab
     }
 
 
@@ -184,5 +186,15 @@ type Msg
     | CloaseAllBook
     | OpenBook (List String)
     | CloseBook (List String)
+    | ChangeTabs (SelectList Tab)
     | ClickedLink UrlRequest
     | ChangeUrl Url
+
+
+
+---------------- UI ----------------
+
+
+type Tab
+    = ArgsTab
+    | SeedTab

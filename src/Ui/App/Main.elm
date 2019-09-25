@@ -1,7 +1,8 @@
-module Ui.App.Main exposing (Tab(..), tabToLabel, tabs, view)
+module Ui.App.Main exposing (tabToLabel, view)
 
 import Element exposing (..)
 import Element.Background as Background
+import Element.Border as Border
 import Element.Font as Font
 import SelectList exposing (SelectList)
 import Types exposing (..)
@@ -13,20 +14,18 @@ import Ui.Basic.Tab.Panel as TabPanel
 import Ui.Color as Color
 
 
-view : List (Attribute PageMsg) -> BoundPage -> Element PageMsg
-view attrs page =
+view : List (Attribute Msg) -> Model -> PagePath -> BoundPage -> Element Msg
+view attrs { tabs } path page =
     let
         pageView =
             page.view page.seeds page.selects
     in
     column attrs
         [ column
-            ([ width fill
-             , height <| fillPortion 65
-             , style "max-height" "65%"
-             ]
-                ++ Card.attributes
-            )
+            [ width fill
+            , height <| fillPortion 65
+            , style "max-height" "65%"
+            ]
             [ el
                 (Card.headerAttributes
                     ++ [ width fill
@@ -39,44 +38,38 @@ view attrs page =
                 text page.label
             , column [ width fill, height fill, scrollbars ] [ pageView.page [ centerX, centerY ] ]
             ]
+            |> map (PageMsg path)
         , row
             [ width fill
             , height <| fillPortion 35
             , style "max-height" "35%"
-            , padding 4
+            , Border.color <| Color.uiColor Color.aiirohatoba
+            , Border.widthEach
+                { bottom = 0, left = 0, right = 0, top = 2 }
+            , Background.color <| Color.uiColor Color.shirahanoya
             ]
             [ TabControls.view [ height fill ]
                 { tabs = tabs
-                , onSelect = Debug.toString >> LogMsg
+                , onSelect = ChangeTabs
                 , toLabel = tabToLabel
                 }
-            , column (TabPanel.attributes ++ [ width fill ])
-                [ case Args of
-                    Args ->
-                        pageView.args [ width fill, height fill, scrollbarY ]
+            , (case SelectList.selected tabs of
+                ArgsTab ->
+                    pageView.args [ width fill, height fill, padding 8, scrollbarY ]
 
-                    Seed ->
-                        Seed.view [] page.seeds
-                ]
+                SeedTab ->
+                    Seed.view [ alignTop, padding 8 ] page.seeds
+              )
+                |> map (PageMsg path)
             ]
         ]
-
-
-type Tab
-    = Args
-    | Seed
-
-
-tabs : SelectList Tab
-tabs =
-    SelectList.fromLists [] Args [ Seed ]
 
 
 tabToLabel : Tab -> String
 tabToLabel tab =
     case tab of
-        Args ->
+        ArgsTab ->
             "args"
 
-        Seed ->
+        SeedTab ->
             "seed"

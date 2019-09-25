@@ -6,7 +6,7 @@ import Element.Background as Background
 import Element.Font as Font
 import Html exposing (Html)
 import Types exposing (..)
-import Ui.App.Main as Mian
+import Ui.App.Main as Main
 import Ui.App.Seed as Seed
 import Ui.App.SideBar as SideBar
 import Ui.Basic exposing (..)
@@ -39,8 +39,10 @@ layout : Model -> Element Msg
 layout model =
     case model.mode of
         PageMode page ->
-            Mian.view [ width fill, height fill ] page
-                |> map (PageMsg { pagePath = page.label, bookPaths = [] })
+            Main.view [ width fill, height fill ]
+                model
+                { pagePath = page.label, bookPaths = [] }
+                page
 
         BookMode book ->
             row [ width fill, height fill ]

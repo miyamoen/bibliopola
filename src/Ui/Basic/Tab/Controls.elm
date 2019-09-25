@@ -1,6 +1,5 @@
 module Ui.Basic.Tab.Controls exposing (Config, view)
 
-import Color
 import Color.Manipulate as Color
 import Element exposing (..)
 import Element.Background as Background
@@ -27,13 +26,14 @@ view attrs config =
             [ width fill
             , height fill
             , scrollbarY
-            , spacing 2
+            , spacing 8
+            , padding 16
             , htmlAttribute <| Html.Attributes.tabindex 0
             ]
           <|
             SelectList.selectedMap (viewSingle config) config.tabs
         , el
-            [ width <| px 8
+            [ width <| px 2
             , height fill
             , Background.color <| Color.uiColor Color.aiirohatoba
             ]
@@ -52,26 +52,14 @@ viewSingle { onSelect, toLabel } pos tabs =
         , paddingXY 16 8
         , onClick <| onSelect tabs
         , pointer
-        , Border.roundEach
-            { topLeft = 4
-            , topRight = 0
-            , bottomLeft = 4
-            , bottomRight = 0
-            }
-        , Background.color <|
-            Color.uiColor <|
-                if pos == SelectList.Selected then
-                    Color.aiirohatoba
+        , Border.color <| Color.uiColor Color.aiirohatoba
+        , Border.widthEach <|
+            if pos == SelectList.Selected then
+                { right = 0, left = 0, bottom = 2, top = 0 }
 
-                else
-                    Color.hinemos
-        , Font.color <|
-            Color.uiColor <|
-                if pos == SelectList.Selected then
-                    Color.fontLight
-
-                else
-                    Color.fontLight
+            else
+                { right = 0, left = 0, bottom = 0, top = 0 }
+        , Font.color <| Color.uiColor <| Color.font
         ]
     <|
         text <|
