@@ -95,7 +95,7 @@ tabControlsPage =
             TabControls.view []
                 { tabs = tabs_
                 , onSelect = SelectList.selected >> tabToString >> (++) "selected tab : "
-                , toLabel = tabToString
+                , toLabel = tabToString >> Element.text
                 }
         )
         (Arg.fromList "selected"

@@ -4,6 +4,7 @@ import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
+import FeatherIcons
 import SelectList exposing (SelectList)
 import Types exposing (..)
 import Ui.App.Seed as Seed
@@ -65,11 +66,20 @@ view attrs { tabs } path page =
         ]
 
 
-tabToLabel : Tab -> String
+tabToLabel : Tab -> Element msg
 tabToLabel tab =
     case tab of
         ArgsTab ->
-            "args"
+            row [ spacing 8 ] [ icon FeatherIcons.list, text "args" ]
 
         SeedTab ->
-            "seed"
+            row [ spacing 8 ] [ icon FeatherIcons.rotateCw, text "seed" ]
+
+
+icon : FeatherIcons.Icon -> Element msg
+icon icon_ =
+    icon_
+        |> FeatherIcons.withSize 20
+        |> FeatherIcons.toHtml []
+        |> html
+        |> el []

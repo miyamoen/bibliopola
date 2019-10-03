@@ -44,7 +44,7 @@ initPageMode config page _ url key =
     ( { mode = PageMode <| BoundPage.bind config (Random.initialSeed 1234) page
       , key = key
       , route = Route.parse url
-      , tabs = SelectList.fromLists [] SeedTab [ ArgsTab ]
+      , tabs = SelectList.fromLists [ SeedTab ] ArgsTab []
       }
     , Cmd.map (PageMsg { pagePath = page.label, bookPaths = [] }) BoundPage.generateSeed
     )
@@ -67,7 +67,7 @@ initBookMode config book _ url key =
     ( { mode = BookMode <| Book.bind config (Random.initialSeed 1234) book
       , key = key
       , route = Route.parse url
-      , tabs = SelectList.fromLists [] SeedTab [ ArgsTab ]
+      , tabs = SelectList.fromLists [ SeedTab ] ArgsTab []
       }
     , Cmd.batch <|
         List.map (\path -> Cmd.map (PageMsg path) BoundPage.generateSeed) <|

@@ -27,7 +27,7 @@ view attrs selects args =
                 )
                 args
     in
-    column ([ spacing 32 ] ++ attrs) <|
+    column ([ spacing 64 ] ++ attrs) <|
         SelectList.selectedMapForList singleView integrated
 
 
@@ -40,11 +40,13 @@ singleView args =
         selects =
             SelectList.map Tuple.second args
     in
-    column ([ width fill ] ++ Card.attributes)
-        [ wrappedText (Card.headerAttributes ++ [ width shrink, paddingXY 16 8, Border.rounded 2 ]) arg.label
-        , column [ spacing 16, padding 8, width fill ]
-            [ wrappedText [ width fill, style "word-wrap" "break-word" ] arg.value
-            , case arg.type_ of
+    column [ width fill, spacing 16 ]
+        [ row [ width fill, spacing 16 ]
+            [ wrappedText (Card.headerAttributes ++ [ width shrink, paddingXY 16 8, Border.rounded 2 ]) arg.label
+            , wrappedText [ width fill, style "word-wrap" "break-word" ] arg.value
+            ]
+        , el [ paddingEach { top = 0, right = 0, bottom = 0, left = 32 } ] <|
+            case arg.type_ of
                 RandomArgView ->
                     randomRadio selects
 
@@ -53,7 +55,6 @@ singleView args =
                         [ randomRadio selects
                         , listRadio selects (item :: list)
                         ]
-            ]
         ]
 
 
@@ -79,7 +80,7 @@ listRadio selects data =
             , label =
                 "Select from list"
             }
-        , Select.view []
+        , Select.view [ style "max-width" "80%" ]
             { data = data
             , toString = identity
             , selected = select.index

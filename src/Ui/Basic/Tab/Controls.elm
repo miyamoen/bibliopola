@@ -15,7 +15,7 @@ import Ui.Color as Color exposing (white)
 type alias Config tab msg =
     { tabs : SelectList tab
     , onSelect : SelectList tab -> msg
-    , toLabel : tab -> String
+    , toLabel : tab -> Element msg
     }
 
 
@@ -52,15 +52,16 @@ viewSingle { onSelect, toLabel } pos tabs =
         , paddingXY 16 8
         , onClick <| onSelect tabs
         , pointer
-        , Border.color <| Color.uiColor Color.aiirohatoba
-        , Border.widthEach <|
-            if pos == SelectList.Selected then
-                { right = 0, left = 0, bottom = 2, top = 0 }
+        , Border.color <|
+            Color.uiColor <|
+                if pos == SelectList.Selected then
+                    Color.aiirohatoba
 
-            else
-                { right = 0, left = 0, bottom = 0, top = 0 }
+                else
+                    Color.shirahanoya
+        , Border.widthEach
+            { right = 0, left = 0, bottom = 2, top = 0 }
         , Font.color <| Color.uiColor <| Color.font
         ]
     <|
-        text <|
-            toLabel current
+        toLabel current
