@@ -2,6 +2,7 @@ module Ui.App.ArgSelect exposing (singleView, view)
 
 import Browser
 import Element exposing (..)
+import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (onClick)
 import Element.Input
@@ -12,6 +13,7 @@ import Ui.Basic exposing (..)
 import Ui.Basic.Card as Card
 import Ui.Basic.Radio as Radio
 import Ui.Basic.Select as Select
+import Ui.Color as Color
 
 
 view : List (Attribute PageMsg) -> List ArgSelect -> List ArgView -> Element PageMsg
@@ -41,9 +43,25 @@ singleView args =
             SelectList.map Tuple.second args
     in
     column [ width fill, spacing 16 ]
-        [ row [ width fill, spacing 16 ]
-            [ wrappedText (Card.headerAttributes ++ [ width shrink, paddingXY 16 8, Border.rounded 2 ]) arg.label
-            , wrappedText [ width fill, style "word-wrap" "break-word" ] arg.value
+        [ row [ width fill ]
+            [ wrappedText
+                (Card.headerAttributes
+                    ++ [ width shrink
+                       , paddingXY 16 8
+                       , Border.roundEach
+                            { topLeft = 2, topRight = 0, bottomLeft = 2, bottomRight = 0 }
+                       ]
+                )
+                arg.label
+            , wrappedText
+                [ width fill
+                , style "word-wrap" "break-word"
+                , paddingXY 16 8
+                , Background.color <| Color.uiColor Color.white
+                , Border.roundEach
+                    { topLeft = 0, topRight = 2, bottomLeft = 0, bottomRight = 2 }
+                ]
+                arg.value
             ]
         , el [ paddingEach { top = 0, right = 0, bottom = 0, left = 32 } ] <|
             case arg.type_ of
